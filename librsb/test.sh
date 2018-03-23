@@ -8,7 +8,8 @@ module load librsb/1.2.0-rc7_gcc6
 set -x
 EXD=`dirname $LIBRSB_CONFIG`/../share/doc/librsb/examples # TODO: need e.g. EXAMPLE_DIR 
 cp -pv $EXD/hello.c .
-$LIBRSB_CC -c hello.c       `$LIBRSB_CONFIG --I_opts`                        
-$LIBRSB_CC -o hello hello.o `$LIBRSB_CONFIG --static --ldflags --extra_libs` 
+cat           hello.c
+$LIBRSB_CC -c hello.c       `$LIBRSB_CONFIG --I_opts`
+$LIBRSB_CC -o hello hello.o `$LIBRSB_CONFIG --static --ldflags --extra_libs`
 ./hello
 set +x
