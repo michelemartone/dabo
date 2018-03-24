@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 set -x
-for PKG in librsb ; do
+PKGS='librsb intel'
+for PKG in $PKGS ; do
 	test -d $PKG
 	TS=`pwd`/$PKG/test.sh
 	LF=`pwd`/$PKG.log
@@ -11,7 +12,7 @@ for PKG in librsb ; do
 	cd $TD
 	bash $TS 2>&1 1> $LF && echo SUCCESS || echo FAILURE
 	cp $TS .
-	FL="test.sh `find -name '*.c' -o -iname '*.h'`"
+	FL="test.sh `find -name '*.c' -o -iname '*.h' -o -iname '*.F90'`"
 	ls -l $FL 
 	for TF in $FL ; do
 		HS=$TF.html
@@ -22,6 +23,7 @@ for PKG in librsb ; do
 	ls -l
 	rm -fR $TD
 	test -f $LF
-	#nl $LF
+	nl $LF
 	cd -
 done
+echo ALL SUCCESS
