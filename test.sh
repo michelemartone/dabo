@@ -2,7 +2,7 @@
 VL=0
 set -e
 test $VL -ge 1 && set -x
-PKGS='librsb intel cmake fail'
+PKGS='librsb intel cmake fail pass'
 EMAIL="noreply@organization.tld"
 #EMAIL=
 PASS=
@@ -40,8 +40,8 @@ for PKG in ${1:-$PKGS} ; do
 done
 echo
 BODY=
-test -n "$FAIL" && BODY+="FAIL: $FAIL. "
-test -n "$PASS" && BODY+="PASS: $PASS. "
+test -n "$FAIL" && BODY+="FAIL: $FAIL. \n"
+test -n "$PASS" && BODY+="PASS: $PASS. \n"
 CMT=
 test -z "$FAIL" && test -n "$PASS" && CMT+="All tests passed."
 test -n "$FAIL" && test -z "$PASS" && CMT+="All tests failed."
@@ -60,4 +60,4 @@ ls -l $WD.shar
 test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
 test -n "$FAIL" || test -n "$PASS" && test -n "$EMAIL" && \
 	echo "Mailed to $EMAIL: " "$SL" && \
-	echo " $BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} -a $WD.shar ${EMAIL}
+	echo -e "$BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} -a $WD.shar ${EMAIL}
