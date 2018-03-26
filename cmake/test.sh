@@ -6,6 +6,9 @@ set -x
 #export LANG="de"
 rm -fR Example
 #shar -s user@example -m  Example | grep -v $USER > Example.shar && vim Example.shar
+which make
+which cmake
+test -f ./Example.shar
 ./Example.shar
 cd Example # originally from the cmake distribution. see https://cmake.org/examples/
 cmake .
