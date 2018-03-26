@@ -2,7 +2,9 @@
 VL=0
 set -e
 test $VL -ge 1 && set -x
-PKGS='librsb intel cmake'
+PKGS='librsb intel cmake fail'
+EMAIL="noreply@organization.tld"
+#EMAIL=
 PASS=
 FAIL=
 for PKG in ${1:-$PKGS} ; do
@@ -18,8 +20,9 @@ for PKG in ${1:-$PKGS} ; do
 	( for f in $SD/*.shar ; do test -f $f && cp $f . ; done || true ; ) > $DN
 	cp $TS .
 	( bash -e $TS 2>&1 ; ) 1> $LF \
-		&& { echo "PASS: $PKG";  PASS+=" $PKG"; } \
-		|| { echo "FAIL: $PKG"; FAIL+=" $PKG"; }
+		&& { TR="pass"; echo "PASS: $PKG"; PASS+=" $PKG"; } \
+		|| { TR="fail"; echo "FAIL: $PKG"; FAIL+=" $PKG"; }
+	#mailx -s test-batch-${PKG}:${TR} -a ${LF} -S from=${EMAIL} ${EMAIL}
 	FL="test.sh `find -name '*.c' -o -iname '*.h' -o -iname '*.F90'`"
 	test $VL -ge 1 && ls -l $FL 
 	for TF in $FL ; do
@@ -35,7 +38,17 @@ for PKG in ${1:-$PKGS} ; do
 	cd - 2>&1 > $DN
 done
 echo
-test -n "$FAIL" && echo "FAIL: $FAIL"
-test -n "$PASS" && echo "PASS: $PASS"
-test -z "$FAIL" && test -n "$PASS" && echo "All tests passed."
-test -n "$FAIL" && test -z "$PASS" && echo "All tests failed."
+BODY=
+test -n "$FAIL" && BODY+="FAIL: $FAIL. "
+test -n "$PASS" && BODY+="PASS: $PASS. "
+CMT=
+test -z "$FAIL" && test -n "$PASS" && CMT+="All tests passed."
+test -n "$FAIL" && test -z "$PASS" && CMT+="All tests failed."
+test -n "$FAIL" && test -n "$PASS" && CMT+="Some tests failed."
+
+#SL="${FAIL:+FAIL:}${FAIL} ${PASS:+PASS:}${PASS}"
+SL="$CMT"
+test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
+test -n "$FAIL" || test -n "$PASS" && test -n "$EMAIL" && \
+	echo "Mailed to $EMAIL: " "$SL" && \
+	echo " $BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} ${EMAIL}
