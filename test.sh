@@ -26,8 +26,8 @@ for PKG in ${1:-$PKGS} ; do
 	FL="test.sh `find -name '*.c' -o -iname '*.h' -o -iname '*.F90'`"
 	test $VL -ge 1 && ls -l $FL 
 	for TF in $FL ; do
-		HS=$TF.html
-		HOME=. vim -E $TF -c 'syntax on' -c 'TOhtml' -c "w $HS" -c 'qall!' 2>&1 > $DN
+		HS=${SD}.html # HS=$TF.html
+		HOME=. vim -E $TF -c 'syntax on' -c 'TOhtml' -c "w! $HS" -c 'qall!' 2>&1 > $DN
 		test -f $HS
 		#elinks $HS
 	done
@@ -45,7 +45,8 @@ CMT=
 test -z "$FAIL" && test -n "$PASS" && CMT+="All tests passed."
 test -n "$FAIL" && test -z "$PASS" && CMT+="All tests failed."
 test -n "$FAIL" && test -n "$PASS" && CMT+="Some tests failed."
-
+pwd
+ls *.html *.log | sort | sed 's/\(.*$\)/<a href="\1">\1<\/a>\n<br\/>/g' > index.html
 #SL="${FAIL:+FAIL:}${FAIL} ${PASS:+PASS:}${PASS}"
 SL="$CMT"
 test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
