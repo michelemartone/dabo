@@ -13,7 +13,7 @@ for PKG in ${1:-$PKGS} ; do
 	cd $TD
 	for f in $SD/*.shar ; do cp $f . ; done || true
 	cp $TS .
-	bash $TS 2>&1 1> $LF && echo SUCCESS || echo FAILURE
+	bash -e $TS 2>&1 1> $LF && echo SUCCESS || echo FAILURE
 	FL="test.sh `find -name '*.c' -o -iname '*.h' -o -iname '*.F90'`"
 	ls -l $FL 
 	for TF in $FL ; do
@@ -28,4 +28,4 @@ for PKG in ${1:-$PKGS} ; do
 	nl $LF
 	cd -
 done
-echo ALL SUCCESS
+echo TERMINATED
