@@ -3,6 +3,8 @@ VL=0
 set -e
 test $VL -ge 1 && set -x
 PKGS='librsb intel cmake'
+PASS=
+FAIL=
 for PKG in ${1:-$PKGS} ; do
 	test -d $PKG
 	SD=`pwd`/$PKG
@@ -16,7 +18,8 @@ for PKG in ${1:-$PKGS} ; do
 	( for f in $SD/*.shar ; do test -f $f && cp $f . ; done || true ; ) > $DN
 	cp $TS .
 	( bash -e $TS 2>&1 ; ) 1> $LF \
-		&& echo "SUCCESS: $PKG" || echo "FAILURE: $PKG"
+		&& { echo "PASS: $PKG";  PASS+=" $PKG"; } \
+		|| { echo "FAIL: $PKG"; FAIL+=" $PKG"; }
 	FL="test.sh `find -name '*.c' -o -iname '*.h' -o -iname '*.F90'`"
 	test $VL -ge 1 && ls -l $FL 
 	for TF in $FL ; do
@@ -31,4 +34,8 @@ for PKG in ${1:-$PKGS} ; do
 	test $VL -ge 2 && nl $LF
 	cd - 2>&1 > $DN
 done
-echo TERMINATED
+echo
+test -n "$FAIL" && echo "FAIL: $FAIL"
+test -n "$PASS" && echo "PASS: $PASS"
+test -z "$FAIL" && test -n "$PASS" && echo "All tests passed."
+test -n "$FAIL" && test -z "$PASS" && echo "All tests failed."
