@@ -7,6 +7,7 @@ EMAIL="noreply@organization.tld"
 #EMAIL=
 PASS=
 FAIL=
+rm -f *.html *.log
 for PKG in ${1:-$PKGS} ; do
 	test -d $PKG
 	SD=`pwd`/$PKG
@@ -46,6 +47,8 @@ test -z "$FAIL" && test -n "$PASS" && CMT+="All tests passed."
 test -n "$FAIL" && test -z "$PASS" && CMT+="All tests failed."
 test -n "$FAIL" && test -n "$PASS" && CMT+="Some tests failed."
 pwd
+test -n "$FAIL" && for t in $FAIL ; do for f in $t.{log,html} ; do mv $f failed-$f ; done; done
+test -n "$PASS" && for t in $PASS ; do for f in $t.{log,html} ; do mv $f passed-$f ; done; done
 ls *.html *.log | sort | sed 's/\(.*$\)/<a href="\1">\1<\/a>\n<br\/>/g' > index.html
 #SL="${FAIL:+FAIL:}${FAIL} ${PASS:+PASS:}${PASS}"
 SL="$CMT"
