@@ -19,7 +19,7 @@ for PKG in ${1:-$PKGS} ; do
 	cd $TD
 	( for f in $SD/*.shar ; do test -f $f && cp $f . ; done || true ; ) > $DN
 	cp $TS .
-	( bash -e $TS 2>&1 ; ) 1> $LF \
+	( timeout 4s bash -e $TS 2>&1 ; ) 1> $LF \
 		&& { TR="pass"; echo "PASS: $PKG"; PASS+=" $PKG"; } \
 		|| { TR="fail"; echo "FAIL: $PKG"; FAIL+=" $PKG"; }
 	#mailx -s test-batch-${PKG}:${TR} -a ${LF} -S from=${EMAIL} ${EMAIL}
