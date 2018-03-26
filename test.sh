@@ -7,7 +7,7 @@ EMAIL="noreply@organization.tld"
 #EMAIL=
 PASS=
 FAIL=
-rm -f *.html *.log
+rm -f *.html *.log *.shar
 for PKG in ${1:-$PKGS} ; do
 	test -d $PKG
 	SD=`pwd`/$PKG
@@ -52,7 +52,12 @@ test -n "$PASS" && for t in $PASS ; do for f in $t.{log,html} ; do mv $f passed-
 ls *.html *.log | sort | sed 's/\(.*$\)/<a href="\1">\1<\/a>\n<br\/>/g' > index.html
 #SL="${FAIL:+FAIL:}${FAIL} ${PASS:+PASS:}${PASS}"
 SL="$CMT"
+WD=`basename $PWD`
+cd ..
+shar $WD/*.log $WD/*.html > $WD/$WD.shar
+cd -
+ls -l $WD.shar
 test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
 test -n "$FAIL" || test -n "$PASS" && test -n "$EMAIL" && \
 	echo "Mailed to $EMAIL: " "$SL" && \
-	echo " $BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} ${EMAIL}
+	echo " $BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} -a $WD.shar ${EMAIL}

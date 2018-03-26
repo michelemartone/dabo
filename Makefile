@@ -4,4 +4,4 @@ all:
 
 .PHONY:
 clean:
-	rm -f *.html *.log
+	rm -f *.html *.log *.shar
