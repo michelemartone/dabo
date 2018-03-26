@@ -2,7 +2,7 @@
 VL=0
 set -e
 test $VL -ge 1 && set -x
-PKGS='librsb intel cmake fail true'
+PKGS='librsb intel cmake false true'
 EMAIL="noreply@organization.tld"
 #EMAIL=
 PASS=
