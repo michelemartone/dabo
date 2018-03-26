@@ -8,7 +8,7 @@ EMAIL="noreply@organization.tld"
 PASS=
 FAIL=
 rm -f *.html *.log *.shar
-for PKG in ${1:-$PKGS} ; do
+for PKG in ${@:-$PKGS} ; do
 	test -d $PKG
 	SD=`pwd`/$PKG
 	TS=`pwd`/$PKG/test.sh
