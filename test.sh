@@ -54,9 +54,9 @@ ls -- *.html *.log | sort | sed 's/\(.*$\)/<a href="\1">\1<\/a>\n<br\/>/g' > ind
 SL="$CMT"
 WD=`basename $PWD`
 cd ..
-shar $WD/*.log $WD/*.html > $WD/$WD.shar
+shar -q -T $WD/*.log $WD/*.html > $WD/$WD.shar
 cd -
-ls -l -- "$WD.shar"
+test -f "$WD.shar"
 test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
 test -n "$FAIL" || test -n "$PASS" && test -n "$EMAIL" && \
 	echo "Mailed to $EMAIL: " "$SL" && \
