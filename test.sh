@@ -53,13 +53,16 @@ ls -- *.html *.log | sort | sed 's/\(.*$\)/<a href="\1">\1<\/a>\n<br\/>/g' > ind
 #SL="${FAIL:+FAIL:}${FAIL} ${PASS:+PASS:}${PASS}"
 SL="$CMT"
 WD=`basename $PWD`
+LS=`basename $PWD`.shar
 cd ..
-shar -q -T $WD/*.log $WD/*.html > $WD/$WD.shar
-test -f "$WD/$WD.shar"
+shar -q -T $WD/*.log $WD/*.html \
+	$WD/test.sh $WD/*/test.sh $WD/*/*.shar \
+	> $WD/$LS
+test -f "$WD/$LS"
 cd -
 test -n "$FAIL" && FF=failed-all.log && tail -n 10000 failed-*.log > $FF
 test -z "$FAIL" && FF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
 test -n "$FAIL" || test -n "$PASS" && test -n "$EMAIL" && \
 	echo "Mailed to $EMAIL: " "$SL" && \
-	echo -e "$BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} -a $WD.shar ${FF:+-a} ${FF} "${EMAIL}"
+	echo -e "$BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} -a $LS ${FF:+-a} ${FF} "${EMAIL}"
