@@ -57,8 +57,9 @@ cd ..
 shar -q -T $WD/*.log $WD/*.html > $WD/$WD.shar
 test -f "$WD/$WD.shar"
 cd -
-tail -n 10000 failed-*.log > failed-all.log
+test -n "$FAIL" && FF=failed-all.log && tail -n 10000 failed-*.log > $FF
+test -z "$FAIL" && FF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
 test -n "$FAIL" || test -n "$PASS" && test -n "$EMAIL" && \
 	echo "Mailed to $EMAIL: " "$SL" && \
-	echo -e "$BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} -a $WD.shar -a failed-all.log "${EMAIL}"
+	echo -e "$BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} -a $WD.shar ${FF:+-a} ${FF} "${EMAIL}"
