@@ -56,7 +56,7 @@ WD=`basename $PWD`
 LS=`basename $PWD`.shar
 cd ..
 shar -q -T $WD/*.log $WD/*.html \
-	$WD/test.sh $WD/*/test.sh $WD/*/*.shar \
+	$WD/README.md $WD/test.sh $WD/*/test.sh $WD/*/*.shar \
 	> $WD/$LS
 test -f "$WD/$LS"
 cd -
