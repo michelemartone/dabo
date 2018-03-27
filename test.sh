@@ -3,7 +3,7 @@ set -e
 EMAIL=${EMAIL:="noreply@organization.tld"}
 VL=${VL:="0"}
 test "$VL" -ge 1 && set -x
-PKGS='false true filesystems librsb intel cmake octave'
+PKGS='false true filesystems librsb intel cmake octave lrztools'
 PASS=''
 FAIL=''
 rm -f -- *.html *.log *.shar
