@@ -42,7 +42,7 @@ echo
 BODY=
 test -n "$FAIL" && BODY+="FAIL: $FAIL. \n"
 test -n "$PASS" && BODY+="PASS: $PASS. \n"
-CMT=
+CMT="$HOSTNAME : "
 test -z "$FAIL" && test -n "$PASS" && CMT+="All tests passed."
 test -n "$FAIL" && test -z "$PASS" && CMT+="All tests failed."
 test -n "$FAIL" && test -n "$PASS" && CMT+="Some tests failed."
