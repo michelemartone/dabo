@@ -2,7 +2,7 @@
 VL=0
 set -e
 test $VL -ge 1 && set -x
-PKGS='librsb intel cmake false true'
+PKGS='false true librsb intel cmake'
 EMAIL="noreply@organization.tld"
 #EMAIL=
 PASS=
@@ -38,6 +38,7 @@ for PKG in ${@:-$PKGS} ; do
 	test $VL -ge 2 && nl $LF
 	cd - 2>&1 > $DN
 done
+FAIL=${FAIL// false/}
 echo
 BODY=
 test -n "$FAIL" && BODY+="FAIL: $FAIL. \n"
