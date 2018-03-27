@@ -1,10 +1,9 @@
 #!/bin/bash
-VL=0
 set -e
+EMAIL=${EMAIL:="noreply@organization.tld"}
+VL=${VL:="0"}
 test $VL -ge 1 && set -x
 PKGS='false true librsb intel cmake'
-EMAIL="noreply@organization.tld"
-#EMAIL=
 PASS=
 FAIL=
 rm -f *.html *.log *.shar
