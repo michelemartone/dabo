@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
-module help svn
-module show svn
-module load svn
+module help subversion
+module show subversion
+module load subversion
 set -x
 which svn
 svn help ls
