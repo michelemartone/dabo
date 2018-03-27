@@ -3,7 +3,7 @@ set -e
 EMAIL=${EMAIL:="noreply@organization.tld"}
 VL=${VL:="0"}
 test "$VL" -ge 1 && set -x
-PKGS='false true filesystems gcc intel cmake librsb octave lrztools matlab'
+PKGS='false true filesystems gcc intel git svn cmake librsb octave lrztools matlab'
 PASS=''
 FAIL=''
 rm -f -- *.html *.log *.shar
