@@ -81,8 +81,10 @@ CMT="$HOSTNAME : "
 test -z "$FAIL" && test -n "$PASS" && CMT+="All tests passed."
 test -n "$FAIL" && test -z "$PASS" && CMT+="All tests failed."
 test -n "$FAIL" && test -n "$PASS" && CMT+="Some tests failed."
-#test -n "$FAIL" && for t in $FAIL ; do for f in $t*.{log,html} ; do mv $f failed-$f ; done; done
-#test -n "$PASS" && for t in $PASS ; do for f in $t*.{log,html} ; do mv $f passed-$f ; done; done
+LOFL=""
+LOPL=""
+test -n "$FOFL" && for t in $FOFL ; do [[ "$t" =~ \.log ]] && LOFL+=" $t" ; done; 
+test -n "$POFL" && for t in $POFL ; do [[ "$t" =~ \.log ]] && LOPL+=" $t" ; done; 
 #ls -- *.html *.log | sort | sed 's/\(.*$\)/<a href="\1">\1<\/a>\n<br\/>/g' > index.html
 #SL="${FAIL:+FAIL:}${FAIL} ${PASS:+PASS:}${PASS}"
 IF="test.sh README.md"
@@ -106,14 +108,16 @@ ls -l   "$WD/$LS"
 cd -
 #bash   "$PS"
 #bash   "$LS"
-#test -n "$FAIL" && FF=failed-all.log && tail -n 10000 failed-*.log > $FF
 test -n "$FAIL" && FF=$FS
 test -n "$PASS" && PF=$PS
 test -z "$FAIL" && FF=''
 test -z "$PASS" && PF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
+FL='' PL=''
+test -n "$LOFL" && FL=failed-all.log && tail -n 10000 $LOFL > $FF
+test -n "$LOPL" && PL=passed-all.log && tail -n 10000 $LOPL > $PF
 if test -n "$EMAIL" ; then
 	test -n "$FAIL" || test -n "$PASS" && \
 	echo "Mailed to $EMAIL: " "$SL" && \
-	echo -e "$BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} -a $LS ${FF:+-a} ${FF} ${PF:+-a} ${PF} "${EMAIL}";
+	echo -e "$BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} -a ${LS} "${EMAIL}";
 fi
