@@ -114,8 +114,8 @@ test -z "$FAIL" && FF=''
 test -z "$PASS" && PF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
 FL='' PL=''
-test -n "$LOFL" && FL=failed-all.log && tail -n 10000 $LOFL > $FF
-test -n "$LOPL" && PL=passed-all.log && tail -n 10000 $LOPL > $PF
+test -n "$LOFL" && FL=failed-all.log && tail -n 10000 $LOFL > $FL
+test -n "$LOPL" && PL=passed-all.log && tail -n 10000 $LOPL > $PL
 if test -n "$EMAIL" ; then
 	test -n "$FAIL" || test -n "$PASS" && \
 	echo "Mailed to $EMAIL: " "$SL" && \
