@@ -22,6 +22,7 @@ example files.
 The script reacts to the following environment variables:
  SCAMC_EMAIL : if set, send report here.
  SCAMC_VERBOSITY : print verbosity: (0), 1, 2.
+ SCAMC_TIMEOUT   : test timeout: <number>[ms], e.g. 4s, 1m, .. 
 
 TODO list:
 
@@ -30,7 +31,6 @@ Use a read only tests script dir, and a results dir:
  SCAMC_TESTS_DIR # into PKGS
  SCAMC_FAILED_DIR
  SCAMC_PASSED_DIR
- SCAMC_TIMEOUT
 
 Test for the test itself.
 

@@ -6,6 +6,8 @@ test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "Error: SCAMC_EMAIL=$SCA
 test -n "$EMAIL" && echo "SCAMC_EMAIL=$SCAMC_EMAIL : will send a report email."
 VL=${SCAMC_VERBOSITY:="0"}
 [[ "$VL" =~ ^[012]$ ]] || { echo "Error: SCAMC_VERBOSITY=$SCAMC_VERBOSITY : 0, 1 or 2!"; false; }
+TO=${SCAMC_TIMEOUT:="4s"}
+[[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "Error: SCAMC_TIMEOUT=$SCAMC_TIMEOUT: <number>[ms], e.g. 4s, 1m, ..!"; false; }
 test "$VL" -ge 1 && set -x
 PKGS='false true filesystems gcc intel git svn cmake librsb octave lrztools matlab spack python-3.0.1 gromacs'
 PASS=''
@@ -23,7 +25,7 @@ for PKG in ${@:-$PKGS} ; do
 	cd $TD
 	( for f in $SD/*.shar ; do test -f $f && cp $f . ; done || true ; ) > $DN
 	cp $TS .
-	( timeout 4s bash -e $TS 2>&1 ; ) 1> $LF \
+	( timeout $TO bash -e $TS 2>&1 ; ) 1> $LF \
 		&& { TR="pass"; echo "PASS: $PKG"; PASS+=" $PKG"; } \
 		|| { TR="fail"; echo "FAIL: $PKG"; FAIL+=" $PKG"; }
 	#mailx -s test-batch-${PKG}:${TR} -a ${LF} -S from="${EMAIL}" "${EMAIL}"
