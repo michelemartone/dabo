@@ -9,31 +9,31 @@ VL=${SCAMC_VERBOSITY:="0"}
 TO=${SCAMC_TIMEOUT:="4s"}
 [[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "Error: SCAMC_TIMEOUT=$SCAMC_TIMEOUT: <number>[ms], e.g. 4s, 1m, ..!"; false; }
 test "$VL" -ge 1 && set -x
-PKGS='false true filesystems gcc intel git svn cmake librsb octave lrztools matlab spack python-3.0.1 gromacs'
+TSTS='false true filesystems gcc intel git svn cmake librsb octave lrztools matlab spack python-3.0.1 gromacs'
 PASS=''
 FAIL=''
 rm -f -- *.html *.log *.shar
-for PKG in ${@:-$PKGS} ; do
-	if test -d $PKG; then
-		test ${PKG:0:1} = '/' && { echo "Error: $PKG must be a local directory!"; false; }
+for TST in ${@:-$TSTS} ; do
+	if test -d $TST; then
+		test ${TST:0:1} = '/' && { echo "Error: $TST must be a local directory!"; false; }
 	else
-		echo "Error: $PKG is not a directory!";
+		echo "Error: $TST is not a directory!";
 		false
 	fi
-	SD=`pwd`/$PKG
-	TS=`pwd`/$PKG/test.sh
-	LF=`pwd`/$PKG.log
+	SD=`pwd`/$TST
+	TS=`pwd`/$TST/test.sh
+	LF=`pwd`/$TST.log
 	test -f $TS
-	TD=`mktemp -d /dev/shm/$PKG-XXXX`
+	TD=`mktemp -d /dev/shm/$TST-XXXX`
 	DN=/dev/null
 	test -d $TD
 	cd $TD
 	( for f in $SD/*.shar ; do test -f $f && cp $f . ; done || true ; ) > $DN
 	cp $TS .
 	( timeout $TO bash -e $TS 2>&1 ; ) 1> $LF \
-		&& { TR="pass"; echo "PASS: $PKG"; PASS+=" $PKG"; } \
-		|| { TR="fail"; echo "FAIL: $PKG"; FAIL+=" $PKG"; }
-	#mailx -s test-batch-${PKG}:${TR} -a ${LF} -S from="${EMAIL}" "${EMAIL}"
+		&& { TR="pass"; echo "PASS: $TST"; PASS+=" $TST"; } \
+		|| { TR="fail"; echo "FAIL: $TST"; FAIL+=" $TST"; }
+	#mailx -s test-batch-${TST}:${TR} -a ${LF} -S from="${EMAIL}" "${EMAIL}"
 	FL="test.sh `find -maxdepth 1 -name '*.c' -o -iname '*.h' -o -iname '*.F90'`"
 	test "$VL" -ge 1 && ls -l -- $FL 
 	for TF in $FL ; do
