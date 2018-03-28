@@ -77,6 +77,8 @@ test -n "$PASS" && PF=$PS
 test -z "$FAIL" && FF=''
 test -z "$PASS" && PF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
-test -n "$FAIL" || test -n "$PASS" && test -n "$EMAIL" && \
+if test -n "$EMAIL" ; then
+	test -n "$FAIL" || test -n "$PASS" && \
 	echo "Mailed to $EMAIL: " "$SL" && \
-	echo -e "$BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} -a $LS ${FF:+-a} ${FF} ${PF:+-a} ${PF} "${EMAIL}"
+	echo -e "$BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} -a $LS ${FF:+-a} ${FF} ${PF:+-a} ${PF} "${EMAIL}";
+fi
