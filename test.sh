@@ -15,7 +15,10 @@ PASS=''
 FAIL=''
 POFL=''
 FOFL=''
-rm -f -- *.shar
+PDIR=`pwd`/
+test -d "$PDIR" -a "${PDIR:0:1}" = '/'
+mkdir -p $PDIR
+rm -f -- $PDIR/*.shar
 if test "$VL" -ge 1 ; then VS=''; VCP=-v; else VS=-q; VCP='' ; fi
 for TST in ${@:-$TSTS} ; do
 	if   test -d "$TST" -a "${TST:0:1}" = '/'; then
@@ -26,7 +29,7 @@ for TST in ${@:-$TSTS} ; do
 		DP=$TST
 	elif test -d "$TST" -a "${TST:0:1}" = '.'; then
 		TS=`pwd`/$TST/test.sh
-		PD=`pwd`/
+		PD=$PDIR
 		DP=$TST
 		test "$VL" -ge 1 && echo "INFO: Will write logs to $PD$DP"
 	elif test ! -d "$TST" ; then
@@ -34,7 +37,7 @@ for TST in ${@:-$TSTS} ; do
 		false
 	else
 		TS=`pwd`/$TST/test.sh
-		PD=`pwd`/
+		PD=$PDIR
 		DP=$TST # relative
 		test "$VL" -ge 1 && echo "INFO: Will write logs to $PD$DP"
 	fi
@@ -53,6 +56,7 @@ for TST in ${@:-$TSTS} ; do
 	{ for f in $TST/*.shar $TST/test.sh ; do test -f $f && cp ${VCP} -- $f $TD && IFL="$IFL `basename $f`" ; done || true ; } > $DN
 	cp ${VCP} -- $TS $TD
 	cd $TD
+	mkdir -p `dirname $LF`
 	( timeout $TO bash -e $TS 2>&1 ; ) 1> $LF \
 		&& { TR="pass"; echo "PASS TEST: $TST"; PASS+=" $TBN"; } \
 		|| { TR="fail"; echo "FAIL TEST: $TST"; FAIL+=" $TBN"; }
@@ -61,6 +65,7 @@ for TST in ${@:-$TSTS} ; do
 	test "$VL" -ge 1 && ls -l -- $OFL 
 	for TF in $OFL ; do
 		HS=${DP}/`basename ${TF}`.html
+		mkdir -p `dirname $PD$HS`
 		HOME=. vim -E $TF -c 'syntax on' -c 'TOhtml' -c "w! ${PD}$HS" -c 'qall!' 2>&1 > $DN
 		test -f ${PD}${HS}
 		#elinks ${PD}${HS}
@@ -71,8 +76,8 @@ for TST in ${@:-$TSTS} ; do
 	test "$TR" = "fail" && test "$VL" -ge 2 && nl $LF
 	test "$TR" = "pass" && POFL="$POFL ${LP}"
 	test "$TR" = "fail" && FOFL="$FOFL ${LP}"
-	test "$TR" = "pass" -a -n "${IFL}" && cp -np ${VCP} -- $IFL $PD$DP
-	test "$TR" = "fail" -a -n "${IFL}" && cp -np ${VCP} -- $IFL $PD$DP
+	test "$TR" = "pass" -a -n "${IFL}" && mkdir -p $PD$DP && cp -np ${VCP} -- $IFL $PD$DP
+	test "$TR" = "fail" -a -n "${IFL}" && mkdir -p $PD$DP && cp -np ${VCP} -- $IFL $PD$DP
 	test "$VL" -ge 1 && ls -l
 	rm -fR -- $TD
 	cd - 2>&1 > $DN
@@ -85,25 +90,28 @@ CMT="$HOSTNAME : "
 test -z "$FAIL" && test -n "$PASS" && CMT+="All tests passed."
 test -n "$FAIL" && test -z "$PASS" && CMT+="All tests failed."
 test -n "$FAIL" && test -n "$PASS" && CMT+="Some tests failed."
+SL="$CMT"
 LOFL=""
 LOPL=""
 test -n "$FOFL" && for t in $FOFL ; do [[ "$t" =~ \.log ]] && LOFL+=" $t" ; done; 
 test -n "$POFL" && for t in $POFL ; do [[ "$t" =~ \.log ]] && LOPL+=" $t" ; done; 
 #ls -- *.html *.log | sort | sed 's/\(.*$\)/<a href="\1">\1<\/a>\n<br\/>/g' > index.html
 #SL="${FAIL:+FAIL:}${FAIL} ${PASS:+PASS:}${PASS}"
+cd $PDIR
 FL='' PL=''
-test -n "$LOFL" && FL=failed-all.log && tail -n 10000 $LOFL > $FL
-test -n "$LOPL" && PL=passed-all.log && tail -n 10000 $LOPL > $PL
-IF="test.sh README.md"
-SL="$CMT"
-WD=`basename $PWD`
-PS=`basename $PWD`-passed.shar
-shar ${VS} -T $POFL $IF > $PS
-test -f "$PS"
-FS=`basename $PWD`-failed.shar
-shar ${VS} -T $FOFL $IF > $FS
-test -f "$FS"
+test -n "$LOFL" && FL=$PDIR/failed.log && tail -n 10000 $LOFL > $FL
+test -n "$LOPL" && PL=$PDIR/passed.log && tail -n 10000 $LOPL > $PL
+#IF="test.sh README.md"
+IF=''
+if test -n "$FOFL"; then
+	PS=$PDIR/passed.shar; shar ${VS} -T $POFL $IF > $PS ; test -f "$PS"; 
+fi
+if test -n "$FOFL"; then
+	FS=$PDIR/failed.shar; shar ${VS} -T $FOFL $IF > $FS ; test -f "$FS";
+fi
+cd -
 LS=`basename $PWD`.shar
+WD=`basename $PWD`
 cd ..
 shar ${VS} -T  \
 	$WD/README.md $WD/test.sh $WD/*/test.sh $WD/*/*.shar \
