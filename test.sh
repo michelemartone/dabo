@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
-EMAIL=${EMAIL:="noreply@organization.tld"}
+EMAIL=${SCAMC_EMAIL:=""}
+test -z "$EMAIL" && echo "SCAMC_EMAIL unset -- no report email will be sent."
+test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "SCAMC_EMAIL=$SCAMC_EMAIL : invalid email address!"; false; }
+test -n "$EMAIL" && echo "SCAMC_EMAIL=$SCAMC_EMAIL : will send a report email."
 VL=${VL:="0"}
 test "$VL" -ge 1 && set -x
 PKGS='false true filesystems gcc intel git svn cmake librsb octave lrztools matlab spack python-3.0.1 gromacs'

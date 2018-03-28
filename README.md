@@ -19,6 +19,9 @@ Each test is a directory containing 'test.sh' and if
 needed, a bunch of extra files. See the attached
 example files.
  
+The script reacts to the following environment variables:
+ SCAMC_EMAIL : if set, send report here.
+
 TODO list:
 
 Make script stand-alone and independent from srcs dir.
