@@ -14,11 +14,17 @@ PASS=''
 FAIL=''
 rm -f -- *.html *.log *.shar
 for TST in ${@:-$TSTS} ; do
-	if test -d $TST; then
-		test ${TST:0:1} = '/' && { echo "Error: $TST must be a local directory!"; false; }
-	else
+	if   test -d "$TST" -a "${TST:0:1}" = '/'; then
+		echo "Error: $TST is not a local directory!";
+		false;
+	elif test -d "$TST" -a "${TST:0:1}" = '.'; then
+		echo "Error: $TST is not an unprefixed local directory!";
+		false;
+	elif test ! -d "$TST" ; then
 		echo "Error: $TST is not a directory!";
 		false
+	else
+		true
 	fi
 	SD=`pwd`/$TST
 	TS=`pwd`/$TST/test.sh
