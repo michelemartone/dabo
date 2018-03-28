@@ -2,9 +2,10 @@
 set -e
 EMAIL=${SCAMC_EMAIL:=""}
 test -z "$EMAIL" && echo "SCAMC_EMAIL unset -- no report email will be sent."
-test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "SCAMC_EMAIL=$SCAMC_EMAIL : invalid email address!"; false; }
+test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "Error: SCAMC_EMAIL=$SCAMC_EMAIL : invalid email address!"; false; }
 test -n "$EMAIL" && echo "SCAMC_EMAIL=$SCAMC_EMAIL : will send a report email."
-VL=${VL:="0"}
+VL=${SCAMC_VERBOSITY:="0"}
+[[ "$VL" =~ ^[012]$ ]] || { echo "Error: SCAMC_VERBOSITY=$SCAMC_VERBOSITY : 0, 1 or 2!"; false; }
 test "$VL" -ge 1 && set -x
 PKGS='false true filesystems gcc intel git svn cmake librsb octave lrztools matlab spack python-3.0.1 gromacs'
 PASS=''
