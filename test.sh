@@ -28,6 +28,7 @@ for TST in ${@:-$TSTS} ; do
 		TS=`pwd`/$TST/test.sh
 		PD=`pwd`/
 		DP=$TST
+		test "$VL" -ge 1 && echo "INFO: Will write logs to $PD$DP"
 	elif test ! -d "$TST" ; then
 		echo "ERROR: $TST is not a directory!";
 		false
@@ -35,6 +36,7 @@ for TST in ${@:-$TSTS} ; do
 		TS=`pwd`/$TST/test.sh
 		PD=`pwd`/
 		DP=$TST # relative
+		test "$VL" -ge 1 && echo "INFO: Will write logs to $PD$DP"
 	fi
 	test -d "$TST" -a "${TS:0:1}" = '/'
 	TBN=${TST//[.\/]/_}
@@ -118,6 +120,6 @@ test -z "$PASS" && PF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
 if test -n "$EMAIL" ; then
 	test -n "$FAIL" || test -n "$PASS" && \
-	echo "INFO: Mailed to $EMAIL: " "$SL" && \
+	echo "INFO: Mailed to <$EMAIL>: " "$SL" && \
 	echo -e "$BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} -a ${LS} "${EMAIL}";
 fi

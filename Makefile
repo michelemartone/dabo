@@ -10,4 +10,4 @@ x:
 clean:
 	#rm -f *.log *.shar
 	#rm -f *.html *.log *.shar
-	rm -f */*.html */*.log *.shar
+	rm -f */*.html */*.log *.shar *.log
