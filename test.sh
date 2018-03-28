@@ -39,7 +39,8 @@ for TST in ${@:-$TSTS} ; do
 	while test "$TBN" != "${TBN/#_/}"; do TBN=${TBN/#_/}; done
 	test -n "$TBN"
 	[[ "$TBN" =~ ^[._[:alnum:]-]*$ ]] || { echo "Error: only alphanumeric and _ in test names, please (not $TBN)."; false; }
-	LF=$PD$DP/test.sh.log
+	LP=$DP/test.sh.log
+	LF=$PD$LP
 	test -f $TS
 	TD=`mktemp -d /dev/shm/$TBN-XXXX`
 	DN=/dev/null
@@ -55,17 +56,17 @@ for TST in ${@:-$TSTS} ; do
 	OFL="`find -maxdepth 1 -name test.sh -o -name '*.c' -o -iname '*.h' -o -iname '*.F90'`"
 	test "$VL" -ge 1 && ls -l -- $OFL 
 	for TF in $OFL ; do
-		HS=${PD}${DP}/`basename ${TF}`.html # HS=$TF.html
-		HOME=. vim -E $TF -c 'syntax on' -c 'TOhtml' -c "w! $HS" -c 'qall!' 2>&1 > $DN
-		test -f $HS
-		test "$TR" = "pass" && POFL="$POFL ${DP}/`basename ${TF}`".html
-		test "$TR" = "fail" && FOFL="$FOFL ${DP}/`basename ${TF}`".html
-		#elinks $HS
+		HS=${DP}/`basename ${TF}`.html
+		HOME=. vim -E $TF -c 'syntax on' -c 'TOhtml' -c "w! ${PD}$HS" -c 'qall!' 2>&1 > $DN
+		test -f ${PD}${HS}
+		#elinks ${PD}${HS}
+		test "$TR" = "pass" && POFL="$POFL ${HS}"
+		test "$TR" = "fail" && FOFL="$FOFL ${HS}"
 	done
 	test -f $LF
 	test "$VL" -ge 2 && nl $LF
-	test "$TR" = "pass" && POFL="$POFL ${DP}/test.sh.log"
-	test "$TR" = "fail" && FOFL="$FOFL ${DP}/test.sh.log"
+	test "$TR" = "pass" && POFL="$POFL ${LP}"
+	test "$TR" = "fail" && FOFL="$FOFL ${LP}"
 	test "$TR" = "pass" -a -n "${IFL}" && cp -npv $IFL $PD$DP
 	test "$TR" = "fail" -a -n "${IFL}" && cp -npv $IFL $PD$DP
 	test "$VL" -ge 1 && ls -l
