@@ -85,14 +85,17 @@ test -n "$FAIL" && test -n "$PASS" && CMT+="Some tests failed."
 #test -n "$PASS" && for t in $PASS ; do for f in $t*.{log,html} ; do mv $f passed-$f ; done; done
 #ls -- *.html *.log | sort | sed 's/\(.*$\)/<a href="\1">\1<\/a>\n<br\/>/g' > index.html
 #SL="${FAIL:+FAIL:}${FAIL} ${PASS:+PASS:}${PASS}"
+IF="test.sh README.md"
 SL="$CMT"
 WD=`basename $PWD`
 PS=`basename $PWD`-passed.shar
-shar -q -T $POFL \
-	README.md \
-	> $PS
+shar -q -T $POFL $IF > $PS
 test -f "$PS"
 ls -l   "$PS"
+FS=`basename $PWD`-failed.shar
+shar -q -T $FOFL $IF > $FS
+test -f "$FS"
+ls -l   "$FS"
 LS=`basename $PWD`.shar
 cd ..
 shar -q -T  \
@@ -104,8 +107,9 @@ cd -
 #bash   "$PS"
 #bash   "$LS"
 #test -n "$FAIL" && FF=failed-all.log && tail -n 10000 failed-*.log > $FF
+test -n "$FAIL" && FF=$FS
 test -n "$PASS" && PF=$PS
-#test -z "$FAIL" && FF=''
+test -z "$FAIL" && FF=''
 test -z "$PASS" && PF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
 if test -n "$EMAIL" ; then
