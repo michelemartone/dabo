@@ -14,7 +14,12 @@ PASS=''
 FAIL=''
 rm -f -- *.html *.log *.shar
 for PKG in ${@:-$PKGS} ; do
-	test -d $PKG
+	if test -d $PKG; then
+		test ${PKG:0:1} = '/' && { echo "Error: $PKG must be a local directory!"; false; }
+	else
+		echo "Error: $PKG is not a directory!";
+		false
+	fi
 	SD=`pwd`/$PKG
 	TS=`pwd`/$PKG/test.sh
 	LF=`pwd`/$PKG.log
