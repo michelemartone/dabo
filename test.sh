@@ -16,6 +16,7 @@ rm -f -- *.html *.log *.shar
 for TST in ${@:-$TSTS} ; do
 	if   test -d "$TST" -a "${TST:0:1}" = '/'; then
 		echo "Error: $TST is not a local directory!";
+		false
 		TS=$TST/test.sh
 	elif test -d "$TST" -a "${TST:0:1}" = '.'; then
 		TS=`pwd`/$TST/test.sh
