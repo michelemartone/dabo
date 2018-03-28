@@ -22,19 +22,19 @@ for TST in ${@:-$TSTS} ; do
 		echo "ERROR: $TST is not a local directory!";
 		false
 		TS=$TST/test.sh
-		DP=$TST
 		PD=''
+		DP=$TST
 	elif test -d "$TST" -a "${TST:0:1}" = '.'; then
 		TS=`pwd`/$TST/test.sh
-		DP=`pwd`/$TST
-		PD=''
+		PD=`pwd`/
+		DP=$TST
 	elif test ! -d "$TST" ; then
 		echo "ERROR: $TST is not a directory!";
 		false
 	else
 		TS=`pwd`/$TST/test.sh
-		DP=$TST # relative
 		PD=`pwd`/
+		DP=$TST # relative
 	fi
 	test -d "$TST" -a "${TS:0:1}" = '/'
 	TBN=${TST//[.\/]/_}
