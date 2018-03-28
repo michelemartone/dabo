@@ -1,13 +1,13 @@
 #!/bin/bash
 set -e
 EMAIL=${SCAMC_EMAIL:=""}
-test -z "$EMAIL" && echo "SCAMC_EMAIL unset -- no report email will be sent."
-test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "Error: SCAMC_EMAIL=$SCAMC_EMAIL : invalid email address!"; false; }
-test -n "$EMAIL" && echo "SCAMC_EMAIL=$SCAMC_EMAIL : will send a report email."
+test -z "$EMAIL" && echo "INFO: SCAMC_EMAIL unset -- no report email will be sent."
+test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "ERROR: SCAMC_EMAIL=$SCAMC_EMAIL : invalid email address!"; false; }
+test -n "$EMAIL" && echo "INFO: SCAMC_EMAIL=$SCAMC_EMAIL : will send a report email."
 VL=${SCAMC_VERBOSITY:="0"}
-[[ "$VL" =~ ^[012]$ ]] || { echo "Error: SCAMC_VERBOSITY=$SCAMC_VERBOSITY : 0, 1 or 2!"; false; }
+[[ "$VL" =~ ^[012]$ ]] || { echo "ERROR: SCAMC_VERBOSITY=$SCAMC_VERBOSITY : 0, 1 or 2!"; false; }
 TO=${SCAMC_TIMEOUT:="4s"}
-[[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "Error: SCAMC_TIMEOUT=$SCAMC_TIMEOUT: <number>[ms], e.g. 4s, 1m, ..!"; false; }
+[[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "ERROR: SCAMC_TIMEOUT=$SCAMC_TIMEOUT: <number>[ms], e.g. 4s, 1m, ..!"; false; }
 test "$VL" -ge 1 && set -x
 TSTS='false true filesystems gcc intel git svn cmake librsb octave lrztools matlab spack python-3.0.1 gromacs timeout'
 PASS=''
@@ -17,7 +17,7 @@ FOFL=''
 rm -f -- *.shar
 for TST in ${@:-$TSTS} ; do
 	if   test -d "$TST" -a "${TST:0:1}" = '/'; then
-		echo "Error: $TST is not a local directory!";
+		echo "ERROR: $TST is not a local directory!";
 		false
 		TS=$TST/test.sh
 		DP=$TST
@@ -27,7 +27,7 @@ for TST in ${@:-$TSTS} ; do
 		DP=`pwd`/$TST
 		PD=''
 	elif test ! -d "$TST" ; then
-		echo "Error: $TST is not a directory!";
+		echo "ERROR: $TST is not a directory!";
 		false
 	else
 		TS=`pwd`/$TST/test.sh
@@ -38,7 +38,7 @@ for TST in ${@:-$TSTS} ; do
 	TBN=${TST//[.\/]/_}
 	while test "$TBN" != "${TBN/#_/}"; do TBN=${TBN/#_/}; done
 	test -n "$TBN"
-	[[ "$TBN" =~ ^[._[:alnum:]-]*$ ]] || { echo "Error: only alphanumeric and _ in test names, please (not $TBN)."; false; }
+	[[ "$TBN" =~ ^[._[:alnum:]-]*$ ]] || { echo "ERROR: only alphanumeric and _ in test names, please (not $TBN)."; false; }
 	LP=$DP/test.sh.log
 	LF=$PD$LP
 	test -f $TS
@@ -87,37 +87,35 @@ test -n "$FOFL" && for t in $FOFL ; do [[ "$t" =~ \.log ]] && LOFL+=" $t" ; done
 test -n "$POFL" && for t in $POFL ; do [[ "$t" =~ \.log ]] && LOPL+=" $t" ; done; 
 #ls -- *.html *.log | sort | sed 's/\(.*$\)/<a href="\1">\1<\/a>\n<br\/>/g' > index.html
 #SL="${FAIL:+FAIL:}${FAIL} ${PASS:+PASS:}${PASS}"
+FL='' PL=''
+test -n "$LOFL" && FL=failed-all.log && tail -n 10000 $LOFL > $FL
+test -n "$LOPL" && PL=passed-all.log && tail -n 10000 $LOPL > $PL
 IF="test.sh README.md"
 SL="$CMT"
 WD=`basename $PWD`
 PS=`basename $PWD`-passed.shar
 shar -q -T $POFL $IF > $PS
 test -f "$PS"
-ls -l   "$PS"
 FS=`basename $PWD`-failed.shar
 shar -q -T $FOFL $IF > $FS
 test -f "$FS"
-ls -l   "$FS"
 LS=`basename $PWD`.shar
 cd ..
 shar -q -T  \
 	$WD/README.md $WD/test.sh $WD/*/test.sh $WD/*/*.shar \
 	> $WD/$LS
 test -f "$WD/$LS"
-ls -l   "$WD/$LS"
 cd -
 #bash   "$PS"
 #bash   "$LS"
 test -n "$FAIL" && FF=$FS
 test -n "$PASS" && PF=$PS
+echo "INFO: Give a look at: ${FL} ${PL} ${FF} ${PF} ${LS}"
 test -z "$FAIL" && FF=''
 test -z "$PASS" && PF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
-FL='' PL=''
-test -n "$LOFL" && FL=failed-all.log && tail -n 10000 $LOFL > $FL
-test -n "$LOPL" && PL=passed-all.log && tail -n 10000 $LOPL > $PL
 if test -n "$EMAIL" ; then
 	test -n "$FAIL" || test -n "$PASS" && \
-	echo "Mailed to $EMAIL: " "$SL" && \
+	echo "INFO: Mailed to $EMAIL: " "$SL" && \
 	echo -e "$BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} -a ${LS} "${EMAIL}";
 fi
