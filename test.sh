@@ -9,56 +9,70 @@ VL=${SCAMC_VERBOSITY:="0"}
 TO=${SCAMC_TIMEOUT:="4s"}
 [[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "Error: SCAMC_TIMEOUT=$SCAMC_TIMEOUT: <number>[ms], e.g. 4s, 1m, ..!"; false; }
 test "$VL" -ge 1 && set -x
-TSTS='false true filesystems gcc intel git svn cmake librsb octave lrztools matlab spack python-3.0.1 gromacs'
+TSTS='false true filesystems gcc intel git svn cmake librsb octave lrztools matlab spack python-3.0.1 gromacs timeout'
 PASS=''
 FAIL=''
-rm -f -- *.html *.log *.shar
+POFL=''
+FOFL=''
+rm -f -- *.shar
 for TST in ${@:-$TSTS} ; do
 	if   test -d "$TST" -a "${TST:0:1}" = '/'; then
 		echo "Error: $TST is not a local directory!";
 		false
 		TS=$TST/test.sh
+		DP=$TST
+		PD=''
 	elif test -d "$TST" -a "${TST:0:1}" = '.'; then
 		TS=`pwd`/$TST/test.sh
+		DP=`pwd`/$TST
+		PD=''
 	elif test ! -d "$TST" ; then
 		echo "Error: $TST is not a directory!";
 		false
 	else
 		TS=`pwd`/$TST/test.sh
+		DP=$TST # relative
+		PD=`pwd`/
 	fi
+	test -d "$TST" -a "${TS:0:1}" = '/'
 	TBN=${TST//[.\/]/_}
 	while test "$TBN" != "${TBN/#_/}"; do TBN=${TBN/#_/}; done
 	test -n "$TBN"
-	[[ "$TBN" =~ ^[._[:alnum:]]*$ ]] || { echo "Only alphanumeric and _ in test names, please."; false; }
-	SD=`pwd`/$TST
-	LF=`pwd`/$TBN.log
+	[[ "$TBN" =~ ^[._[:alnum:]-]*$ ]] || { echo "Error: only alphanumeric and _ in test names, please (not $TBN)."; false; }
+	LF=$PD$DP/test.sh.log
 	test -f $TS
 	TD=`mktemp -d /dev/shm/$TBN-XXXX`
 	DN=/dev/null
 	test -d $TD
+	IFL=""
+	{ for f in $TST/*.shar $TST/test.sh ; do test -f $f && cp $f $TD && IFL="$IFL `basename $f`" ; done || true ; } > $DN
+	cp $TS $TD
 	cd $TD
-	( for f in $SD/*.shar ; do test -f $f && cp $f . ; done || true ; ) > $DN
-	cp $TS .
 	( timeout $TO bash -e $TS 2>&1 ; ) 1> $LF \
 		&& { TR="pass"; echo "PASS: $TST"; PASS+=" $TBN"; } \
 		|| { TR="fail"; echo "FAIL: $TST"; FAIL+=" $TBN"; }
-	#mailx -s test-batch-${TST}:${TR} -a ${LF} -S from="${EMAIL}" "${EMAIL}"
-	FL="test.sh `find -maxdepth 1 -name '*.c' -o -iname '*.h' -o -iname '*.F90'`"
-	test "$VL" -ge 1 && ls -l -- $FL 
-	for TF in $FL ; do
-		HS=${SD}-`basename ${TF}`.html # HS=$TF.html
+	#mailx -s test-batch-${TBN}:${TR} -a ${LF} -S from="${EMAIL}" "${EMAIL}"
+	OFL="`find -maxdepth 1 -name test.sh -o -name '*.c' -o -iname '*.h' -o -iname '*.F90'`"
+	test "$VL" -ge 1 && ls -l -- $OFL 
+	for TF in $OFL ; do
+		HS=${PD}${DP}/`basename ${TF}`.html # HS=$TF.html
 		HOME=. vim -E $TF -c 'syntax on' -c 'TOhtml' -c "w! $HS" -c 'qall!' 2>&1 > $DN
 		test -f $HS
+		test "$TR" = "pass" && POFL="$POFL ${DP}/`basename ${TF}`".html
+		test "$TR" = "fail" && FOFL="$FOFL ${DP}/`basename ${TF}`".html
 		#elinks $HS
 	done
-	test "$VL" -ge 1 && ls -l
-	rm -fR -- $TD
 	test -f $LF
 	test "$VL" -ge 2 && nl $LF
+	test "$TR" = "pass" && POFL="$POFL ${DP}/test.sh.log"
+	test "$TR" = "fail" && FOFL="$FOFL ${DP}/test.sh.log"
+	test "$TR" = "pass" -a -n "${IFL}" && cp -npv $IFL $PD$DP
+	test "$TR" = "fail" -a -n "${IFL}" && cp -npv $IFL $PD$DP
+	test "$VL" -ge 1 && ls -l
+	rm -fR -- $TD
 	cd - 2>&1 > $DN
 done
 FAIL=${FAIL// false/}
-echo
 BODY=
 test -n "$FAIL" && BODY+="FAIL: $FAIL. \n"
 test -n "$PASS" && BODY+="PASS: $PASS. \n"
@@ -66,29 +80,31 @@ CMT="$HOSTNAME : "
 test -z "$FAIL" && test -n "$PASS" && CMT+="All tests passed."
 test -n "$FAIL" && test -z "$PASS" && CMT+="All tests failed."
 test -n "$FAIL" && test -n "$PASS" && CMT+="Some tests failed."
-pwd
-test -n "$FAIL" && for t in $FAIL ; do for f in $t*.{log,html} ; do mv $f failed-$f ; done; done
-test -n "$PASS" && for t in $PASS ; do for f in $t*.{log,html} ; do mv $f passed-$f ; done; done
-ls -- *.html *.log | sort | sed 's/\(.*$\)/<a href="\1">\1<\/a>\n<br\/>/g' > index.html
+#test -n "$FAIL" && for t in $FAIL ; do for f in $t*.{log,html} ; do mv $f failed-$f ; done; done
+#test -n "$PASS" && for t in $PASS ; do for f in $t*.{log,html} ; do mv $f passed-$f ; done; done
+#ls -- *.html *.log | sort | sed 's/\(.*$\)/<a href="\1">\1<\/a>\n<br\/>/g' > index.html
 #SL="${FAIL:+FAIL:}${FAIL} ${PASS:+PASS:}${PASS}"
 SL="$CMT"
 WD=`basename $PWD`
 PS=`basename $PWD`-passed.shar
-shar -q -T passed*.log passed*.html \
-	README.md `find $PASS -maxdepth 1 -name 'test.sh' -or -name '*.shar'` \
+shar -q -T $POFL \
+	README.md \
 	> $PS
 test -f "$PS"
 ls -l   "$PS"
 LS=`basename $PWD`.shar
 cd ..
-shar -q -T $WD/*.log $WD/*.html \
+shar -q -T  \
 	$WD/README.md $WD/test.sh $WD/*/test.sh $WD/*/*.shar \
 	> $WD/$LS
 test -f "$WD/$LS"
+ls -l   "$WD/$LS"
 cd -
-test -n "$FAIL" && FF=failed-all.log && tail -n 10000 failed-*.log > $FF
+#bash   "$PS"
+#bash   "$LS"
+#test -n "$FAIL" && FF=failed-all.log && tail -n 10000 failed-*.log > $FF
 test -n "$PASS" && PF=$PS
-test -z "$FAIL" && FF=''
+#test -z "$FAIL" && FF=''
 test -z "$PASS" && PF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
 if test -n "$EMAIL" ; then
