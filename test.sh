@@ -12,6 +12,7 @@ test -z "$SCAMC_TIMEOUT" && echo "INFO: SCAMC_TIMEOUT unset -- will use default 
 TO=${SCAMC_TIMEOUT:="$TO"}
 [[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "ERROR: SCAMC_TIMEOUT=$SCAMC_TIMEOUT: <number>[ms], e.g. $TO, 1m, ..!"; false; }
 test "$VL" -ge 3 && set -x
+if test "$VL" -ge 1 ; then VMD=-v; VS=''; VCP=-v; else VMD=''; VS=-q; VCP=''; fi
 TSTS='false true filesystems gcc intel git svn cmake librsb octave lrztools matlab spack python-3.0.1 gromacs timeout'
 PASS=''
 FAIL=''
@@ -22,10 +23,9 @@ test -z "$SCAMC_RESULTS_DIR" && echo "INFO: SCAMC_RESULTS_DIR unset -- will use 
 PDIR=${SCAMC_RESULTS_DIR:="$PDIR"}
 test "${PDIR:0:1}" = '/' || { echo "ERROR: SCAMC_RESULTS_DIR=$SCAMC_RESULTS_DIR: not an absolute path ..!"; false; }
 [[ "$PDIR" =~ /$ ]] || PDIR+='/'
-mkdir -p "$PDIR"
+mkdir -p ${VMD} -- "$PDIR"
 test -d "$PDIR"
 rm -f -- $PDIR/*.shar
-if test "$VL" -ge 1 ; then VS=''; VCP=-v; else VS=-q; VCP='' ; fi
 for TST in ${@:-$TSTS} ; do
 	if   test -d "$TST" -a "${TST:0:1}" = '/'; then
 		echo "ERROR: $TST is not a local directory!";
@@ -62,7 +62,7 @@ for TST in ${@:-$TSTS} ; do
 	{ for f in $TST/*.shar $TST/test.sh ; do test -f $f && cp ${VCP} -- $f $TD && IFL="$IFL `basename $f`" ; done || true ; } > $DN
 	cp ${VCP} -- $TS $TD
 	cd $TD
-	mkdir -p `dirname $LF`
+	mkdir -p ${VMD} -- `dirname $LF`
 	( timeout $TO bash -e $TS 2>&1 ; ) 1> $LF \
 		&& { TR="pass"; echo "PASS TEST: $TST"; PASS+=" $TBN"; } \
 		|| { TR="fail"; echo "FAIL TEST: $TST"; FAIL+=" $TBN"; }
@@ -71,7 +71,7 @@ for TST in ${@:-$TSTS} ; do
 	test "$VL" -ge 1 && ls -l -- $OFL 
 	for TF in $OFL ; do
 		HS=${DP}/`basename ${TF}`.html
-		mkdir -p `dirname $PD$HS`
+		mkdir -p ${VMD} -- `dirname $PD$HS`
 		HOME=. vim -E $TF -c 'syntax on' -c 'TOhtml' -c "w! ${PD}$HS" -c 'qall!' 2>&1 > $DN
 		test -f ${PD}${HS}
 		#elinks ${PD}${HS}
@@ -82,8 +82,8 @@ for TST in ${@:-$TSTS} ; do
 	test "$TR" = "fail" && test "$VL" -ge 2 && nl $LF
 	test "$TR" = "pass" && POFL="$POFL ${LP}"
 	test "$TR" = "fail" && FOFL="$FOFL ${LP}"
-	test "$TR" = "pass" -a -n "${IFL}" && mkdir -p $PD$DP && cp -np ${VCP} -- $IFL $PD$DP
-	test "$TR" = "fail" -a -n "${IFL}" && mkdir -p $PD$DP && cp -np ${VCP} -- $IFL $PD$DP
+	test "$TR" = "pass" -a -n "${IFL}" && mkdir -p ${VMD} -- $PD$DP && cp -np ${VCP} -- $IFL $PD$DP
+	test "$TR" = "fail" -a -n "${IFL}" && mkdir -p ${VMD} -- $PD$DP && cp -np ${VCP} -- $IFL $PD$DP
 	test "$VL" -ge 1 && ls -l
 	rm -fR -- $TD
 	cd - 2>&1 > $DN
