@@ -4,17 +4,19 @@ EMAIL=${SCAMC_EMAIL:=""}
 test -z "$EMAIL" && echo "INFO: SCAMC_EMAIL unset -- no report email will be sent."
 test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "ERROR: SCAMC_EMAIL=$SCAMC_EMAIL : invalid email address!"; false; }
 test -n "$EMAIL" && echo "INFO: SCAMC_EMAIL=$SCAMC_EMAIL : will send a report email."
+test -z "$SCAMC_VERBOSITY" && echo "INFO: SCAMC_VERBOSITY unset -- will operate quietly (as with 0)."
 VL=${SCAMC_VERBOSITY:="0"}
-[[ "$VL" =~ ^[012]$ ]] || { echo "ERROR: SCAMC_VERBOSITY=$SCAMC_VERBOSITY : 0, 1 or 2!"; false; }
+[[ "$VL" =~ ^[0123]$ ]] || { echo "ERROR: SCAMC_VERBOSITY=$SCAMC_VERBOSITY : 0 to 3!"; false; }
 TO=${SCAMC_TIMEOUT:="4s"}
 [[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "ERROR: SCAMC_TIMEOUT=$SCAMC_TIMEOUT: <number>[ms], e.g. 4s, 1m, ..!"; false; }
-test "$VL" -ge 1 && set -x
+test "$VL" -ge 3 && set -x
 TSTS='false true filesystems gcc intel git svn cmake librsb octave lrztools matlab spack python-3.0.1 gromacs timeout'
 PASS=''
 FAIL=''
 POFL=''
 FOFL=''
 rm -f -- *.shar
+if test "$VL" -ge 1 ; then VS=''; VCP=-v; else VS=-q; VCP='' ; fi
 for TST in ${@:-$TSTS} ; do
 	if   test -d "$TST" -a "${TST:0:1}" = '/'; then
 		echo "ERROR: $TST is not a local directory!";
@@ -46,12 +48,12 @@ for TST in ${@:-$TSTS} ; do
 	DN=/dev/null
 	test -d $TD
 	IFL=""
-	{ for f in $TST/*.shar $TST/test.sh ; do test -f $f && cp $f $TD && IFL="$IFL `basename $f`" ; done || true ; } > $DN
-	cp $TS $TD
+	{ for f in $TST/*.shar $TST/test.sh ; do test -f $f && cp ${VCP} -- $f $TD && IFL="$IFL `basename $f`" ; done || true ; } > $DN
+	cp ${VCP} -- $TS $TD
 	cd $TD
 	( timeout $TO bash -e $TS 2>&1 ; ) 1> $LF \
-		&& { TR="pass"; echo "PASS: $TST"; PASS+=" $TBN"; } \
-		|| { TR="fail"; echo "FAIL: $TST"; FAIL+=" $TBN"; }
+		&& { TR="pass"; echo "PASS TEST: $TST"; PASS+=" $TBN"; } \
+		|| { TR="fail"; echo "FAIL TEST: $TST"; FAIL+=" $TBN"; }
 	#mailx -s test-batch-${TBN}:${TR} -a ${LF} -S from="${EMAIL}" "${EMAIL}"
 	OFL="`find -maxdepth 1 -name test.sh -o -name '*.c' -o -iname '*.h' -o -iname '*.F90'`"
 	test "$VL" -ge 1 && ls -l -- $OFL 
@@ -64,11 +66,11 @@ for TST in ${@:-$TSTS} ; do
 		test "$TR" = "fail" && FOFL="$FOFL ${HS}"
 	done
 	test -f $LF
-	test "$VL" -ge 2 && nl $LF
+	test "$TR" = "fail" && test "$VL" -ge 2 && nl $LF
 	test "$TR" = "pass" && POFL="$POFL ${LP}"
 	test "$TR" = "fail" && FOFL="$FOFL ${LP}"
-	test "$TR" = "pass" -a -n "${IFL}" && cp -npv $IFL $PD$DP
-	test "$TR" = "fail" -a -n "${IFL}" && cp -npv $IFL $PD$DP
+	test "$TR" = "pass" -a -n "${IFL}" && cp -np ${VCP} -- $IFL $PD$DP
+	test "$TR" = "fail" -a -n "${IFL}" && cp -np ${VCP} -- $IFL $PD$DP
 	test "$VL" -ge 1 && ls -l
 	rm -fR -- $TD
 	cd - 2>&1 > $DN
@@ -94,14 +96,14 @@ IF="test.sh README.md"
 SL="$CMT"
 WD=`basename $PWD`
 PS=`basename $PWD`-passed.shar
-shar -q -T $POFL $IF > $PS
+shar ${VS} -T $POFL $IF > $PS
 test -f "$PS"
 FS=`basename $PWD`-failed.shar
-shar -q -T $FOFL $IF > $FS
+shar ${VS} -T $FOFL $IF > $FS
 test -f "$FS"
 LS=`basename $PWD`.shar
 cd ..
-shar -q -T  \
+shar ${VS} -T  \
 	$WD/README.md $WD/test.sh $WD/*/test.sh $WD/*/*.shar \
 	> $WD/$LS
 test -f "$WD/$LS"

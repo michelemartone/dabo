@@ -21,7 +21,7 @@ example files.
  
 The script reacts to the following environment variables:
  SCAMC_EMAIL : if set, send report here.
- SCAMC_VERBOSITY : print verbosity: (0), 1, 2.
+ SCAMC_VERBOSITY : print verbosity: (0) to 3.
  SCAMC_TIMEOUT   : test timeout: <number>[ms], e.g. 4s, 1m, .. 
 
 TODO list:
