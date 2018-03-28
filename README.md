@@ -20,9 +20,10 @@ needed, a bunch of extra files. See the attached
 example files.
  
 The script reacts to the following environment variables:
- SCAMC_EMAIL : if set, send report here.
- SCAMC_VERBOSITY : print verbosity: (0) to 3.
- SCAMC_TIMEOUT   : test timeout: <number>[ms], e.g. 4s, 1m, .. 
+ SCAMC_EMAIL      : if set, send report to this email address.
+ SCAMC_VERBOSITY  : print verbosity: (0) to 3.
+ SCAMC_TIMEOUT    : test timeout: <number>[ms], e.g. 4s, 1m, .. 
+ SCAMC_RESULTS_DIR: where to copy results; if unset, here.
 
 TODO list:
 

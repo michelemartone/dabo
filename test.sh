@@ -8,7 +8,7 @@ test -z "$SCAMC_VERBOSITY" && echo "INFO: SCAMC_VERBOSITY unset -- will operate 
 VL=${SCAMC_VERBOSITY:="0"}
 [[ "$VL" =~ ^[0123]$ ]] || { echo "ERROR: SCAMC_VERBOSITY=$SCAMC_VERBOSITY : 0 to 3!"; false; }
 TO=4s;
-test -z "$SCAMC_TIMEOUT" && echo "INFO: SCAMC_TIMEOUT unset -- will will use default test timeout of $TO."
+test -z "$SCAMC_TIMEOUT" && echo "INFO: SCAMC_TIMEOUT unset -- will use default test timeout of $TO."
 TO=${SCAMC_TIMEOUT:="$TO"}
 [[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "ERROR: SCAMC_TIMEOUT=$SCAMC_TIMEOUT: <number>[ms], e.g. $TO, 1m, ..!"; false; }
 test "$VL" -ge 3 && set -x
@@ -18,8 +18,12 @@ FAIL=''
 POFL=''
 FOFL=''
 PDIR=`pwd`/
-test -d "$PDIR" -a "${PDIR:0:1}" = '/'
-mkdir -p $PDIR
+test -z "$SCAMC_RESULTS_DIR" && echo "INFO: SCAMC_RESULTS_DIR unset -- will use working directory: $PDIR"
+PDIR=${SCAMC_RESULTS_DIR:="$PDIR"}
+test "${PDIR:0:1}" = '/' || { echo "ERROR: SCAMC_RESULTS_DIR=$SCAMC_RESULTS_DIR: not an absolute path ..!"; false; }
+[[ "$PDIR" =~ /$ ]] || PDIR+='/'
+mkdir -p "$PDIR"
+test -d "$PDIR"
 rm -f -- $PDIR/*.shar
 if test "$VL" -ge 1 ; then VS=''; VCP=-v; else VS=-q; VCP='' ; fi
 for TST in ${@:-$TSTS} ; do
