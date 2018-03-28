@@ -16,29 +16,28 @@ rm -f -- *.html *.log *.shar
 for TST in ${@:-$TSTS} ; do
 	if   test -d "$TST" -a "${TST:0:1}" = '/'; then
 		echo "Error: $TST is not a local directory!";
-		false;
+		TS=$TST/test.sh
 	elif test -d "$TST" -a "${TST:0:1}" = '.'; then
-		echo "Error: $TST is not an unprefixed local directory!";
-		false;
+		TS=`pwd`/$TST/test.sh
 	elif test ! -d "$TST" ; then
 		echo "Error: $TST is not a directory!";
 		false
 	else
-		true
+		TS=`pwd`/$TST/test.sh
 	fi
+	TBN=`basename $TST`
 	SD=`pwd`/$TST
-	TS=`pwd`/$TST/test.sh
-	LF=`pwd`/$TST.log
+	LF=`pwd`/$TBN.log
 	test -f $TS
-	TD=`mktemp -d /dev/shm/$TST-XXXX`
+	TD=`mktemp -d /dev/shm/$TBN-XXXX`
 	DN=/dev/null
 	test -d $TD
 	cd $TD
 	( for f in $SD/*.shar ; do test -f $f && cp $f . ; done || true ; ) > $DN
 	cp $TS .
 	( timeout $TO bash -e $TS 2>&1 ; ) 1> $LF \
-		&& { TR="pass"; echo "PASS: $TST"; PASS+=" $TST"; } \
-		|| { TR="fail"; echo "FAIL: $TST"; FAIL+=" $TST"; }
+		&& { TR="pass"; echo "PASS: $TST"; PASS+=" $TBN"; } \
+		|| { TR="fail"; echo "FAIL: $TST"; FAIL+=" $TBN"; }
 	#mailx -s test-batch-${TST}:${TR} -a ${LF} -S from="${EMAIL}" "${EMAIL}"
 	FL="test.sh `find -maxdepth 1 -name '*.c' -o -iname '*.h' -o -iname '*.F90'`"
 	test "$VL" -ge 1 && ls -l -- $FL 
