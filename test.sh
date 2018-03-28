@@ -25,7 +25,10 @@ for TST in ${@:-$TSTS} ; do
 	else
 		TS=`pwd`/$TST/test.sh
 	fi
-	TBN=`basename $TST`
+	TBN=${TST//[.\/]/_}
+	while test "$TBN" != "${TBN/#_/}"; do TBN=${TBN/#_/}; done
+	test -n "$TBN"
+	[[ "$TBN" =~ ^[._[:alnum:]]*$ ]] || { echo "Only alphanumeric and _ in test names, please."; false; }
 	SD=`pwd`/$TST
 	LF=`pwd`/$TBN.log
 	test -f $TS
