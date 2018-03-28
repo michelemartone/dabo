@@ -7,8 +7,10 @@ test -n "$EMAIL" && echo "INFO: SCAMC_EMAIL=$SCAMC_EMAIL : will send a report em
 test -z "$SCAMC_VERBOSITY" && echo "INFO: SCAMC_VERBOSITY unset -- will operate quietly (as with 0)."
 VL=${SCAMC_VERBOSITY:="0"}
 [[ "$VL" =~ ^[0123]$ ]] || { echo "ERROR: SCAMC_VERBOSITY=$SCAMC_VERBOSITY : 0 to 3!"; false; }
-TO=${SCAMC_TIMEOUT:="4s"}
-[[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "ERROR: SCAMC_TIMEOUT=$SCAMC_TIMEOUT: <number>[ms], e.g. 4s, 1m, ..!"; false; }
+TO=4s;
+test -z "$SCAMC_TIMEOUT" && echo "INFO: SCAMC_TIMEOUT unset -- will will use default test timeout of $TO."
+TO=${SCAMC_TIMEOUT:="$TO"}
+[[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "ERROR: SCAMC_TIMEOUT=$SCAMC_TIMEOUT: <number>[ms], e.g. $TO, 1m, ..!"; false; }
 test "$VL" -ge 3 && set -x
 TSTS='false true filesystems gcc intel git svn cmake librsb octave lrztools matlab spack python-3.0.1 gromacs timeout'
 PASS=''
