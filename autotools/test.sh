@@ -1,4 +1,7 @@
 #!/bin/bash
+# this test might take ~10s or so..
+#module switch gcc
+#module switch autotools
 set -e
 #module help autotools
 #module show autotools
@@ -59,3 +62,4 @@ test -f Makefile.in
 test -f Makefile
 make
 test -x hello
+true
