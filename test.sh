@@ -13,7 +13,7 @@ TO=${SCAMC_TIMEOUT:="$TO"}
 [[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "ERROR: SCAMC_TIMEOUT=$SCAMC_TIMEOUT: <number>[ms], e.g. $TO, 1m, ..!"; false; }
 test "$VL" -ge 3 && set -x
 if test "$VL" -ge 1 ; then VMD=-v; VS=''; VCP=-v; else VMD=''; VS=-q; VCP=''; fi
-TSTS='false true filesystems gcc intel git svn cmake autotools librsb octave lrztools matlab spack python-3.0.1 gromacs timeout'
+TSTS='false true filesystems gcc intel git svn cmake autotools librsb octave lrztools matlab spack python-3.0.1 gromacs timeout hls-testsuite'
 PASS=''
 FAIL=''
 POFL=''
