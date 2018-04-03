@@ -132,24 +132,25 @@ if test -n "$FOFL"; then
 	FS=$PDIR/failed.shar; shar ${VS} -T $FOFL $IF > $FS ; test -f "$FS";
 fi
 cd -
-LS=`basename $PWD`.shar
+LS=''
 WD=`basename $PWD`
-cd ..
-shar ${VS} -T  \
-	$WD/README.md $WD/test.sh $WD/*/test.sh $WD/*/*.shar \
-	> $WD/$LS
-test -f "$WD/$LS"
-cd -
+if test -f README.md; then
+	LS=`basename $PWD`.shar
+	cd ..
+	shar ${VS} -T  $WD/README.md $WD/test.sh $WD/*/test.sh $WD/*/*.shar > $WD/$LS
+	test -f "$WD/$LS"
+	cd -
+fi
 #bash   "$PS"
 #bash   "$LS"
 test -n "$FAIL" && FF=$FS
 test -n "$PASS" && PF=$PS
-echo "INFO: Give a look at: ${FL} ${PL} ${FF} ${PF} ${LS}"
+echo "INFO: Give a look at: ${FL} ${PL} ${FF} ${PF} ${LS:+-a }${LS}"
 test -z "$FAIL" && FF=''
 test -z "$PASS" && PF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
 if test -n "$EMAIL" ; then
 	test -n "$FAIL" || test -n "$PASS" && \
 	echo "INFO: Mailed to <$EMAIL>: " "$SL" && \
-	echo -e "$BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} -a ${LS} "${EMAIL}";
+	echo -e "$BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} ${LS:+-a }${LS} "${EMAIL}";
 fi
