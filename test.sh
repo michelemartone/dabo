@@ -30,7 +30,7 @@ if declare -f module 2>&1 > $DN ; then
 fi
 test "$VL" -ge 3 && set -x
 if echo $MODULEPATH | grep $USER; then echo "ERROR: shall unload personal modules first!"; false; fi
-TSTS='false true filesystems gcc intel git svn cmake autotools librsb octave lrztools matlab spack python-3.0.1 gromacs timeout hls-testsuite'
+TSTS='false true filesystems gcc intel git svn cmake autotools librsb octave lrztools matlab spack python-3.0.1 gromacs timeout hls-testsuite mumps_cmuc3'
 PASS=''
 FAIL=''
 POFL=''
