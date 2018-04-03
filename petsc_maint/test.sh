@@ -7,8 +7,8 @@ for MP in ${MODULEPATH//:/ } ; do
 	fi
 done
 #PML=`module avail petsc | grep -v -- --`
-PML="petsc/3.8"
-#PML="petsc/3.8 petsc/3.8_debug petsc/3.8c petsc/3.8c_debug"
+#PML="petsc/3.8"
+PML="petsc/3.8 petsc/3.8_debug petsc/3.8c petsc/3.8c_debug"
 #PML=petsc/3.8 petsc/3.8-mumps petsc/3.8_debug petsc/3.8_debug-mumps petsc/3.8c petsc/3.8c_debug
 for LM in $PML ; do
 	echo Using: $LM
