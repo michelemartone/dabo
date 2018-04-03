@@ -137,7 +137,8 @@ WD=`basename $PWD`
 if test -f README.md; then
 	LS=`basename $PWD`.shar
 	cd ..
-	shar ${VS} -T  $WD/README.md $WD/test.sh $WD/*/test.sh $WD/*/*.shar > $WD/$LS
+	SC=test.sh # this script basename
+	shar ${VS} -T  $WD/README.md $WD/$SC $WD/*/test.sh $WD/*/*.shar > $WD/$LS
 	test -f "$WD/$LS"
 	cd -
 fi

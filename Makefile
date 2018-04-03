@@ -1,10 +1,12 @@
+SC=./scamc.sh
+
 .PHONY:
 all:
-	./test.sh
+	$(SC)
 
 .PHONY:
 x:
-	bash -x ./test.sh
+	bash -x $(SC)
 
 .PHONY:
 clean:
@@ -14,4 +16,4 @@ clean:
 
 .PHONY:
 maint:
-	SCAMC_TIMEOUT=120s ./test.sh librsb_maint petsc_maint
+	SCAMC_TIMEOUT=120s $(SC) librsb_maint petsc_maint
