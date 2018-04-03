@@ -79,7 +79,7 @@ for TST in ${@:-$TSTS} ; do
 	cp ${VCP} -- $TS $TD
 	cd $TD
 	mkdir -p ${VMD} -- `dirname $LF`
-	( timeout $TO bash --norc -e $TS 3>&1 ; ) 1> $LF \
+	( timeout $TO bash --norc -e $TS 2>&1 ; ) 1> $LF \
 		&& { TR="pass"; echo "PASS TEST: $TST"; PASS+=" $TBN"; } \
 		|| { TR="fail"; echo "FAIL TEST: $TST"; FAIL+=" $TBN"; }
 	#mailx -s test-batch-${TBN}:${TR} -a ${LF} -S from="${EMAIL}" "${EMAIL}"
