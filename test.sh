@@ -109,7 +109,7 @@ test -n "$LOFL" && FL=$PDIR/failed.log && tail -n 10000 $LOFL > $FL
 test -n "$LOPL" && PL=$PDIR/passed.log && tail -n 10000 $LOPL > $PL
 #IF="test.sh README.md"
 IF=''
-if test -n "$FOFL"; then
+if test -n "$POFL"; then
 	PS=$PDIR/passed.shar; shar ${VS} -T $POFL $IF > $PS ; test -f "$PS"; 
 fi
 if test -n "$FOFL"; then
