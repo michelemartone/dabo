@@ -30,7 +30,7 @@ if declare -f module 2>&1 > $DN ; then
 fi
 test "$VL" -ge 3 && set -x
 if echo $MODULEPATH | grep $USER; then echo "ERROR: shall unload personal modules first!"; false; fi
-TSTS='false true filesystems gcc intel git svn cmake autotools librsb octave lrztools matlab spack python-3.0.1 gromacs timeout hls-testsuite'
+TSTS='false true filesystems gcc intel git svn cmake autotools librsb octave lrztools matlab spack python-3.0.1 gromacs timeout hls-testsuite librsb_maint'
 PASS=''
 FAIL=''
 POFL=''
@@ -80,8 +80,8 @@ for TST in ${@:-$TSTS} ; do
 	cd $TD
 	mkdir -p ${VMD} -- `dirname $LF`
 	( timeout $TO bash --norc -e $TS 2>&1 ; ) 1> $LF \
-		&& { TR="pass"; echo "PASS TEST: $TST"; PASS+=" $TBN"; } \
-		|| { TR="fail"; echo "FAIL TEST: $TST"; FAIL+=" $TBN"; }
+		&& {        TR="pass"; echo "PASS TEST: $TST"; PASS+=" $TBN"; } \
+		|| { TC=$?; TR="fail"; echo "FAIL TEST: $TST`test $TC == 124 && echo ' [TIMEOUT]'`"; FAIL+=" $TBN"; }
 	#mailx -s test-batch-${TBN}:${TR} -a ${LF} -S from="${EMAIL}" "${EMAIL}"
 	OFL="`find -maxdepth 1 -name test.sh -o -name '*.c' -o -iname '*.h' -o -iname '*.F90'`"
 	test "$VL" -ge 1 && ls -l -- $OFL 
