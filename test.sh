@@ -13,6 +13,7 @@ TO=${SCAMC_TIMEOUT:="$TO"}
 [[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "ERROR: SCAMC_TIMEOUT=$SCAMC_TIMEOUT: <number>[ms], e.g. $TO, 1m, ..!"; false; }
 test "$VL" -ge 3 && set -x
 if test "$VL" -ge 1 ; then VMD=-v; VS=''; VCP=-v; else VMD=''; VS=-q; VCP=''; fi
+if echo $MODULEPATH | grep $USER; then echo "ERROR: shall unload personal modules first!"; false; fi
 TSTS='false true filesystems gcc intel git svn cmake autotools librsb octave lrztools matlab spack python-3.0.1 gromacs timeout hls-testsuite'
 PASS=''
 FAIL=''
@@ -63,7 +64,7 @@ for TST in ${@:-$TSTS} ; do
 	cp ${VCP} -- $TS $TD
 	cd $TD
 	mkdir -p ${VMD} -- `dirname $LF`
-	( timeout $TO bash -e $TS 2>&1 ; ) 1> $LF \
+	( timeout $TO bash --norc -e $TS 3>&1 ; ) 1> $LF \
 		&& { TR="pass"; echo "PASS TEST: $TST"; PASS+=" $TBN"; } \
 		|| { TR="fail"; echo "FAIL TEST: $TST"; FAIL+=" $TBN"; }
 	#mailx -s test-batch-${TBN}:${TR} -a ${LF} -S from="${EMAIL}" "${EMAIL}"
