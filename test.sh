@@ -1,4 +1,5 @@
 #!/bin/bash
+DN=/dev/null
 set -e
 EMAIL=${SCAMC_EMAIL:=""}
 test -z "$EMAIL" && echo "INFO: SCAMC_EMAIL unset -- no report email will be sent."
@@ -11,13 +12,23 @@ TO=4s;
 test -z "$SCAMC_TIMEOUT" && echo "INFO: SCAMC_TIMEOUT unset -- will use default test timeout of $TO."
 TO=${SCAMC_TIMEOUT:="$TO"}
 [[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "ERROR: SCAMC_TIMEOUT=$SCAMC_TIMEOUT: <number>[ms], e.g. $TO, 1m, ..!"; false; }
-test "$VL" -ge 3 && set -x
 if test "$VL" -ge 1 ; then VMD=-v; VS=''; VCP=-v; else VMD=''; VS=-q; VCP=''; fi
-for MP in ${MODULEPATH//:/ } ; do 
-	if [[ "$MP" =~ $USER ]] ; then 
-		module unuse $MP; echo "unloading module $MP" 
-	fi
-done
+if declare -f module 2>&1 > $DN ; then
+	ML="`module list -t`"
+	for MN in ${ML} ; do 
+		if [[ "$MN" =~ $USER ]] ; then 
+			echo "INFO: unload module $MN" ;
+			module unload $MN;
+		fi
+	done
+	for MP in ${MODULEPATH//:/ } ; do 
+		if [[ "$MP" =~ $USER ]] ; then 
+			echo "INFO: unuse path $MP" ;
+			module unuse $MP; module unuse $MP; # yes, twice
+		fi
+	done
+fi
+test "$VL" -ge 3 && set -x
 if echo $MODULEPATH | grep $USER; then echo "ERROR: shall unload personal modules first!"; false; fi
 TSTS='false true filesystems gcc intel git svn cmake autotools librsb octave lrztools matlab spack python-3.0.1 gromacs timeout hls-testsuite'
 PASS=''
@@ -62,7 +73,6 @@ for TST in ${@:-$TSTS} ; do
 	LF=$PD$LP
 	test -f $TS
 	TD=`mktemp -d /dev/shm/$TBN-XXXX`
-	DN=/dev/null
 	test -d $TD
 	IFL=""
 	{ for f in $TST/*.shar $TST/test.sh ; do test -f $f && cp ${VCP} -- $f $TD && IFL="$IFL `basename $f`" ; done || true ; } > $DN
