@@ -83,6 +83,7 @@ for TST in ${@:-$TSTS} ; do
 		&& {        TR="pass"; echo "PASS TEST: $TST"; PASS+=" $TBN"; } \
 		|| { TC=$?; TR="fail"; echo "FAIL TEST: $TST`test $TC == 124 && echo ' [TIMEOUT]'`"; FAIL+=" $TBN"; }
 	#mailx -s test-batch-${TBN}:${TR} -a ${LF} -S from="${EMAIL}" "${EMAIL}"
+	SC=scamc.sh # this script basename
 	OFL="`find -maxdepth 1 -name test.sh -o -name '*.c' -o -iname '*.h' -o -iname '*.F90'`"
 	test "$VL" -ge 1 && ls -l -- $OFL 
 	for TF in $OFL ; do
@@ -137,7 +138,6 @@ WD=`basename $PWD`
 if test -f README.md; then
 	LS=`basename $PWD`.shar
 	cd ..
-	SC=test.sh # this script basename
 	shar ${VS} -T  $WD/README.md $WD/$SC $WD/*/test.sh $WD/*/*.shar > $WD/$LS
 	test -f "$WD/$LS"
 	cd -
