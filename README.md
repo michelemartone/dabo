@@ -1,15 +1,15 @@
 SCAMC
 =====
-## SCAnt Modulefiles Checker
+# SCAnt Modulefiles Checker
 
-# A minimalistic, non-invasive approach to user-side:
+## A minimalistic, non-invasive approach to user-side:
  * testing
  * documentation
  * reporting
 of short shell scripts as test cases.
 
 
-# SCAMC is not meant...
+## SCAMC is not meant...
  * for exhaustive testing
  * to test the whole system
  * to document modulefiles
@@ -18,14 +18,14 @@ of short shell scripts as test cases.
  * to write e.g. automated benchmarks 
 
 
-# SCAMC can:
+## SCAMC can:
  * produce logs and script renderings useful as document snippets
  * spot failing use cases
  * report failure logs via email
  * save results in a custom directory
 
 
-# Workflow:
+## Workflow:
  * you create a directory, named e.g. `$MYTEST`
  * you write test script `$MYTEST/test.sh`, which:
    - shall succeed (e.g. exit 0) on success
@@ -43,7 +43,7 @@ The script reacts to the following environment variables:
     SCAMC_TIMEOUT     # test timeout: <number>[ms], e.g. 4s, 1m, .. 
     SCAMC_RESULTS_DIR # where to copy results; if unset, here.
 
-# Example executions:
+## Example executions:
 
     ./scamc.sh
     ./scamc.sh true
