@@ -5,20 +5,33 @@ A minimalistic, non-invasive approach to user-side:
  * testing
  * documentation
  * reporting
-of short shell scripts.
+of short shell scripts as test cases.
 
-SCAMC is not meant for exhaustive testing.
-Neither to test the whole system.
-Neither to document modulefiles.
-Neither to work on any computer.
-Just to give a glimpse into use and minimal correctness,
-and if running from, e.g. cron job, reporting issues to tester..
+SCAMC is not meant...
+ * for exhaustive testing
+ * to test the whole system
+ * to document modulefiles
+ * to be particularly portable
+ * to replace per-software test suites
+ * to write e.g. automated benchmarks 
 
-Workflow: you write a set of tests, and run them.
-Each test is a directory containing 'test.sh' and if
-needed, a bunch of extra files.
-See the example directories.
- 
+SCAMC can:
+ * produce logs and script renderings useful as document snippets
+ * spot failing use cases
+ * report failure logs via email
+ * save results in a custom directory
+
+Workflow:
+ * you create a directory, named e.g. $MYTEST
+ * you write test script $MYTEST/test.sh, which:
+   - shall succeed (e.g. exit 0) on success
+   - shall fail    (e.g. exit 1) on failure
+   - shall make no assumptions on the running directory
+   - runs behalf of the user (so, caution with your tests)
+ * you run it: ./scamc.sh $MYTEST
+ * path invocation of $MYTEST shall be relative
+ * you can run many, e.g.: ./scamc.sh $TEST1 $TEST2
+
 The script reacts to the following environment variables:
 
  SCAMC_EMAIL      : if set, send report to this email address.
@@ -28,8 +41,9 @@ The script reacts to the following environment variables:
 
 Example executions:
 
- ./test.sh
- ./test.sh true
- bash ./test.sh true
- SCAMC_EMAIL=nobody@tld ./test.sh
- SCAMC_VERBOSITY=1 SCAMC_TIMEOUT=5s SCAMC_RESULTS_DIR=`pwd`/../scamc_results ./test.sh
+ ./scamc.sh
+ ./scamc.sh true
+ bash ./scamc.sh true
+ SCAMC_EMAIL=nobody@tld ./scamc.sh
+ SCAMC_VERBOSITY=1 SCAMC_TIMEOUT=5s SCAMC_RESULTS_DIR=`pwd`/../scamc_results ./scamc.sh
+
