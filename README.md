@@ -69,3 +69,4 @@ It reads the following environment variables:
     #
     # nightly runs:
     # crontab -e # 00 23 * * * SCAMC_EMAIL=me@there ~/src/scamc/scamc.sh ~/testsdir
+
