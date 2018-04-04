@@ -148,7 +148,7 @@ fi
 #bash   "$LS"
 test -n "$FAIL" && FF=$FS
 test -n "$PASS" && PF=$PS
-echo "INFO: Give a look at: ${FL} ${PL} ${FF} ${PF} ${LS:+-a }${LS}"
+echo "INFO: Give a look at: ${FL} ${PL} ${FF} ${PF} ${LS}"
 test -z "$FAIL" && FF=''
 test -z "$PASS" && PF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
