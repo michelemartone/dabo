@@ -89,7 +89,7 @@ for TST in ${@:-$TSTS} ; do
 	for TF in $OFL ; do
 		HS=${DP}/`basename ${TF}`.html
 		mkdir -p ${VMD} -- `dirname $PD$HS`
-		HOME=. vim -E $TF -c 'syntax on' -c 'TOhtml' -c "w! ${PD}$HS" -c 'qall!' 2>&1 > $DN
+		! HOME=. nohup vim -E $TF -c 'syntax on' -c 'TOhtml' -c "w! ${PD}$HS" -c 'qall!' 2> $DN
 		test -f ${PD}${HS}
 		#elinks ${PD}${HS}
 		test "$TR" = "pass" && POFL="$POFL ${HS}"
