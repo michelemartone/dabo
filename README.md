@@ -47,11 +47,13 @@ It reads the following environment variables:
 ## Example executions
 
     # intro:
-    git clone git@github.com:michelemartone/scamc.git && cd scamc # download
-    ./scamc.sh true       # run trivial passing test
-    ./scamc.sh false      # run trivial failing test
-    ./scamc.sh self       # run self test -- shall pass
-    ./scamc.sh            # run all tests -- some will fail
+    git clone git@github.com:michelemartone/scamc.git && cd scamc # get the code
+    ./scamc.sh true         # run trivial passing test
+    ./scamc.sh false        # run trivial failing test
+    ./scamc.sh self         # run self test -- shall pass
+    ./scamc.sh              # run all tests -- some will fail
+    ./scamc.sh example_pass # run user example test
+    nl example_pass/test.sh # give a look -- eventually edit
     git clone git@github.com:tests/examples.git scamc_examples && ./scamc.sh scamc_examples/* # examples
     #
     # write your own tests:
