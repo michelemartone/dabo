@@ -10,47 +10,43 @@ unset SCAMC_VERBOSITY
 unset SCAMC_TIMEOUT
 unset SCAMC_RESULTS_DIR
 #
-function tests()
+function build_test()
 {
 	TD=self_internal
+	TS=$TD/test.sh
 	rm -fR $TD failed.log passed.log
 	mkdir  $TD
-	TS=$TD/test.sh
-cat >> $TS << EOF
-#!/bin/bash
-echo Successful test: $TS
-true
-EOF
+	echo "$@" > $TS
 	test -f $TS
-echo mango
 	$SCAMC_SCRIPT $TD
-echo papaya
-	pwd
-	test   -f passed.log
-	test ! -f failed.log
-	nl passed.log
+}
+function post_any()
+{
+	test -n $TD
+	test -d $TD
 	rm -R $TD
-	rm passed.log
-	#
-	mkdir  $TD
-	TS=$TD/test.sh
-cat >> $TS << EOF
-#!/bin/bash
-echo Failing test: $TS
-false
-EOF
-echo banana
-	test -f $TS
-	"$SCAMC_SCRIPT" $TD
-	pwd
+}
+function post_pass()
+{
+	test ! -f failed.log
+	test   -f passed.log
+	nl passed.log
+	rm        passed.log
+	post_any
+}
+function post_fail()
+{
 	test   -f failed.log
 	test ! -f passed.log
 	nl failed.log
-	rm -fR $TD
+	rm        failed.log
+	post_any
 }
-#
-#
 export SCAMC_TIMEOUT=1s
 export SCAMC_VERBOSITY=3
-tests
-#
+build_test true
+post_pass
+build_test fail
+post_fail
+build_test 'sleep 2'
+post_fail
