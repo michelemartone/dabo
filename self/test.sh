@@ -54,12 +54,23 @@ unset SCAMC_VERBOSITY
 unset SCAMC_TIMEOUT
 unset SCAMC_RESULTS_DIR
 #
+VL='1 2 3'
+for SCAMC_VERBOSITY in 0 $VL; do
+	export SCAMC_VERBOSITY
+	#false
+	eval WC_$SCAMC_VERBOSITY=`basic_tests 2>&1 | wc -c`
+done
+#
+for SCAMC_VERBOSITY in   $VL; do # test for non-decreasing verbosity
+	eval test    $SCAMC_VERBOSITY -gt $((SCAMC_VERBOSITY-1))
+	eval test \$WC_$SCAMC_VERBOSITY -ge \$WC_$((SCAMC_VERBOSITY-1))
+done
+#
 export SCAMC_TIMEOUT=1s
 export SCAMC_VERBOSITY=3
 build_test 'sleep 2'
 post_fail
 basic_tests
-#
 #
 export SCAMC_RESULTS_DIR=`pwd`/custom_results_dir/
 test -n $SCAMC_RESULTS_DIR
