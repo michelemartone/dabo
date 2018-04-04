@@ -1,6 +1,15 @@
 #!/bin/bash
 set -e
 set -x
+which vim
+which nohup
+which sed
+which basename
+which true
+which false
+which shar
+which mail
+# false # uncomment to make test fail
 [[ "$SCAMC_SCRIPT" =~ scamc ]] || false
 test -n "$SCAMC_SCRIPT"
 test -f "$SCAMC_SCRIPT"
