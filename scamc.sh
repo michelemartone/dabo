@@ -1,6 +1,7 @@
 #!/bin/bash
 DN=/dev/null
 set -e
+test "`uname`" = Linux # not tested elsewhere
 EMAIL=${SCAMC_EMAIL:=""}
 test -z "$EMAIL" && echo "INFO: SCAMC_EMAIL unset -- no report email will be sent."
 test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "ERROR: SCAMC_EMAIL=$SCAMC_EMAIL : invalid email address!"; false; }
