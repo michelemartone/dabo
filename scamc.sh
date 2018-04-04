@@ -30,7 +30,7 @@ if declare -f module 2>&1 > $DN ; then
 fi
 test "$VL" -ge 3 && set -x
 if echo $MODULEPATH | grep $USER; then echo "ERROR: shall unload personal modules first!"; false; fi
-TSTS='false true filesystems gcc intel git svn cmake autotools librsb octave lrztools matlab spack python-3.0.1 gromacs timeout hls-testsuite mumps_cmuc3'
+TSTS='false true self filesystems gcc intel git svn cmake autotools librsb octave lrztools matlab spack python-3.0.1 gromacs timeout hls-testsuite mumps_cmuc3'
 PASS=''
 FAIL=''
 POFL=''
@@ -43,6 +43,7 @@ test "${PDIR:0:1}" = '/' || { echo "ERROR: SCAMC_RESULTS_DIR=$SCAMC_RESULTS_DIR:
 mkdir -p ${VMD} -- "$PDIR"
 test -d "$PDIR"
 rm -f -- $PDIR/*.shar
+export SCAMC_SCRIPT="`which $0`" 
 for TST in ${@:-$TSTS} ; do
 	if   test -d "$TST" -a "${TST:0:1}" = '/'; then
 		echo "ERROR: $TST is not a local directory!";
