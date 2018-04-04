@@ -2,14 +2,13 @@ SCAMC
 =====
 # SCAnt Modulefiles Checker
 
-## A minimalistic, non-invasive approach to user-side:
+## A minimalistic, non-invasive approach to user-side
  * testing
  * documentation
  * reporting
 of short shell scripts as test cases.
 
-
-## SCAMC is not meant...
+## SCAMC is NOT meant
  * for exhaustive testing
  * to test the whole system
  * to document modulefiles
@@ -17,15 +16,14 @@ of short shell scripts as test cases.
  * to replace per-software test suites
  * to write e.g. automated benchmarks 
 
-
-## SCAMC can:
- * produce logs and script renderings useful as document snippets
+## SCAMC is meant to
+ * run on Linux
+ * produce logs useful as document snippets
  * spot failing use cases
  * report failure logs via email
  * save results in a custom directory
 
-
-## Workflow:
+## Workflow
  * you create a directory, named e.g. `$MYTEST`
  * you write test script `$MYTEST/test.sh`, which:
    - shall succeed (e.g. exit 0) on success
@@ -33,24 +31,39 @@ of short shell scripts as test cases.
    - shall make no assumptions on the running directory
    - runs behalf of the user (so, caution with your tests)
  * you run it: `./scamc.sh $MYTEST`
+   getting PASS / FAIL info for each test
  * path invocation of `$MYTEST` shall be relative
  * you can run many, e.g.: `./scamc.sh $TEST1 $TEST2`
 
-The script reacts to the following environment variables:
+## Options
+The script works in the current directory.
+It reads the following environment variables:
 
     SCAMC_EMAIL       # if set, send report to this email address.
     SCAMC_VERBOSITY   # print verbosity: (0) to 3.
     SCAMC_TIMEOUT     # test timeout: <number>[ms], e.g. 4s, 1m, .. 
-    SCAMC_RESULTS_DIR # where to copy results; if unset, here.
+    SCAMC_RESULTS_DIR # where to copy results
 
-## Example executions:
+## Example executions
 
-    ./scamc.sh
-    ./scamc.sh true
-    bash ./scamc.sh true
-    SCAMC_VERBOSITY=2 ./scamc.sh unfinished_test
-    SCAMC_EMAIL=nobody@tld ./scamc.sh
+    # intro:
+    git clone git@github.com:michelemartone/scamc.git && cd scamc # download
+    ./scamc.sh true       # run trivial passing test
+    ./scamc.sh false      # run trivial failing test
+    ./scamc.sh self       # run self test -- shall pass
+    ./scamc.sh            # run all tests -- some will fail
+    git clone git@github.com:tests/examples.git scamc_examples && ./scamc.sh scamc_examples/* # examples
+    #
+    # write your own tests:
+    mkdir -p unfinished_test ; echo 'echo my test' > unfinished_test/test.sh 
+    SCAMC_VERBOSITY=2 ./scamc.sh unfinished_test  # inspect your running tests
+    mv unfinished_test my_test
+    SCAMC_EMAIL=my@email ./scamc.sh my_test
+    # 
+    # use different collections of tests:
     SCAMC_TIMEOUT=9s SCAMC_RESULTS_DIR=$PWD/../demos_results ./scamc.sh small_demos/*
     SCAMC_TIMEOUT=1s SCAMC_RESULTS_DIR=$PWD/../scamc_results ./scamc.sh env_quick_tests/*
-    SCAMC_TIMEOUT=1m SCAMC_RESULTS_DIR=$PWD/../scamc_results ./scamc.sh slow_test
+    SCAMC_TIMEOUT=1m SCAMC_RESULTS_DIR=$PWD/../scamc_results ./scamc.sh path-to-slow_test
+    #
+    # nightly runs:
     # crontab -e # 00 23 * * * SCAMC_EMAIL=me@there ~/src/scamc/scamc.sh ~/testsdir
