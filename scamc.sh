@@ -11,6 +11,7 @@ VL=${SCAMC_VERBOSITY:="0"}
 [[ "$VL" =~ ^[0123]$ ]] || { echo "ERROR: SCAMC_VERBOSITY=$SCAMC_VERBOSITY : 0 to 3!"; false; }
 TO=4s;
 test -z "$SCAMC_TIMEOUT" && echo "INFO: SCAMC_TIMEOUT unset -- will use default test timeout of $TO."
+test -n "$SCAMC_TIMEOUT" && echo "INFO: SCAMC_TIMEOUT=${SCAMC_TIMEOUT}: each test will be run with this timeout."
 TO=${SCAMC_TIMEOUT:="$TO"}
 [[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "ERROR: SCAMC_TIMEOUT=$SCAMC_TIMEOUT: <number>[ms], e.g. $TO, 1m, ..!"; false; }
 if test "$VL" -ge 1 ; then VMD=-v; VS=''; VCP=-v; else VMD=''; VS=-q; VCP=''; fi
