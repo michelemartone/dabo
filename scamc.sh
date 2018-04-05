@@ -140,10 +140,10 @@ fi
 cd -
 LS=''
 WD=`basename $PWD`
-if test -f README.md; then
+if test -f README.md -a -f "$SC" ; then
 	LS=`basename $PWD`.shar
 	cd ..
-	shar ${VS} -T  $WD/README.md $WD/$SC $WD/*/test.sh $WD/*/*.shar > $WD/$LS
+	shar ${VS} -T  $WD/README.md $WD/$SC $WD/*/test.sh $WD/*/*.shar > $WD/$LS # FIXME: */test.sh might still fail, if executing from somewhere else.
 	test -f "$WD/$LS"
 	cd -
 fi
