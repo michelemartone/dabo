@@ -2,7 +2,7 @@ SCAMC
 =====
 # SCAnt Modulefiles Checker
 
-## A minimalistic, non-invasive approach to user-side
+## A minimalistic, non-invasive helper to user-side
  * testing
  * documentation
  * reporting
@@ -34,6 +34,7 @@ of short shell scripts as test cases.
    getting PASS / FAIL info for each test
  * path invocation of `$MYTEST` shall be relative
  * you can run many, e.g.: `./scamc.sh $TEST1 $TEST2`
+ * such test scripts shall be portable to any other testing facility
 
 ## Options
 The script works in the current directory.
@@ -48,13 +49,14 @@ It reads the following environment variables:
 
     # intro:
     git clone git@github.com:michelemartone/scamc.git && cd scamc # get the code
-    ./scamc.sh true         # run trivial passing test
+    ./scamc.sh true         # run trivial passing test, in 'true' directory
     ./scamc.sh false        # run trivial failing test
     ./scamc.sh self         # run self test -- shall pass
     ./scamc.sh              # run all tests -- some will fail
     ./scamc.sh example_pass # run user example test
     nl example_pass/test.sh # give a look -- eventually edit
     git clone git@github.com:tests/examples.git scamc_examples && ./scamc.sh scamc_examples/* # examples
+    git clone git@github.com:tests/mm.git scamc_mm && ./scamc.sh scamc_mm/demos/*
     #
     # write your own tests:
     mkdir -p unfinished_test ; echo 'echo my test' > unfinished_test/test.sh 
