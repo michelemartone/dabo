@@ -47,7 +47,7 @@ rm -f -- $PDIR/*.shar
 export SCAMC_SCRIPT="`which $0`" 
 for TST in ${@:-$TSTS} ; do
 	if   test -d "$TST" -a "${TST:0:1}" = '/'; then
-		echo "ERROR: $TST is not a local directory!";
+		echo "ERROR: $TST is not a relative path!";
 		false
 		TS=$TST/test.sh
 		PD=''
