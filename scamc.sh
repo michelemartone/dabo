@@ -158,5 +158,5 @@ test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
 if test -n "$EMAIL" ; then
 	test -n "$FAIL" || test -n "$PASS" && \
 	echo "INFO: Mailed to <$EMAIL>: " "$SL" && \
-	echo -e "$BODY" | mailx -s "test-batch: $SL" -S from=${EMAIL} ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} ${LS:+-a }${LS} "${EMAIL}";
+	echo -e "$BODY" | mailx -s "test-batch: $SL" -S from="$USER-at-$HOSTNAME <${EMAIL}>" ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} ${LS:+-a }${LS} "${EMAIL}";
 fi
