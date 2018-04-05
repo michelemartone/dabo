@@ -37,6 +37,8 @@ FAIL=''
 POFL=''
 FOFL=''
 PDIR=`pwd`/
+MPIF='/etc/profile.d/modules.sh' # module path include file
+if ! declare -f module > /dev/null -a -r "$MPIF"; then echo "INFO: activating module system by including $MPIF"; . $MPIF; fi
 test -z "$SCAMC_RESULTS_DIR" && echo "INFO: SCAMC_RESULTS_DIR unset -- will use working directory: $PDIR"
 PDIR=${SCAMC_RESULTS_DIR:="$PDIR"}
 test "${PDIR:0:1}" = '/' || { echo "ERROR: SCAMC_RESULTS_DIR=$SCAMC_RESULTS_DIR: not an absolute path ..!"; false; }
