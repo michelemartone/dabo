@@ -1,12 +1,13 @@
 TS=./dabo.sh
+TL=example_pass false self timeout true
 
 .PHONY:
 all:
-	$(TS)
+	$(TS) $(TL)
 
 .PHONY:
 x:
-	bash -x $(TS)
+	bash -x $(TS) $(TL)
 
 .PHONY:
 e:
