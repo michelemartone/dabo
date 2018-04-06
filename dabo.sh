@@ -157,10 +157,10 @@ cd - > $DN
 LS=''
 WD=`basename $PWD`
 if test -f README.md -a -f "$SC" ; then
+	LS=`basename $PWD`.shar
 	cd ..
 	SFL=`for f in $WD/README.md $WD/$SC $WD/*/test.sh $WD/*/*.shar; do if test -f $f ;then echo $f; fi ; done` 
-	if test -n "$SFL"; then 
-		LS=`basename $PWD`.shar
+	if test -z "$SFL"; then LS=''; else 
 		shar ${VS} -T $SFL > $WD/$LS # FIXME: */test.sh might still fail, if executing from somewhere else.
 		test -f "$WD/$LS"
 	fi
