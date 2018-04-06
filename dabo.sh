@@ -143,7 +143,7 @@ fi
 if test -n "$FOFL"; then
 	FS=$PDIR/failed.shar; shar ${VS} -T $FOFL $IF > $FS ; test -f "$FS";
 fi
-cd -
+cd - > $DN
 LS=''
 WD=`basename $PWD`
 if test -f README.md -a -f "$SC" ; then
@@ -154,7 +154,7 @@ if test -f README.md -a -f "$SC" ; then
 		shar ${VS} -T $SFL > $WD/$LS # FIXME: */test.sh might still fail, if executing from somewhere else.
 		test -f "$WD/$LS"
 	fi
-	cd -
+	cd - > $DN
 fi
 #bash   "$PS"
 #bash   "$LS"
