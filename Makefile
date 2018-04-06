@@ -1,5 +1,5 @@
 TS=./dabo.sh
-TL=example_pass false self timeout true
+TL=false true example_pass self timeout
 
 .PHONY:
 all:
@@ -15,10 +15,4 @@ e:
 
 .PHONY:
 clean:
-	#rm -f *.log *.shar
-	#rm -f *.html *.log *.shar
 	rm -f */*.html */*.log *.shar *.log
-
-.PHONY:
-maint:
-	DABO_TIMEOUT=120s $(TS) librsb_maint petsc_maint
