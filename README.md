@@ -48,6 +48,7 @@ The script works in the current directory.
 It reads the following environment variables:
 
     DABO_EMAIL       # if set, send report to this email address.
+    DABO_SUBJPFX     # if set, email subject prefix
     DABO_VERBOSITY   # print verbosity: (0) to 3.
     DABO_TIMEOUT     # test timeout: <number>[ms], e.g. 4s, 1m, .. 
     DABO_RESULTS_DIR # where to copy results

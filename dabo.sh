@@ -14,6 +14,10 @@ test -z "$DABO_TIMEOUT" && echo "INFO: DABO_TIMEOUT unset -- will use default te
 test -n "$DABO_TIMEOUT" && echo "INFO: DABO_TIMEOUT=${DABO_TIMEOUT}: each test will be run with this timeout."
 TO=${DABO_TIMEOUT:="$TO"}
 [[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "ERROR: DABO_TIMEOUT=$DABO_TIMEOUT: <number>[ms], e.g. $TO, 1m, ..!"; false; }
+DSP="TEST: "
+test -z "$DABO_SUBJPFX" && echo "INFO: DABO_SUBJPFX unset -- will use default email subject prefix \"$DSP\"."
+test -n "$DABO_SUBJPFX" && echo "INFO: DABO_SUBJPFX=${DABO_SUBJPFX}: user-set email subject prefix."
+DSP=${DABO_SUBJPFX:="$DSP"} # default subject prefix
 if test "$VL" -ge 1 ; then VMD=-v; VS=''; VCP=-v; else VMD=''; VS=-q; VCP=''; fi
 if declare -f module 2>&1 > $DN ; then
 	ML="`module list -t`"
@@ -167,5 +171,5 @@ test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
 if test -n "$EMAIL" ; then
 	test -n "$FAIL" || test -n "$PASS" && \
 	echo "INFO: Mailed to ${AUTHOR} <$EMAIL>: " "$SL" && \
-	echo -e "$BODY" | mailx -s "test-batch: $SL" -S from="${AUTHOR//@/-at-} <${EMAIL}>" ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} ${LS:+-a }${LS} "${EMAIL}";
+	echo -e "$BODY" | mailx -s "$DSP$SL" -S from="${AUTHOR//@/-at-} <${EMAIL}>" ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} ${LS:+-a }${LS} "${EMAIL}";
 fi
