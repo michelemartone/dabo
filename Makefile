@@ -1,4 +1,4 @@
-SC=./scamc.sh
+SC=./dabo.sh
 
 .PHONY:
 all:
@@ -16,4 +16,4 @@ clean:
 
 .PHONY:
 maint:
-	SCAMC_TIMEOUT=120s $(SC) librsb_maint petsc_maint
+	DABO_TIMEOUT=120s $(SC) librsb_maint petsc_maint
