@@ -12,15 +12,14 @@ of short shell scripts as test cases.
  * automated test run
  * test driven development
 
-## DABO is NOT meant
- * to replace per-software test suites
- * for exhaustive or whole system testing
- * to replace modulefiles documentation
- * to implement heavy automated benchmarks 
- * to be particularly portable
+## DABO is NOT meant to
+ * replace per-software test suites
+ * test exhaustively the whole system
+ * replace modulefiles documentation
+ * implement heavy automated benchmarks 
+ * be particularly portable apart from Linux
 
 ## DABO is meant to
- * run on Linux
  * produce logs useful as document snippets
  * spot failing use cases
  * report via email
@@ -39,8 +38,10 @@ of short shell scripts as test cases.
  * you can run many, e.g.: `./dabo.sh $TEST1 $TEST2`
  * such test scripts shall be portable to any other testing facility
 
-## DABO caution note
+## DABO caution notes
  * DABO performs no chroot or permissions downgrade
+ * DABO copies test each supplied directory, script, and input
+   to a temporary directory under /dev/shm, then destroys it.
  * run tests of other people using a shared restricted account !!!
 
 ## DABO options
