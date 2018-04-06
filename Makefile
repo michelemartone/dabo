@@ -1,12 +1,16 @@
-SC=./dabo.sh
+TS=./dabo.sh
 
 .PHONY:
 all:
-	$(SC)
+	$(TS)
 
 .PHONY:
 x:
-	bash -x $(SC)
+	bash -x $(TS)
+
+.PHONY:
+e:
+	vim $(TS)
 
 .PHONY:
 clean:
@@ -16,4 +20,4 @@ clean:
 
 .PHONY:
 maint:
-	DABO_TIMEOUT=120s $(SC) librsb_maint petsc_maint
+	DABO_TIMEOUT=120s $(TS) librsb_maint petsc_maint
