@@ -147,10 +147,13 @@ cd -
 LS=''
 WD=`basename $PWD`
 if test -f README.md -a -f "$SC" ; then
-	LS=`basename $PWD`.shar
 	cd ..
-	shar ${VS} -T  $WD/README.md $WD/$SC $WD/*/test.sh $WD/*/*.shar > $WD/$LS # FIXME: */test.sh might still fail, if executing from somewhere else.
-	test -f "$WD/$LS"
+	SFL=`for f in $WD/README.md $WD/$SC $WD/*/test.sh $WD/*/*.shar; do if test -f $f ;then echo $f; fi ; done` 
+	if test -n "$SFL"; then 
+		LS=`basename $PWD`.shar
+		shar ${VS} -T $SFL > $WD/$LS # FIXME: */test.sh might still fail, if executing from somewhere else.
+		test -f "$WD/$LS"
+	fi
 	cd -
 fi
 #bash   "$PS"
