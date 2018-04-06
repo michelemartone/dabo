@@ -9,16 +9,15 @@ DABO
 of short shell scripts as test cases.
 
 ## DABO supports
- * automated testing
+ * automated test run
  * test driven development
 
 ## DABO is NOT meant
- * for exhaustive testing
- * to test the whole system
- * to document modulefiles
- * to be particularly portable
  * to replace per-software test suites
- * to write e.g. automated benchmarks 
+ * for exhaustive or whole system testing
+ * to replace modulefiles documentation
+ * to implement heavy automated benchmarks 
+ * to be particularly portable
 
 ## DABO is meant to
  * run on Linux
