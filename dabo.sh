@@ -38,8 +38,11 @@ test "$VL" -ge 3 && set -x
 if echo $MODULEPATH | grep $USER; then echo "ERROR: shall unload personal modules first!"; false; fi
 TSTS=''
 TSTS=${TSTS:="$@"}
+ECT="'mkdir mytest; echo true  > mytest/test.sh; $0 mytest;'"
+ECF="'mkdir mytest; echo false > mytest/test.sh; $0 mytest;'"
+EI="You can create your own first test case easily, e.g.: $ECT or $ECF."
 UI="Each test directory contains one script file called 'test.sh', and shall be specified with its relative path."
-if test -z "$TSTS"; then echo "INFO: No test directory specified at the command line -- exiting. $UI"; exit ; fi
+if test -z "$TSTS"; then echo "INFO: No test directory specified at the command line -- exiting. $UI $EI"; exit ; fi
 PASS=''
 FAIL=''
 POFL=''
