@@ -40,6 +40,10 @@ of short shell scripts as test cases.
  * you can run many, e.g.: `./dabo.sh $TEST1 $TEST2`
  * such test scripts shall be portable to any other testing facility
 
+## DABO caution note
+ * DABO performs no chroot or permissions downgrade
+ * run tests of other people using a shared restricted account !!!
+
 ## DABO options
 The script works in the current directory.
 It reads the following environment variables:
