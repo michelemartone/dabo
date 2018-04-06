@@ -8,6 +8,10 @@ SCAMC
  * reporting
 of short shell scripts as test cases.
 
+## SCAMC supports
+ * automated testing
+ * test driven development
+
 ## SCAMC is NOT meant
  * for exhaustive testing
  * to test the whole system
@@ -20,10 +24,10 @@ of short shell scripts as test cases.
  * run on Linux
  * produce logs useful as document snippets
  * spot failing use cases
- * report failure logs via email
+ * report via email
  * save results in a custom directory
 
-## Workflow
+## SCAMC workflow
  * you create a directory, named e.g. `$MYTEST`
  * you write test script `$MYTEST/test.sh`, which:
    - shall succeed (e.g. exit 0) on success
@@ -36,7 +40,7 @@ of short shell scripts as test cases.
  * you can run many, e.g.: `./scamc.sh $TEST1 $TEST2`
  * such test scripts shall be portable to any other testing facility
 
-## Options
+## SCAMC options
 The script works in the current directory.
 It reads the following environment variables:
 
@@ -45,7 +49,7 @@ It reads the following environment variables:
     SCAMC_TIMEOUT     # test timeout: <number>[ms], e.g. 4s, 1m, .. 
     SCAMC_RESULTS_DIR # where to copy results
 
-## Example executions
+## SCAMC examples
 
     # intro:
     git clone git@github.com:michelemartone/scamc.git && cd scamc # get the code
@@ -65,10 +69,14 @@ It reads the following environment variables:
     SCAMC_EMAIL=my@email ./scamc.sh my_test
     # 
     # use different collections of tests:
-    SCAMC_TIMEOUT=9s SCAMC_RESULTS_DIR=$PWD/../demos_results ./scamc.sh small_demos/*
-    SCAMC_TIMEOUT=1s SCAMC_RESULTS_DIR=$PWD/../scamc_results ./scamc.sh env_quick_tests/*
-    SCAMC_TIMEOUT=1m SCAMC_RESULTS_DIR=$PWD/../scamc_results ./scamc.sh path-to-slow_test
+    SCAMC_TIMEOUT=9s SCAMC_RESULTS_DIR=$PWD/../demos_results ./scamc.sh demos/*
+    SCAMC_TIMEOUT=1s SCAMC_RESULTS_DIR=$PWD/../scamc_results ./scamc.sh envtests/*
+    SCAMC_TIMEOUT=1m SCAMC_RESULTS_DIR=$PWD/../scamc_results ./scamc.sh thorough/*
     #
-    # nightly runs:
-    # crontab -e # 00 23 * * * SCAMC_EMAIL=me@there ~/src/scamc/scamc.sh ~/testsdir
-
+    ## crontab -e:
+    # SCAMC=~/src/scamc/scamc.sh
+    # EMAIL=me@somewhere
+    ## nightly runs (e.g. environment sanity checks):
+    # 00 01 * * *   cd ~/mytests; SCAMC_EMAIL=$EMAIL                  $SCAMC demos/*
+    ## weekly runs (e.g. longer ones):
+    # 00 02 * * Sun cd ~/mytests; SCAMC_EMAIL=$EMAIL SCAMC_TIMEOUT=5m $SCAMC thorough/*
