@@ -154,20 +154,18 @@ if test -n "$FOFL"; then
 	FS=$PDIR/failed.shar; shar ${VS} -T $FOFL $IF > $FS ; test -f "$FS";
 fi
 cd - > $DN
-LS=''
-WD=`basename $PWD`
-if test -f README.md -a -f "$SC" ; then
-	LS=`basename $PWD`.shar
-	cd ..
-	SFL=`for f in $WD/README.md $WD/$SC $WD/*/test.sh $WD/*/*.shar; do if test -f $f ;then echo $f; fi ; done` 
-	if test -z "$SFL"; then LS=''; else 
-		shar ${VS} -T $SFL > $WD/$LS # FIXME: */test.sh might still fail, if executing from somewhere else.
-		test -f "$WD/$LS"
-	fi
-	cd - > $DN
-fi
-#bash   "$PS"
-#bash   "$LS"
+LS='' # devel-side sources archive
+#WD=`basename $PWD`
+#if test -f README.md -a -f "$SC" ; then
+#	LS=`basename $PWD`.shar
+#	cd ..
+#	SFL=`for f in $WD/README.md $WD/$SC $WD/*/test.sh $WD/*/*.shar; do if test -f $f ;then echo $f; fi ; done` 
+#	if test -z "$SFL"; then LS=''; else 
+#		shar ${VS} -T $SFL > $WD/$LS # FIXME: */test.sh might still fail, if executing from somewhere else.
+#		test -f "$WD/$LS"
+#	fi
+#	cd - > $DN
+#fi
 test -n "$FAIL" && FF=$FS
 test -n "$PASS" && PF=$PS
 echo "INFO: Give a look at: ${FL} ${PL} ${FF} ${PF} ${LS}"
