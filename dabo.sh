@@ -36,7 +36,10 @@ if declare -f module 2>&1 > $DN ; then
 fi
 test "$VL" -ge 3 && set -x
 if echo $MODULEPATH | grep $USER; then echo "ERROR: shall unload personal modules first!"; false; fi
-TSTS='false true example_pass self timeout'
+TSTS=''
+TSTS=${TSTS:="$@"}
+UI="Each test directory contains one script file called 'test.sh', and shall be specified with its relative path."
+if test -z "$TSTS"; then echo "INFO: No test directory specified at the command line -- exiting. $UI"; exit ; fi
 PASS=''
 FAIL=''
 POFL=''
@@ -52,7 +55,7 @@ mkdir -p ${VMD} -- "$PDIR"
 test -d "$PDIR"
 rm -f -- $PDIR/*.shar
 export DABO_SCRIPT="`which $0`" 
-for TST in ${@:-$TSTS} ; do
+for TST in ${TSTS} ; do
 	if   test -d "$TST" -a "${TST:0:1}" = '/'; then
 		echo "ERROR: $TST is not a relative path!";
 		false
@@ -65,7 +68,7 @@ for TST in ${@:-$TSTS} ; do
 		DP=$TST
 		test "$VL" -ge 1 && echo "INFO: Will write logs to $PD$DP"
 	elif test ! -d "$TST" ; then
-		echo "ERROR: $TST is not a directory!";
+		echo "ERROR: $TST is not a directory! $UI";
 		false
 	else
 		TS=`pwd`/$TST/test.sh
