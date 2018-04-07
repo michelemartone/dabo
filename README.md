@@ -85,3 +85,11 @@ It reads the following environment variables:
     # 00 01 * * *   cd ~/mytests; DABO_EMAIL=$EMAIL                  $DABO demos/*
     ## weekly runs (e.g. longer ones):
     # 00 02 * * Sun cd ~/mytests; DABO_EMAIL=$EMAIL DABO_TIMEOUT=5m $DABO thorough/*
+
+## DABO possible improvements 
+    Option switches, like:
+    -e DABO_EMAIL       
+    -s DABO_SUBJPFX     
+    -v DABO_VERBOSITY   
+    -t DABO_TIMEOUT     
+    -d DABO_RESULTS_DIR 
