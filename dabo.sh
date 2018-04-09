@@ -2,6 +2,19 @@
 DN=/dev/null
 set -e
 test "`uname`" = Linux # not tested elsewhere
+OPTSTRING="e:s:v:t:d:"
+while getopts $OPTSTRING NAME; do
+	echo processing $NAME  out of $@
+	case $NAME in
+		e) DABO_EMAIL=$OPTARG;;
+		s) DABO_SUBJPFX=$OPTARG;;
+		v) DABO_VERBOSITY=$OPTARG;;
+		t) DABO_TIMEOUT=$OPTARG;;
+		d) DABO_RESULTS_DIR=$OPTARG;;
+		*) false
+	esac
+done
+shift $((OPTIND-1))
 EMAIL=${DABO_EMAIL:=""}
 test -z "$EMAIL" && echo "INFO: DABO_EMAIL unset -- no report email will be sent."
 test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "ERROR: DABO_EMAIL=$DABO_EMAIL : invalid email address!"; false; }

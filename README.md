@@ -54,6 +54,13 @@ It reads the following environment variables:
     DABO_TIMEOUT     # test timeout: <number>[ms], e.g. 4s, 1m, .. 
     DABO_RESULTS_DIR # where to copy results
 
+The following option switches override the environment variables:
+    -e $DABO_EMAIL
+    -s $DABO_SUBJPFX
+    -v $DABO_VERBOSITY
+    -t $DABO_TIMEOUT
+    -d $DABO_RESULTS_DIR
+
 ## DABO examples
 
     # intro:
@@ -86,10 +93,3 @@ It reads the following environment variables:
     ## weekly runs (e.g. longer ones):
     # 00 02 * * Sun cd ~/mytests; DABO_EMAIL=$EMAIL DABO_TIMEOUT=5m $DABO thorough/*
 
-## DABO possible improvements 
-    Option switches, like:
-    -e DABO_EMAIL       
-    -s DABO_SUBJPFX     
-    -v DABO_VERBOSITY   
-    -t DABO_TIMEOUT     
-    -d DABO_RESULTS_DIR 
