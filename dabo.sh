@@ -83,9 +83,12 @@ for TST in ${TSTS} ; do
 		PD=$PDIR
 		DP=$TST
 		test "$VL" -ge 1 && echo "INFO: Will write logs to $PD$DP"
+#	elif test ! -d "$TST" ; then
+#		echo "ERROR: $TST is not a directory! $UI";
+#		false
 	elif test ! -d "$TST" ; then
-		echo "ERROR: $TST is not a directory! $UI";
-		false
+		echo "INFO: $TST is not a test directory -- SKIPPING! $UI";
+		continue;
 	else
 		TS=`pwd`/$TST/test.sh
 		PD=$PDIR
