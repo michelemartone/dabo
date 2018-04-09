@@ -122,7 +122,7 @@ for TST in ${TSTS} ; do
 		mkdir -p ${VMD} -- `dirname $PD$HS`
 		! HOME=. vim -E $TF -c 'syntax on' -c 'TOhtml' -c "w! ${PD}$HS" -c 'qall!' 2>&1 > $DN
 		test -f ${PD}${HS}
-		if cmp $TF ${PD}${HS} > $DN ; then echo "WARNING: $TF -> ${PD}${HS} conversion failed"; true; fi # e.g. nohup vim
+		if cmp $TF ${PD}${HS} > $DN ; then echo "WARNING: $TF -> ${PD}${HS} conversion failed"; sed -i 's/$/<br>/g' ${PD}${HS}; true; fi # e.g. nohup vim
 		#elinks ${PD}${HS}
 		test "$TR" = "pass" && POFL="$POFL ${HS}"
 		test "$TR" = "fail" && FOFL="$FOFL ${HS}"
