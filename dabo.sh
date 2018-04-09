@@ -4,7 +4,6 @@ set -e
 test "`uname`" = Linux # not tested elsewhere
 OPTSTRING="e:s:v:t:d:o:"
 while getopts $OPTSTRING NAME; do
-	echo processing $NAME  out of $@
 	case $NAME in
 		e) DABO_EMAIL=$OPTARG;;
 		s) DABO_SUBJPFX=$OPTARG;;
