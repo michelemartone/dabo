@@ -120,7 +120,7 @@ for TST in ${TSTS} ; do
 	for TF in $OFL ; do
 		HS=${DP}/`basename ${TF}`.html
 		mkdir -p ${VMD} -- `dirname $PD$HS`
-		! HOME=. vim -E $TF -c 'syntax on' -c 'TOhtml' -c "w! ${PD}$HS" -c 'qall!' 2&>1 > $DN
+		! HOME=. vim -E $TF -c 'syntax on' -c 'TOhtml' -c "w! ${PD}$HS" -c 'qall!' 2>&1 > $DN
 		test -f ${PD}${HS}
 		if cmp $TF ${PD}${HS} > $DN ; then echo "WARNING: $TF -> ${PD}${HS} conversion failed"; true; fi # e.g. nohup vim
 		#elinks ${PD}${HS}
