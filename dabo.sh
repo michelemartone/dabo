@@ -58,6 +58,7 @@ PASS=''
 FAIL=''
 POFL=''
 FOFL=''
+CHEAPTOHTMLRE='s/$/<br>/g'
 PDIR=`pwd`/
 test -z "$DABO_RESULTS_DIR" && echo "INFO: DABO_RESULTS_DIR [-d/-o] unset -- will use working directory: $PDIR"
 PDIR=${DABO_RESULTS_DIR:="$PDIR"}
@@ -122,7 +123,7 @@ for TST in ${TSTS} ; do
 		mkdir -p ${VMD} -- `dirname $PD$HS`
 		! HOME=. vim -E $TF -c 'syntax on' -c 'TOhtml' -c "w! ${PD}$HS" -c 'qall!' 2>&1 > $DN
 		test -f ${PD}${HS}
-		if cmp $TF ${PD}${HS} > $DN ; then echo "WARNING: $TF -> ${PD}${HS} conversion failed"; sed -i 's/$/<br>/g' ${PD}${HS}; true; fi # e.g. nohup vim
+		if cmp $TF ${PD}${HS} > $DN ; then echo "WARNING: $TF -> ${PD}${HS} conversion failed"; sed -i "$CHEAPTOHTMLRE" ${PD}${HS}; true; fi # e.g. nohup vim
 		#elinks ${PD}${HS}
 		test "$TR" = "pass" && POFL="$POFL ${HS}"
 		test "$TR" = "fail" && FOFL="$FOFL ${HS}"
