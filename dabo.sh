@@ -2,7 +2,7 @@
 DN=/dev/null
 set -e
 test "`uname`" = Linux # not tested elsewhere
-OPTSTRING="e:s:v:t:d:"
+OPTSTRING="e:s:v:t:d:o:"
 while getopts $OPTSTRING NAME; do
 	echo processing $NAME  out of $@
 	case $NAME in
@@ -10,7 +10,7 @@ while getopts $OPTSTRING NAME; do
 		s) DABO_SUBJPFX=$OPTARG;;
 		v) DABO_VERBOSITY=$OPTARG;;
 		t) DABO_TIMEOUT=$OPTARG;;
-		d) DABO_RESULTS_DIR=$OPTARG;;
+		o|d) DABO_RESULTS_DIR=$OPTARG;;
 		*) false
 	esac
 done
@@ -60,7 +60,7 @@ FAIL=''
 POFL=''
 FOFL=''
 PDIR=`pwd`/
-test -z "$DABO_RESULTS_DIR" && echo "INFO: DABO_RESULTS_DIR [-d] unset -- will use working directory: $PDIR"
+test -z "$DABO_RESULTS_DIR" && echo "INFO: DABO_RESULTS_DIR [-d/-o] unset -- will use working directory: $PDIR"
 PDIR=${DABO_RESULTS_DIR:="$PDIR"}
 test "${PDIR:0:1}" = '/' || { echo "ERROR: DABO_RESULTS_DIR=$DABO_RESULTS_DIR: not an absolute path ..!"; false; }
 [[ "$PDIR" =~ /$ ]] || PDIR+='/'

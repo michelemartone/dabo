@@ -59,7 +59,7 @@ The following option switches override the environment variables:
     -s $DABO_SUBJPFX
     -v $DABO_VERBOSITY
     -t $DABO_TIMEOUT
-    -d $DABO_RESULTS_DIR
+    -d $DABO_RESULTS_DIR # -o too
 
 ## DABO examples
 
