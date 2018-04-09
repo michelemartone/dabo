@@ -95,6 +95,7 @@ for TST in ${TSTS} ; do
 		DP=$TST # relative
 		test "$VL" -ge 1 && echo "INFO: Will write logs to $PD$DP"
 	fi
+	test ! -f $TS && { echo "INFO: $TS is not present -- SKIPPING test \"$TST\""; continue; }
 	test -d "$TST" -a "${TS:0:1}" = '/'
 	TBN=${TST//[.\/]/_}
 	while test "$TBN" != "${TBN/#_/}"; do TBN=${TBN/#_/}; done
