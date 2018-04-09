@@ -188,6 +188,6 @@ test -z "$PASS" && PF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
 if test -n "$EMAIL" ; then
 	test -n "$FAIL" || test -n "$PASS" && \
-	echo "INFO: Mailed to ${AUTHOR} <$EMAIL>: " "$SL" && \
+	echo "INFO: Mailed to \"${AUTHOR} <$EMAIL>\" with subject \"$SL\"" && \
 	echo -e "$BODY" | mailx -s "$DSP$SL" -S from="${AUTHOR//@/-at-} <${EMAIL}>" ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} ${LS:+-a }${LS} "${EMAIL}";
 fi
