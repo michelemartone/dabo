@@ -156,15 +156,16 @@ test -n "$POFL" && for t in $POFL ; do [[ "$t" =~ \.log ]] && LOPL+=" $t" ; done
 #SL="${FAIL:+FAIL:}${FAIL} ${PASS:+PASS:}${PASS}"
 cd $PDIR
 FL='' PL=''
-test -n "$LOFL" && FL=$PDIR/failed.log && tail -n 10000 $LOFL > $FL
-test -n "$LOPL" && PL=$PDIR/passed.log && tail -n 10000 $LOPL > $PL
+TSL="-`date +%s`"
+test -n "$LOFL" && FL=$PDIR/failed${TSL}.log && tail -n 10000 $LOFL > $FL
+test -n "$LOPL" && PL=$PDIR/passed${TSL}.log && tail -n 10000 $LOPL > $PL
 #IF="test.sh README.md"
 IF=''
 if test -n "$POFL"; then
-	PS=$PDIR/passed.shar; shar ${VS} -T $POFL $IF > $PS ; test -f "$PS"; 
+	PS=$PDIR/passed${TSL}.shar; shar ${VS} -T $POFL $IF > $PS ; test -f "$PS"; 
 fi
 if test -n "$FOFL"; then
-	FS=$PDIR/failed.shar; shar ${VS} -T $FOFL $IF > $FS ; test -f "$FS";
+	FS=$PDIR/failed${TSL}.shar; shar ${VS} -T $FOFL $IF > $FS ; test -f "$FS";
 fi
 cd - > $DN
 LS='' # devel-side sources archive
