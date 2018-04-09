@@ -129,6 +129,7 @@ for TST in ${TSTS} ; do
 		test "$TR" = "fail" && FOFL="$FOFL ${HS}"
 	done
 	test -f $LF
+	cp $LF $LF.html && sed -i 's/$/<br>/g' $LF.html
 	test "$TR" = "fail" && test "$VL" -ge 2 && nl $LF
 	test "$TR" = "pass" && POFL="$POFL ${LP}"
 	test "$TR" = "fail" && FOFL="$FOFL ${LP}"
