@@ -60,12 +60,12 @@ FAIL=''
 POFL=''
 FOFL=''
 PDIR=`pwd`/
-MPIF='/etc/profile.d/modules.sh' # module path include file
-if ! declare -f module > /dev/null -a -r "$MPIF"; then echo "INFO: activating module system by including $MPIF"; . $MPIF; fi
 test -z "$DABO_RESULTS_DIR" && echo "INFO: DABO_RESULTS_DIR [-d] unset -- will use working directory: $PDIR"
 PDIR=${DABO_RESULTS_DIR:="$PDIR"}
 test "${PDIR:0:1}" = '/' || { echo "ERROR: DABO_RESULTS_DIR=$DABO_RESULTS_DIR: not an absolute path ..!"; false; }
 [[ "$PDIR" =~ /$ ]] || PDIR+='/'
+MPIF='/etc/profile.d/modules.sh' # module path include file
+if ! declare -f module > /dev/null -a -r "$MPIF"; then echo "INFO: activating module system by including $MPIF"; . $MPIF; fi
 if test -z "$TSTS"; then echo "INFO: No test directory specified at the command line -- exiting. $UI $EI"; exit ; fi
 mkdir -p ${VMD} -- "$PDIR"
 test -d "$PDIR"
