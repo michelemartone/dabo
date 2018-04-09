@@ -16,19 +16,19 @@ while getopts $OPTSTRING NAME; do
 done
 shift $((OPTIND-1))
 EMAIL=${DABO_EMAIL:=""}
-test -z "$EMAIL" && echo "INFO: DABO_EMAIL unset -- no report email will be sent."
+test -z "$EMAIL" && echo "INFO: DABO_EMAIL [-e] unset -- no report email will be sent."
 test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "ERROR: DABO_EMAIL=$DABO_EMAIL : invalid email address!"; false; }
 test -n "$EMAIL" && echo "INFO: DABO_EMAIL=$DABO_EMAIL : will send a report email."
-test -z "$DABO_VERBOSITY" && echo "INFO: DABO_VERBOSITY unset -- will operate quietly (as with 0)."
+test -z "$DABO_VERBOSITY" && echo "INFO: DABO_VERBOSITY [-v] unset -- will operate quietly (as with 0)."
 VL=${DABO_VERBOSITY:="0"}
 [[ "$VL" =~ ^[0123]$ ]] || { echo "ERROR: DABO_VERBOSITY=$DABO_VERBOSITY : 0 to 3!"; false; }
 TO=4s;
-test -z "$DABO_TIMEOUT" && echo "INFO: DABO_TIMEOUT unset -- will use default test timeout of $TO."
+test -z "$DABO_TIMEOUT" && echo "INFO: DABO_TIMEOUT [-t] unset -- will use default test timeout of $TO."
 test -n "$DABO_TIMEOUT" && echo "INFO: DABO_TIMEOUT=${DABO_TIMEOUT}: each test will be run with this timeout."
 TO=${DABO_TIMEOUT:="$TO"}
 [[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "ERROR: DABO_TIMEOUT=$DABO_TIMEOUT: <number>[ms], e.g. $TO, 1m, ..!"; false; }
 DSP="TEST: "
-test -z "$DABO_SUBJPFX" && echo "INFO: DABO_SUBJPFX unset -- will use default email subject prefix \"$DSP\"."
+test -z "$DABO_SUBJPFX" && echo "INFO: DABO_SUBJPFX [-s] unset -- will use default email subject prefix \"$DSP\"."
 test -n "$DABO_SUBJPFX" && echo "INFO: DABO_SUBJPFX=${DABO_SUBJPFX}: user-set email subject prefix."
 DSP=${DABO_SUBJPFX:="$DSP"} # default subject prefix
 if test "$VL" -ge 1 ; then VMD=-v; VS=''; VCP=-v; else VMD=''; VS=-q; VCP=''; fi
@@ -63,7 +63,7 @@ FOFL=''
 PDIR=`pwd`/
 MPIF='/etc/profile.d/modules.sh' # module path include file
 if ! declare -f module > /dev/null -a -r "$MPIF"; then echo "INFO: activating module system by including $MPIF"; . $MPIF; fi
-test -z "$DABO_RESULTS_DIR" && echo "INFO: DABO_RESULTS_DIR unset -- will use working directory: $PDIR"
+test -z "$DABO_RESULTS_DIR" && echo "INFO: DABO_RESULTS_DIR [-d] unset -- will use working directory: $PDIR"
 PDIR=${DABO_RESULTS_DIR:="$PDIR"}
 test "${PDIR:0:1}" = '/' || { echo "ERROR: DABO_RESULTS_DIR=$DABO_RESULTS_DIR: not an absolute path ..!"; false; }
 [[ "$PDIR" =~ /$ ]] || PDIR+='/'
