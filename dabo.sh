@@ -55,7 +55,6 @@ ECT="'mkdir mytest; echo true  > mytest/test.sh; $0 mytest;'"
 ECF="'mkdir mytest; echo false > mytest/test.sh; $0 mytest;'"
 EI="You can create your own first test case easily, e.g.: $ECT or $ECF."
 UI="Each test directory contains one script file called 'test.sh', and shall be specified with its relative path."
-if test -z "$TSTS"; then echo "INFO: No test directory specified at the command line -- exiting. $UI $EI"; exit ; fi
 PASS=''
 FAIL=''
 POFL=''
@@ -67,6 +66,7 @@ test -z "$DABO_RESULTS_DIR" && echo "INFO: DABO_RESULTS_DIR [-d] unset -- will u
 PDIR=${DABO_RESULTS_DIR:="$PDIR"}
 test "${PDIR:0:1}" = '/' || { echo "ERROR: DABO_RESULTS_DIR=$DABO_RESULTS_DIR: not an absolute path ..!"; false; }
 [[ "$PDIR" =~ /$ ]] || PDIR+='/'
+if test -z "$TSTS"; then echo "INFO: No test directory specified at the command line -- exiting. $UI $EI"; exit ; fi
 mkdir -p ${VMD} -- "$PDIR"
 test -d "$PDIR"
 rm -f -- $PDIR/*.shar
