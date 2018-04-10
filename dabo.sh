@@ -111,11 +111,11 @@ for TST in ${TSTS} ; do
 	IFL=""
 	{ for f in $TST/*.shar $TST/test.sh ; do test -f $f && cp ${VCP} -- $f $TD && IFL="$IFL `basename $f`" ; done || true ; } > $DN
 	cp ${VCP} -- $TS $TD
-	cd $TD/..
+	pushd $TD/.. > $DN
 	TTBN=`basename $TD` # test tarball name
 	TTB=${DABO_RESULTS_DIR}/${TBN}.tar.gz
 	tar c${VTAR}zf ${TTB} --transform s/${TTBN}/${TBN}/g --show-transformed-names ${TTBN}
-	cd $TD
+	pushd $TD > $DN
 	mkdir -p ${VMD} -- `dirname $LF`
 	( timeout $TO bash --norc -e $TS 2>&1 ; ) 1> $LF \
 		&& {        TR="pass"; echo "PASS TEST: $TST"; PASS+=" $TBN"; } \
@@ -144,7 +144,7 @@ for TST in ${TSTS} ; do
 	test "$TR" = "fail" -a -n "${IFL}" && mkdir -p ${VMD} -- $PD$DP && cp -np ${VCP} -- $IFL $PD$DP
 	test "$VL" -ge 1 && ls -l
 	rm -fR -- $TD
-	cd - 2>&1 > $DN
+	{ popd; popd; } > $DN
 done
 ONLYTEST="$PASS$FAIL"
 FAIL=${FAIL// false/}
