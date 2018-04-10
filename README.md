@@ -92,4 +92,7 @@ The following option switches override the environment variables:
     # 00 01 * * *   cd ~/mytests; DABO_EMAIL=$EMAIL                  $DABO demos/*
     ## weekly runs (e.g. longer ones):
     # 00 02 * * Sun cd ~/mytests; DABO_EMAIL=$EMAIL DABO_TIMEOUT=5m $DABO thorough/*
+    #
+    ## in your ~/.bashrc:
+    # $ alias dabo="dabo.sh -e `pinky -l $USER | grep ^Login |sed 's/^Login.*: *//g;s/ /./g;s/$/\@lrz.de/'`"
 
