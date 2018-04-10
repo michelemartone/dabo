@@ -64,7 +64,6 @@ CHEAPTOHTMLRE='s/$/<br>/g'
 PDIR=`pwd`/
 test -z "$DABO_RESULTS_DIR" && echo "INFO: DABO_RESULTS_DIR [-d/-o] unset -- will use working directory: $PDIR"
 PDIR=${DABO_RESULTS_DIR:="$PDIR"}
-test "${PDIR:0:1}" = '/' || { echo "ERROR: DABO_RESULTS_DIR=$DABO_RESULTS_DIR: not a relative path ..!"; false; }
 [[ "$PDIR" =~ /$ ]] || PDIR+='/'
 DROH='hrt.'
 DRO='rt'
@@ -80,12 +79,10 @@ rm -f -- $PDIR/*.shar
 export DABO_SCRIPT="`which $0`" 
 for TST in ${TSTS} ; do
 	TST=${TST/%\//} # elicit trailing slash
-	if   test -d "$TST" -a "${TST:0:1}" = '/'; then
-		echo "ERROR: $TST is not a relative path!";
-		false;exit
-		#TS=$TST/test.sh
-		#PD=''
-		#DP=$TST
+	if   test -d "$TST" -a "${TST:0:1}" = '/'; then # absolute path
+		TS=$TST/test.sh
+		PD=$PDIR
+		DP=$TST
 	elif test -d "$TST" -a "${TST:0:1}" = '.'; then
 		TS=`pwd`/$TST/test.sh
 		PD=$PDIR
