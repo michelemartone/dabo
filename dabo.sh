@@ -112,7 +112,7 @@ for TST in ${TSTS} ; do
 	cp ${VCP} -- $TS $TD
 	cd $TD/..
 	TTBN=`basename $TD` # test tarball name
-	TTB=${DABO_RESULTS_DIR}/$TTBN.tar.gz
+	TTB=${DABO_RESULTS_DIR}/${TBN}.tar.gz
 	tar c${VTAR}zf ${TTB} --transform s/${TTBN}/${TBN}/g --show-transformed-names ${TTBN}
 	cd $TD
 	mkdir -p ${VMD} -- `dirname $LF`
