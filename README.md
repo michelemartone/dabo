@@ -60,7 +60,7 @@ The following option switches override the environment variables:
     -v $DABO_VERBOSITY
     -t $DABO_TIMEOUT
     -d $DABO_RESULTS_DIR  # -o too
-    -r $DABO_RESULTS_OPTS # any from [ht.]
+    -r $DABO_RESULTS_OPTS # any from [hrt.]
 
 ## DABO examples
 

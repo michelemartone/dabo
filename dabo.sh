@@ -66,11 +66,11 @@ test -z "$DABO_RESULTS_DIR" && echo "INFO: DABO_RESULTS_DIR [-d/-o] unset -- wil
 PDIR=${DABO_RESULTS_DIR:="$PDIR"}
 test "${PDIR:0:1}" = '/' || { echo "ERROR: DABO_RESULTS_DIR=$DABO_RESULTS_DIR: not an absolute path ..!"; false; }
 [[ "$PDIR" =~ /$ ]] || PDIR+='/'
-DROH='ht.'
-DRO='t'
+DROH='hrt.'
+DRO='rt'
 test -z "$DABO_RESULTS_OPTS" && echo "INFO: DABO_RESULTS_OPTS [-r] unset -- will use: \"$DRO\""
 DRO=${DABO_RESULTS_OPTS:="$DRO"}
-[[ "$DRO" =~ ^[ht.]+$ ]] || { echo "ERROR: DABO_RESULTS_OPTS=$DABO_RESULTS_OPTS: shall contain chars from [$DROH] ..!"; false; }
+[[ "$DRO" =~ ^[hrt.]+$ ]] || { echo "ERROR: DABO_RESULTS_OPTS=$DABO_RESULTS_OPTS: shall contain chars from [$DROH] ..!"; false; }
 MPIF='/etc/profile.d/modules.sh' # module path include file
 if test -r "$MPIF" && ! declare -f module > /dev/null ; then echo "INFO: activating module system by including $MPIF"; . $MPIF; fi
 if test -z "$TSTS"; then echo "INFO: No test directory specified at the command line -- exiting. $UI $EI"; exit ; fi
@@ -213,3 +213,4 @@ if test -n "$EMAIL" ; then test -n "$ONLYTEST" && \
 	echo "INFO: Mailed to \"${AUTHOR} <$EMAIL>\" with subject \"$SL\"" && \
 	echo -e "$BODY" | mailx -s "$DSP$SL" -S from="${AUTHOR//@/-at-} <${EMAIL}>" ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} ${LS:+-a }${LS} ${ATFL:+-a }${ATFL} "${EMAIL}";
 fi
+if [[ "$DRO" =~ r ]] && test $FC -gt 0 ; then false; fi
