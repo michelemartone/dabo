@@ -147,7 +147,7 @@ for TST in ${TSTS} ; do
 	{ popd; popd; } > $DN
 done
 ONLYTEST="${PASS// /}${FAIL// /}"
-FAIL=${FAIL// false/} # ignoring 'false'
+#FAIL=${FAIL// false/} # ignoring 'false'
 BODY=
 test -n "$FAIL" && BODY+="FAIL: $FAIL. \n"
 test -n "$PASS" && BODY+="PASS: $PASS. \n"
