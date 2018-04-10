@@ -177,7 +177,7 @@ test -n "$POFL" && for t in $POFL ; do [[ "$t" =~ \.log ]] && LOPL+=" $t" ; done
 #SL="${FAIL:+FAIL:}${FAIL} ${PASS:+PASS:}${PASS}"
 cd $PDIR
 FL='' PL=''
-if [[ "$DRO" =~ t ]]; then TSL="-`date +%s`"; else TLS=''; fi # time stamp for the logs
+if [[ "$DRO" =~ t ]]; then TSL="-`date +%s`"; else TSL=''; fi # time stamp for the logs
 test -n "$LOFL" && FL=$PDIR/failed${TSL}.log && tail -n 10000 $LOFL > $FL
 test -n "$LOPL" && PL=$PDIR/passed${TSL}.log && tail -n 10000 $LOPL > $PL
 #IF="test.sh README.md"
