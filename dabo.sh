@@ -87,7 +87,6 @@ for TST in ${TSTS} ; do
 		TS=`pwd`/$TST/test.sh
 		PD=$PDIR
 		DP=$TST
-		test "$VL" -ge 1 && echo "INFO: Will write logs to $PD$DP"
 #	elif test ! -d "$TST" ; then
 #		echo "ERROR: $TST is not a directory! $UI";
 #		false
@@ -98,8 +97,8 @@ for TST in ${TSTS} ; do
 		TS=`pwd`/$TST/test.sh
 		PD=$PDIR
 		DP=$TST # relative
-		test "$VL" -ge 1 && echo "INFO: Will write logs to $PD$DP"
 	fi
+	test "$VL" -ge 1 && echo "INFO: Will write logs to $PD$DP"
 	test ! -f $TS && { echo "INFO: $TS is not present -- SKIPPING test \"$TST\""; continue; }
 	test -d "$TST" -a "${TS:0:1}" = '/'
 	TBN=${TST//[.\/]/_}
