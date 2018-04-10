@@ -2,13 +2,14 @@
 DN=/dev/null
 set -e
 test "`uname`" = Linux # not tested elsewhere
-OPTSTRING="e:s:v:t:d:o:"
+OPTSTRING="e:s:v:t:d:o:r:"
 while getopts $OPTSTRING NAME; do
 	case $NAME in
 		e) DABO_EMAIL=$OPTARG;;
 		s) DABO_SUBJPFX=$OPTARG;;
 		v) DABO_VERBOSITY=$OPTARG;;
 		t) DABO_TIMEOUT=$OPTARG;;
+		r) DABO_RESULTS_OPTS=$OPTARG;;
 		o|d) DABO_RESULTS_DIR=$OPTARG;;
 		*) false
 	esac
@@ -65,6 +66,11 @@ test -z "$DABO_RESULTS_DIR" && echo "INFO: DABO_RESULTS_DIR [-d/-o] unset -- wil
 PDIR=${DABO_RESULTS_DIR:="$PDIR"}
 test "${PDIR:0:1}" = '/' || { echo "ERROR: DABO_RESULTS_DIR=$DABO_RESULTS_DIR: not an absolute path ..!"; false; }
 [[ "$PDIR" =~ /$ ]] || PDIR+='/'
+DROH='t.'
+DRO='t'
+test -z "$DABO_RESULTS_OPTS" && echo "INFO: DABO_RESULTS_OPTS [-r] unset -- will use: \"$DRO\""
+DRO=${DABO_RESULTS_OPTS:="$DRO"}
+[[ "$DRO" =~ ^[t.]+$ ]] || { echo "ERROR: DABO_RESULTS_OPTS=$DABO_RESULTS_OPTS: shall contain chars from [$DROH] ..!"; false; }
 MPIF='/etc/profile.d/modules.sh' # module path include file
 if test -r "$MPIF" && ! declare -f module > /dev/null ; then echo "INFO: activating module system by including $MPIF"; . $MPIF; fi
 if test -z "$TSTS"; then echo "INFO: No test directory specified at the command line -- exiting. $UI $EI"; exit ; fi
@@ -171,7 +177,7 @@ test -n "$POFL" && for t in $POFL ; do [[ "$t" =~ \.log ]] && LOPL+=" $t" ; done
 #SL="${FAIL:+FAIL:}${FAIL} ${PASS:+PASS:}${PASS}"
 cd $PDIR
 FL='' PL=''
-TSL="-`date +%s`"
+if [[ "$DRO" =~ t ]]; then TSL="-`date +%s`"; else TLS=''; fi # time stamp for the logs
 test -n "$LOFL" && FL=$PDIR/failed${TSL}.log && tail -n 10000 $LOFL > $FL
 test -n "$LOPL" && PL=$PDIR/passed${TSL}.log && tail -n 10000 $LOPL > $PL
 #IF="test.sh README.md"
