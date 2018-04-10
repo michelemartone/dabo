@@ -162,9 +162,9 @@ PC=`words_count $PASS`
 FC=`words_count $FAIL`
 TC=`words_count $PASS $FAIL`
 if test $TC -le 1; then ATS="All tests"; else ATS="All tests"; fi
-test -z "$FAIL" && test -n "$PASS" && CMT+="$ATS passed [$PC/$TC]."
-test -n "$FAIL" && test -z "$PASS" && CMT+="$ATS failed [$FC/$TC]."
-test -n "$FAIL" && test -n "$PASS" && CMT+="Some tests failed [$FC/$TC]."
+test -z "$FAIL" && test -n "$PASS" && CMT+="$ATS passed [$PC/$TC]"
+test -n "$FAIL" && test -z "$PASS" && CMT+="$ATS failed [$FC/$TC]"
+test -n "$FAIL" && test -n "$PASS" && CMT+="Some tests failed [$FC/$TC]"
 SL="$CMT"
 LOFL=""
 LOPL=""
@@ -203,7 +203,7 @@ test -n "$PASS" && PF=$PS
 echo "INFO: Give a look at: ${FL} ${PL} ${FF} ${PF} ${LS} ${ATFL}"
 test -z "$FAIL" && FF=''
 test -z "$PASS" && PF=''
-test -z "$FAIL" && test -z "$PASS" && SL="$SL $ATS test passed."
+test -z "$FAIL" && test -z "$PASS" && SL="$SL $ATS test passed"
 if test $TC -le 1; then SL+=" [$ONLYTEST]"; fi
 if test -n "$EMAIL" ; then test -n "$ONLYTEST" && \
 	echo "INFO: Mailed to \"${AUTHOR} <$EMAIL>\" with subject \"$SL\"" && \
