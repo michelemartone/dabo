@@ -30,7 +30,7 @@ DSP="TEST: "
 test -z "$DABO_SUBJPFX" && echo "INFO: DABO_SUBJPFX [-s] unset -- will use default email subject prefix \"$DSP\"."
 test -n "$DABO_SUBJPFX" && echo "INFO: DABO_SUBJPFX=${DABO_SUBJPFX}: user-set email subject prefix."
 DSP=${DABO_SUBJPFX:="$DSP"} # default subject prefix
-if test "$VL" -ge 1 ; then VMD=-v; VS=''; VCP=-v; else VMD=''; VS=-q; VCP=''; fi
+if test "$VL" -ge 1 ; then VMD=-v; VS=''; VCP=-v; VTAR=v; else VMD=''; VS=-q; VCP=''; VTAR=''; fi
 if declare -f module 2>&1 > $DN ; then
 	ML="`module list -t`"
 	for MN in ${ML} ; do 
@@ -112,7 +112,7 @@ for TST in ${TSTS} ; do
 	cd $TD/..
 	TTBN=`basename $TD` # test tarball name
 	TTB=${DABO_RESULTS_DIR}/$TTBN.tar.gz
-	tar cvzf ${TTB} --transform s/${TTBN}/${TBN}/g --show-transformed-names ${TTBN}
+	tar c${VTAR}zf ${TTB} --transform s/${TTBN}/${TBN}/g --show-transformed-names ${TTBN}
 	cd $TD
 	mkdir -p ${VMD} -- `dirname $LF`
 	( timeout $TO bash --norc -e $TS 2>&1 ; ) 1> $LF \
