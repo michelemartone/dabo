@@ -21,3 +21,11 @@ e:
 .PHONY:
 clean:
 	rm -f */*.html */*.log *.shar *.log *.tar.gz
+
+.PHONY:
+true:
+	$(TS) $@
+
+.PHONY:
+false:
+	$(TS) $@
