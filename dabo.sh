@@ -109,6 +109,10 @@ for TST in ${TSTS} ; do
 	IFL=""
 	{ for f in $TST/*.shar $TST/test.sh ; do test -f $f && cp ${VCP} -- $f $TD && IFL="$IFL `basename $f`" ; done || true ; } > $DN
 	cp ${VCP} -- $TS $TD
+	cd $TD/..
+	TTBN=`basename $TD` # test tarball name
+	TTB=${DABO_RESULTS_DIR}/$TTBN.tar.gz
+	tar cvzf ${TTB} --transform s/${TTBN}/${TBN}/g --show-transformed-names ${TTBN}
 	cd $TD
 	mkdir -p ${VMD} -- `dirname $LF`
 	( timeout $TO bash --norc -e $TS 2>&1 ; ) 1> $LF \
