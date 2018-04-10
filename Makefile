@@ -1,9 +1,14 @@
 TS=./dabo.sh
-TL=false true example_pass self timeout
+TL=true example_pass self timeout
+ATL=false $(TL)
+
+.PHONY:
+almost_all:
+	$(TS) $(TL)
 
 .PHONY:
 all:
-	$(TS) $(TL)
+	$(TS) $(ATL)
 
 .PHONY:
 x:
