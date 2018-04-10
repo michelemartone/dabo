@@ -147,8 +147,8 @@ for TST in ${TSTS} ; do
 	test "$TR" = "pass" && ATFL="$ATFL ${TTB}"
 	test "$TR" = "pass" && POFL="$POFL ${LP}"
 	test "$TR" = "fail" && FOFL="$FOFL ${LP}"
-	test "$TR" = "pass" -a -n "${IFL}" && mkdir -p ${VMD} -- $PD$DP && cp -np ${VCP} -- $IFL $PD$DP
-	test "$TR" = "fail" -a -n "${IFL}" && mkdir -p ${VMD} -- $PD$DP && cp -np ${VCP} -- $IFL $PD$DP
+	test "$TR" = "pass" -a -n "${IFL}" && mkdir -p ${VMD} -- $PD$DP && for f in ${IFL}; do if test -f $f; then cp -np ${VCP} -- $f $PD$DP; fi ; done
+	test "$TR" = "fail" -a -n "${IFL}" && mkdir -p ${VMD} -- $PD$DP && for f in ${IFL}; do if test -f $f; then cp -np ${VCP} -- $f $PD$DP; fi ; done
 	test "$VL" -ge 1 && ls -l
 	rm -fR -- $TD
 	{ popd; popd; } > $DN
