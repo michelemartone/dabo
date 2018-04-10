@@ -156,8 +156,9 @@ words_count() { echo ${#@}; }
 PC=`words_count $PASS`
 FC=`words_count $FAIL`
 TC=`words_count $PASS $FAIL`
-test -z "$FAIL" && test -n "$PASS" && CMT+="All tests passed [$PC/$TC]."
-test -n "$FAIL" && test -z "$PASS" && CMT+="All tests failed [$FC/$TC]."
+if test $TC = 1; then ATS="test $PASS$FAIL"; else ATS="All tests"; fi
+test -z "$FAIL" && test -n "$PASS" && CMT+="$ATS passed [$PC/$TC]."
+test -n "$FAIL" && test -z "$PASS" && CMT+="$ATS failed [$FC/$TC]."
 test -n "$FAIL" && test -n "$PASS" && CMT+="Some tests failed [$FC/$TC]."
 SL="$CMT"
 LOFL=""
@@ -197,7 +198,7 @@ test -n "$PASS" && PF=$PS
 echo "INFO: Give a look at: ${FL} ${PL} ${FF} ${PF} ${LS} ${ATFL}"
 test -z "$FAIL" && FF=''
 test -z "$PASS" && PF=''
-test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
+test -z "$FAIL" && test -z "$PASS" && SL="$SL $ATS test passed."
 if test -n "$EMAIL" ; then
 	test -n "$FAIL" || test -n "$PASS" && \
 	echo "INFO: Mailed to \"${AUTHOR} <$EMAIL>\" with subject \"$SL\"" && \
