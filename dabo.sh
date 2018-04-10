@@ -57,6 +57,7 @@ UI="Each test directory contains one script file called 'test.sh', and shall be 
 PASS=''
 FAIL=''
 POFL=''
+ATFL=''
 FOFL=''
 CHEAPTOHTMLRE='s/$/<br>/g'
 PDIR=`pwd`/
@@ -135,6 +136,7 @@ for TST in ${TSTS} ; do
 	test -f $LF
 	cp $LF $LF.html && sed -i 's/$/<br>/g' $LF.html
 	test "$TR" = "fail" && test "$VL" -ge 2 && nl $LF
+	test "$TR" = "pass" && ATFL="$ATFL ${TTB}"
 	test "$TR" = "pass" && POFL="$POFL ${LP}"
 	test "$TR" = "fail" && FOFL="$FOFL ${LP}"
 	test "$TR" = "pass" -a -n "${IFL}" && mkdir -p ${VMD} -- $PD$DP && cp -np ${VCP} -- $IFL $PD$DP
@@ -192,12 +194,12 @@ LS='' # devel-side sources archive
 #fi
 test -n "$FAIL" && FF=$FS
 test -n "$PASS" && PF=$PS
-echo "INFO: Give a look at: ${FL} ${PL} ${FF} ${PF} ${LS}"
+echo "INFO: Give a look at: ${FL} ${PL} ${FF} ${PF} ${LS} ${ATFL}"
 test -z "$FAIL" && FF=''
 test -z "$PASS" && PF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL All test passed."
 if test -n "$EMAIL" ; then
 	test -n "$FAIL" || test -n "$PASS" && \
 	echo "INFO: Mailed to \"${AUTHOR} <$EMAIL>\" with subject \"$SL\"" && \
-	echo -e "$BODY" | mailx -s "$DSP$SL" -S from="${AUTHOR//@/-at-} <${EMAIL}>" ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} ${LS:+-a }${LS} "${EMAIL}";
+	echo -e "$BODY" | mailx -s "$DSP$SL" -S from="${AUTHOR//@/-at-} <${EMAIL}>" ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} ${LS:+-a }${LS} ${ATFL:+-a }${ATFL} "${EMAIL}";
 fi
