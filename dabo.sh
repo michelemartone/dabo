@@ -64,7 +64,7 @@ CHEAPTOHTMLRE='s/$/<br>/g'
 PDIR=`pwd`/
 test -z "$DABO_RESULTS_DIR" && echo "INFO: DABO_RESULTS_DIR [-d/-o] unset -- will use working directory: $PDIR"
 PDIR=${DABO_RESULTS_DIR:="$PDIR"}
-test "${PDIR:0:1}" = '/' || { echo "ERROR: DABO_RESULTS_DIR=$DABO_RESULTS_DIR: not an absolute path ..!"; false; }
+test "${PDIR:0:1}" = '/' || { echo "ERROR: DABO_RESULTS_DIR=$DABO_RESULTS_DIR: not a relative path ..!"; false; }
 [[ "$PDIR" =~ /$ ]] || PDIR+='/'
 DROH='hrt.'
 DRO='rt'
