@@ -73,7 +73,7 @@ test -d "$PDIR"
 rm -f -- $PDIR/*.shar
 export DABO_SCRIPT="`which $0`" 
 for TST in ${TSTS} ; do
-	TST=${TST//\//}
+	TST=${TST/%\//} # elicit trailing slash
 	if   test -d "$TST" -a "${TST:0:1}" = '/'; then
 		echo "ERROR: $TST is not a relative path!";
 		false
