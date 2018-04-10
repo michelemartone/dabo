@@ -146,8 +146,8 @@ for TST in ${TSTS} ; do
 	rm -fR -- $TD
 	{ popd; popd; } > $DN
 done
-ONLYTEST="$PASS$FAIL"
-FAIL=${FAIL// false/}
+ONLYTEST="${PASS// /}${FAIL// /}"
+FAIL=${FAIL// false/} # ignoring 'false'
 BODY=
 test -n "$FAIL" && BODY+="FAIL: $FAIL. \n"
 test -n "$PASS" && BODY+="PASS: $PASS. \n"
@@ -158,7 +158,7 @@ words_count() { echo ${#@}; }
 PC=`words_count $PASS`
 FC=`words_count $FAIL`
 TC=`words_count $PASS $FAIL`
-if test $TC = 1; then ATS="test $ONLYTEST"; else ATS="All tests"; fi
+if test $TC -le 1; then ATS="All tests"; else ATS="All tests"; fi
 test -z "$FAIL" && test -n "$PASS" && CMT+="$ATS passed [$PC/$TC]."
 test -n "$FAIL" && test -z "$PASS" && CMT+="$ATS failed [$FC/$TC]."
 test -n "$FAIL" && test -n "$PASS" && CMT+="Some tests failed [$FC/$TC]."
@@ -201,6 +201,7 @@ echo "INFO: Give a look at: ${FL} ${PL} ${FF} ${PF} ${LS} ${ATFL}"
 test -z "$FAIL" && FF=''
 test -z "$PASS" && PF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL $ATS test passed."
+if test $TC -le 1; then SL+=" [$ONLYTEST]"; fi
 if test -n "$EMAIL" ; then test -n "$ONLYTEST" && \
 	echo "INFO: Mailed to \"${AUTHOR} <$EMAIL>\" with subject \"$SL\"" && \
 	echo -e "$BODY" | mailx -s "$DSP$SL" -S from="${AUTHOR//@/-at-} <${EMAIL}>" ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} ${LS:+-a }${LS} ${ATFL:+-a }${ATFL} "${EMAIL}";
