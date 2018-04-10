@@ -61,6 +61,11 @@ The following option switches override the environment variables:
     -t $DABO_TIMEOUT
     -d $DABO_RESULTS_DIR  # -o too
     -r $DABO_RESULTS_OPTS # any from [hrt.]
+    DABO_RESULTS_OPTS takes a combination of:
+     r : script returns false on any failure
+     h : internally uses nohup
+     t : timestamp in filenames
+     . : ignored (but allows to override defaults)
 
 ## DABO examples
 
