@@ -2,30 +2,30 @@ TS=./dabo.sh
 TL=true example_pass self timeout
 ATL=false $(TL)
 
-.PHONY:
+.PHONY: almost_all
 almost_all:
 	$(TS) $(TL)
 
-.PHONY:
+.PHONY: all
 all:
 	$(TS) $(ATL)
 
-.PHONY:
+.PHONY: x
 x:
 	bash -x $(TS) $(TL)
 
-.PHONY:
+.PHONY: e
 e:
 	vim $(TS)
 
-.PHONY:
+.PHONY: clean
 clean:
 	rm -f */*.html */*.log *.shar *.log *.tar.gz
 
-.PHONY:
+.PHONY: true
 true:
 	$(TS) $@
 
-.PHONY:
+.PHONY: false
 false:
 	$(TS) $@
