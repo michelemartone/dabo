@@ -76,10 +76,10 @@ for TST in ${TSTS} ; do
 	TST=${TST/%\//} # elicit trailing slash
 	if   test -d "$TST" -a "${TST:0:1}" = '/'; then
 		echo "ERROR: $TST is not a relative path!";
-		false
-		TS=$TST/test.sh
-		PD=''
-		DP=$TST
+		false;exit
+		#TS=$TST/test.sh
+		#PD=''
+		#DP=$TST
 	elif test -d "$TST" -a "${TST:0:1}" = '.'; then
 		TS=`pwd`/$TST/test.sh
 		PD=$PDIR
