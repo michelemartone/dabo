@@ -44,9 +44,15 @@ of short shell scripts as test cases.
    to a temporary directory under /dev/shm, then destroys it.
  * run tests of other people using a shared restricted account !!!
 
-## DABO options
-The script works in the current directory.
-It reads the following environment variables:
+## DABO documentation: (from `dabo -h`)
+Usage:
+    dabo.sh <option switches> <test-dirs>
+
+A test-dir is a directory containing a test.sh file.
+That file will be copied to a temporary directory and executed.
+If it returns zero the test passes, otherwise fails.
+
+Environment variables:
 
     DABO_EMAIL       # if set, send report to this email address.
     DABO_SUBJPFX     # if set, email subject prefix
@@ -54,24 +60,24 @@ It reads the following environment variables:
     DABO_TIMEOUT     # test timeout: <number>[ms], e.g. 4s, 1m, .. 
     DABO_RESULTS_DIR # where to copy results
 
-Option switches overriding the environment variables:
+Option switches (overriding the environment variables):
     -e $DABO_EMAIL
     -s $DABO_SUBJPFX
     -v $DABO_VERBOSITY
     -t $DABO_TIMEOUT
     -d $DABO_RESULTS_DIR  # -o too
-    -r $DABO_RESULTS_OPTS # any from [hrt.]
+    -r $DABO_RESULTS_OPTS # any from "hrt."
     DABO_RESULTS_OPTS / -r takes a combination of:
-     r : script returns false on any failure
      h : internally uses nohup
+     r : script returns false on any failure
      t : timestamp in filenames
      . : ignored (but allows to override defaults)
 
-Option switches for interactive use:
+Option switches meant for interactive use:
     -h :            print help message and exit
+    -L :            view test log with less immediately
     -P : if passed, view test log with less immediately
     -F : if failed, view test log with less immediately
-    -L :            view test log with less immediately
 
 ## DABO examples
 

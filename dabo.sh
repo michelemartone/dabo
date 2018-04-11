@@ -3,7 +3,7 @@ DN=/dev/null
 VIEW_LOG=''
 set -e
 test "`uname`" = Linux # not tested elsewhere
-OPTSTRING="e:s:v:t:d:o:r:LFPhH"
+OPTSTRING="e:s:v:t:d:o:r:LFPh"
 while getopts $OPTSTRING NAME; do
 	case $NAME in
 		e) DABO_EMAIL=$OPTARG;;
@@ -15,7 +15,7 @@ while getopts $OPTSTRING NAME; do
 		F) VIEW_LOG+='F';;
 		P) VIEW_LOG+='P';;
 		L) VIEW_LOG+='FP';;
-		h|H)
+		h)
 DABO_HELP='
 Usage:
     dabo.sh <option switches> <test-dirs>
@@ -50,7 +50,7 @@ Option switches meant for interactive use:
     -L :            view test log with less immediately
     -P : if passed, view test log with less immediately
     -F : if failed, view test log with less immediately
-'
+' # meant for copy paste in the README
 		echo "${DABO_HELP}";exit;;
 		*) false
 	esac
