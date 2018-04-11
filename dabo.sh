@@ -70,7 +70,12 @@ while getopts $OPTSTRING NAME; do
 done
 shift $((OPTIND-1))
 test $# = 0 && on_help
-echo "INFO: Will go through tests directories: $@"; 
+TSTS=''
+TSTS=${TSTS:="$@"}
+echo "INFO: Will go through tests directories: $TSTS"; 
+for TST in ${TSTS} ; do
+	if test ! -f "$TST/test.sh" ; then echo "INFO: $TST is not a valid test directory -- (will be skipped)."; continue; fi
+done
 EMAIL=${DABO_EMAIL:=""}
 test -z "$EMAIL" && echo "INFO: DABO_EMAIL [-e] unset -- no report email will be sent."
 test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "ERROR: DABO_EMAIL=$DABO_EMAIL : invalid email address!"; false; }
@@ -105,8 +110,6 @@ if declare -f module 2>&1 > $DN ; then
 fi
 test "$VL" -ge 3 && set -x
 if echo $MODULEPATH | grep $USER; then echo "ERROR: shall unload personal modules first!"; false; fi
-TSTS=''
-TSTS=${TSTS:="$@"}
 ECT="'mkdir mytest; echo true  > mytest/test.sh; $0 mytest;'"
 ECF="'mkdir mytest; echo false > mytest/test.sh; $0 mytest;'"
 EI="You can create your own first test case easily, e.g.: $ECT or $ECF."
