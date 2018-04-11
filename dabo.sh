@@ -27,9 +27,9 @@ If it returns zero the test passes, otherwise fails.
 
 Check it out:
 
-    mkdir -p echo_test; echo 'echo my echo test;false' > echo_test/test.sh 
+    mkdir -p echo_test; echo "echo my echo test;false" > echo_test/test.sh 
     ./dabo.sh -L echo_test  # fails
-    mkdir -p echo_test; echo 'echo my echo test;true ' > echo_test/test.sh 
+    mkdir -p echo_test; echo "echo my echo test;true " > echo_test/test.sh 
     ./dabo.sh -L echo_test  # passes
 
 Environment variables:
