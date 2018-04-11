@@ -53,6 +53,13 @@ A test-dir is a directory containing a test.sh file.
 That file will be copied to a temporary directory and executed.
 If it returns zero the test passes, otherwise fails.
 
+Check it out:
+
+    mkdir -p echo_test; echo 'echo my echo test;false' > echo_test/test.sh 
+    ./dabo.sh -L echo_test  # fails
+    mkdir -p echo_test; echo 'echo my echo test;true ' > echo_test/test.sh 
+    ./dabo.sh -L echo_test  # passes
+
 Environment variables:
 
     DABO_EMAIL       # if set, send report to this email address.
