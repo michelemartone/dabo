@@ -65,8 +65,8 @@ while getopts $OPTSTRING NAME; do
 		*) false
 	esac
 done
-test $# = 0 && on_help
 shift $((OPTIND-1))
+test $# = 0 && on_help
 EMAIL=${DABO_EMAIL:=""}
 test -z "$EMAIL" && echo "INFO: DABO_EMAIL [-e] unset -- no report email will be sent."
 test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "ERROR: DABO_EMAIL=$DABO_EMAIL : invalid email address!"; false; }
