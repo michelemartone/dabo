@@ -54,18 +54,23 @@ It reads the following environment variables:
     DABO_TIMEOUT     # test timeout: <number>[ms], e.g. 4s, 1m, .. 
     DABO_RESULTS_DIR # where to copy results
 
-The following option switches override the environment variables:
+Option switches overriding the environment variables:
     -e $DABO_EMAIL
     -s $DABO_SUBJPFX
     -v $DABO_VERBOSITY
     -t $DABO_TIMEOUT
     -d $DABO_RESULTS_DIR  # -o too
     -r $DABO_RESULTS_OPTS # any from [hrt.]
-    DABO_RESULTS_OPTS takes a combination of:
+    DABO_RESULTS_OPTS / -r takes a combination of:
      r : script returns false on any failure
      h : internally uses nohup
      t : timestamp in filenames
      . : ignored (but allows to override defaults)
+
+Option switches for interactive use:
+    -P : if passed, view test log with less immediately
+    -F : if failed, view test log with less immediately
+    -L :            view test log with less immediately
 
 ## DABO examples
 
