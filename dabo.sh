@@ -43,13 +43,15 @@ Option switches meant for interactive use:
     -L :            view test log with less immediately
     -P : if passed, view test log with less immediately
     -F : if failed, view test log with less immediately
+    -D : dry run: checks arguments and exit
 ' # meant for copy paste in the README
 DN=/dev/null
 VIEW_LOG=''
+DRY_RUN=''
 set -e
 test "`uname`" = Linux # not tested elsewhere
 function on_help() { echo "${DABO_HELP}";exit; }
-OPTSTRING="e:s:v:t:d:o:r:LFPh"
+OPTSTRING="e:s:v:t:d:o:r:DFLPh"
 while getopts $OPTSTRING NAME; do
 	case $NAME in
 		e) DABO_EMAIL=$OPTARG;;
@@ -61,6 +63,7 @@ while getopts $OPTSTRING NAME; do
 		F) VIEW_LOG+='F';;
 		P) VIEW_LOG+='P';;
 		L) VIEW_LOG+='FP';;
+		D) DRY_RUN=yes;;
 		h) on_help;;
 		*) false
 	esac
@@ -125,6 +128,7 @@ DRO=${DABO_RESULTS_OPTS:="$DRO"}
 MPIF='/etc/profile.d/modules.sh' # module path include file
 if test -r "$MPIF" && ! declare -f module > /dev/null ; then echo "INFO: activating module system by including $MPIF"; . $MPIF; fi
 if test -z "$TSTS"; then echo "INFO: No test directory specified at the command line -- exiting. $UI $EI"; exit ; fi
+if test "$DRY_RUN" = yes ; then echo "INFO: dry run requested: doing nothing and exiting."; exit; fi
 mkdir -p ${VMD} -- "$PDIR"
 test -d "$PDIR"
 rm -f -- $PDIR/*.shar

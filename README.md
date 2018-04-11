@@ -97,14 +97,16 @@ Option switches meant for interactive use:
     -L :            view test log with less immediately
     -P : if passed, view test log with less immediately
     -F : if failed, view test log with less immediately
+    -D : dry run: checks arguments and exit
 
 ## DABO examples
 
     # intro:
     git clone git@github.com:michelemartone/dabo.git && cd dabo # get the code
-    ./dabo.sh true         # run trivial passing test, in 'true' directory
-    ./dabo.sh false        # run trivial failing test
-    ./dabo.sh self         # run self test -- shall pass
+    ./dabo.sh -D true      # dry run: what would be executed ?
+    ./dabo.sh    true      # run trivial passing test, in 'true' directory
+    ./dabo.sh    false     # run trivial failing test
+    ./dabo.sh    self      # run self test -- shall pass
     ./dabo.sh              # run all tests -- some will fail
     ./dabo.sh example_pass # run user example test
     nl example_pass/test.sh # give a look -- eventually edit
