@@ -5,10 +5,10 @@ DABO
 Maintaining good user experience on a system with multiple users
 and administrators requires reproducible procedures, e.g. to:
  - ensure basic environment is consistent
- - spot erroneous behaviours early
+ - spot erroneous behaviours early on
  - manage user side tickets / incidents
 
-DABO is a script to address the above.
+DABO is a script to address this.
 
 ## A minimalistic, non-invasive helper to user-side
  * testing
@@ -64,9 +64,9 @@ If it returns zero the test passes, otherwise fails.
 
 Check it out:
 
-    mkdir -p echo_test; echo 'echo my echo test;false' > echo_test/test.sh 
+    mkdir -p echo_test; echo "echo my echo test;false" > echo_test/test.sh 
     ./dabo.sh -L echo_test  # fails
-    mkdir -p echo_test; echo 'echo my echo test;true ' > echo_test/test.sh 
+    mkdir -p echo_test; echo "echo my echo test;true " > echo_test/test.sh 
     ./dabo.sh -L echo_test  # passes
 
 Environment variables:
