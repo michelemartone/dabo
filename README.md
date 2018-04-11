@@ -2,24 +2,32 @@ DABO
 ====
 # Did Anything Break Overnight ?
 
+Maintaining good user experience on a system with multiple users
+and administrators requires reproducible procedures, e.g. to:
+ - ensure basic environment is consistent
+ - spot erroneous behaviours early
+ - manage user side tickets / incidents
+
+DABO is a script to address the above.
+
 ## A minimalistic, non-invasive helper to user-side
  * testing
  * documentation
  * reporting
 of short shell scripts as test cases.
 
-## DABO supports
+## DABO fits in
  * automated test run
  * test driven development
 
 ## DABO is NOT meant to
- * replace per-software test suites
+ * replace per-software test suites or documentation
  * test exhaustively the whole system
  * replace modulefiles documentation
  * implement heavy automated benchmarks 
  * be particularly portable apart from Linux
 
-## DABO is meant to
+## DABO can
  * produce logs useful as document snippets
  * spot failing use cases
  * report via email
@@ -35,11 +43,12 @@ of short shell scripts as test cases.
  * you run it: `./dabo.sh $MYTEST`
    getting PASS / FAIL info for each test
  * path invocation of `$MYTEST` shall be relative
- * you can run many, e.g.: `./dabo.sh $TEST1 $TEST2`
- * such test scripts shall be portable to any other testing facility
+ * you can run many, e.g.: `./dabo.sh $TEST1 $TEST2 ...`
+ * such test scripts can be very portable (e.g. run stand-alone)
 
 ## DABO caution notes
  * DABO performs no chroot or permissions downgrade
+ * DABO uses a timeout: if too short, might leave test files around
  * DABO copies test each supplied directory, script, and input
    to a temporary directory under /dev/shm, then destroys it.
  * run tests of other people using a shared restricted account !!!
