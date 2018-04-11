@@ -1,21 +1,4 @@
 #!/bin/bash
-DN=/dev/null
-VIEW_LOG=''
-set -e
-test "`uname`" = Linux # not tested elsewhere
-OPTSTRING="e:s:v:t:d:o:r:LFPh"
-while getopts $OPTSTRING NAME; do
-	case $NAME in
-		e) DABO_EMAIL=$OPTARG;;
-		s) DABO_SUBJPFX=$OPTARG;;
-		v) DABO_VERBOSITY=$OPTARG;;
-		t) DABO_TIMEOUT=$OPTARG;;
-		r) DABO_RESULTS_OPTS=$OPTARG;;
-		o|d) DABO_RESULTS_DIR=$OPTARG;;
-		F) VIEW_LOG+='F';;
-		P) VIEW_LOG+='P';;
-		L) VIEW_LOG+='FP';;
-		h)
 DABO_HELP='
 Usage:
 
@@ -61,6 +44,23 @@ Option switches meant for interactive use:
     -P : if passed, view test log with less immediately
     -F : if failed, view test log with less immediately
 ' # meant for copy paste in the README
+DN=/dev/null
+VIEW_LOG=''
+set -e
+test "`uname`" = Linux # not tested elsewhere
+OPTSTRING="e:s:v:t:d:o:r:LFPh"
+while getopts $OPTSTRING NAME; do
+	case $NAME in
+		e) DABO_EMAIL=$OPTARG;;
+		s) DABO_SUBJPFX=$OPTARG;;
+		v) DABO_VERBOSITY=$OPTARG;;
+		t) DABO_TIMEOUT=$OPTARG;;
+		r) DABO_RESULTS_OPTS=$OPTARG;;
+		o|d) DABO_RESULTS_DIR=$OPTARG;;
+		F) VIEW_LOG+='F';;
+		P) VIEW_LOG+='P';;
+		L) VIEW_LOG+='FP';;
+		h)
 		echo "${DABO_HELP}";exit;;
 		*) false
 	esac
