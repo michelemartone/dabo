@@ -18,6 +18,7 @@ while getopts $OPTSTRING NAME; do
 		h)
 DABO_HELP='
 Usage:
+
     dabo.sh <option switches> <test-dirs>
 
 A test-dir is a directory containing a test.sh file.
@@ -33,6 +34,7 @@ Environment variables:
     DABO_RESULTS_DIR # where to copy results
 
 Option switches (overriding the environment variables):
+
     -e $DABO_EMAIL
     -s $DABO_SUBJPFX
     -v $DABO_VERBOSITY
@@ -46,6 +48,7 @@ Option switches (overriding the environment variables):
      . : ignored (but allows to override defaults)
 
 Option switches meant for interactive use:
+
     -h :            print help message and exit
     -L :            view test log with less immediately
     -P : if passed, view test log with less immediately
