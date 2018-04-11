@@ -48,6 +48,7 @@ DN=/dev/null
 VIEW_LOG=''
 set -e
 test "`uname`" = Linux # not tested elsewhere
+function on_help() { echo "${DABO_HELP}";exit; }
 OPTSTRING="e:s:v:t:d:o:r:LFPh"
 while getopts $OPTSTRING NAME; do
 	case $NAME in
@@ -60,11 +61,11 @@ while getopts $OPTSTRING NAME; do
 		F) VIEW_LOG+='F';;
 		P) VIEW_LOG+='P';;
 		L) VIEW_LOG+='FP';;
-		h)
-		echo "${DABO_HELP}";exit;;
+		h) on_help;;
 		*) false
 	esac
 done
+test $# = 0 && on_help
 shift $((OPTIND-1))
 EMAIL=${DABO_EMAIL:=""}
 test -z "$EMAIL" && echo "INFO: DABO_EMAIL [-e] unset -- no report email will be sent."
