@@ -3,7 +3,7 @@ DN=/dev/null
 VIEW_LOG=''
 set -e
 test "`uname`" = Linux # not tested elsewhere
-OPTSTRING="e:s:v:t:d:o:r:LFP"
+OPTSTRING="e:s:v:t:d:o:r:LFPhH"
 while getopts $OPTSTRING NAME; do
 	case $NAME in
 		e) DABO_EMAIL=$OPTARG;;
@@ -15,6 +15,43 @@ while getopts $OPTSTRING NAME; do
 		F) VIEW_LOG+='F';;
 		P) VIEW_LOG+='P';;
 		L) VIEW_LOG+='FP';;
+		h|H)
+DABO_HELP='
+Usage:
+    dabo.sh <option switches> <test-dirs>
+
+A test-dir is a directory containing a test.sh file.
+That file will be copied to a temporary directory and executed.
+If it returns zero the test passes, otherwise fails.
+
+Environment variables:
+
+    DABO_EMAIL       # if set, send report to this email address.
+    DABO_SUBJPFX     # if set, email subject prefix
+    DABO_VERBOSITY   # print verbosity: (0) to 3.
+    DABO_TIMEOUT     # test timeout: <number>[ms], e.g. 4s, 1m, .. 
+    DABO_RESULTS_DIR # where to copy results
+
+Option switches (overriding the environment variables):
+    -e $DABO_EMAIL
+    -s $DABO_SUBJPFX
+    -v $DABO_VERBOSITY
+    -t $DABO_TIMEOUT
+    -d $DABO_RESULTS_DIR  # -o too
+    -r $DABO_RESULTS_OPTS # any from "hrt."
+    DABO_RESULTS_OPTS / -r takes a combination of:
+     h : internally uses nohup
+     r : script returns false on any failure
+     t : timestamp in filenames
+     . : ignored (but allows to override defaults)
+
+Option switches meant for interactive use:
+    -h :            print help message and exit
+    -L :            view test log with less immediately
+    -P : if passed, view test log with less immediately
+    -F : if failed, view test log with less immediately
+'
+		echo "${DABO_HELP}";exit;;
 		*) false
 	esac
 done

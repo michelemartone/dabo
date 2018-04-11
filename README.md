@@ -68,6 +68,7 @@ Option switches overriding the environment variables:
      . : ignored (but allows to override defaults)
 
 Option switches for interactive use:
+    -h :            print help message and exit
     -P : if passed, view test log with less immediately
     -F : if failed, view test log with less immediately
     -L :            view test log with less immediately
