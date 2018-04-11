@@ -3,7 +3,7 @@ DN=/dev/null
 VIEW_LOG=''
 set -e
 test "`uname`" = Linux # not tested elsewhere
-OPTSTRING="e:s:v:t:d:o:r:FP"
+OPTSTRING="e:s:v:t:d:o:r:LFP"
 while getopts $OPTSTRING NAME; do
 	case $NAME in
 		e) DABO_EMAIL=$OPTARG;;
@@ -14,6 +14,7 @@ while getopts $OPTSTRING NAME; do
 		o|d) DABO_RESULTS_DIR=$OPTARG;;
 		F) VIEW_LOG+='F';;
 		P) VIEW_LOG+='P';;
+		L) VIEW_LOG+='FP';;
 		*) false
 	esac
 done
@@ -149,8 +150,9 @@ for TST in ${TSTS} ; do
 	test "$TR" = "pass" -a -n "${IFL}" && mkdir -p ${VMD} -- $PD$DP && for f in ${IFL}; do if test -f $f; then cp -np ${VCP} -- $f $PD$DP; fi ; done
 	test "$TR" = "fail" -a -n "${IFL}" && mkdir -p ${VMD} -- $PD$DP && for f in ${IFL}; do if test -f $f; then cp -np ${VCP} -- $f $PD$DP; fi ; done
 	test "$VL" -ge 1 && ls -l
-	if test "$TR" = "fail" && [[ "$VIEW_LOG" =~ F ]] ; then less ${LF}; fi
-	if test "$TR" = "pass" && [[ "$VIEW_LOG" =~ P ]] ; then less ${LF}; fi
+	if ( test "$TR" = "fail" && [[ "$VIEW_LOG" =~ F ]] ) || ( test "$TR" = "pass" && [[ "$VIEW_LOG" =~ P ]] ) ;  then
+		less ${LF};
+	fi
 	rm -fR -- $TD
 	{ popd; popd; } > $DN
 done
