@@ -30,10 +30,10 @@ Option switches (overriding the environment variables):
     -v $DABO_VERBOSITY
     -t $DABO_TIMEOUT
     -d $DABO_RESULTS_DIR  # -o too
-    -r $DABO_RESULTS_OPTS # any from "hrt."
+    -r $DABO_RESULTS_OPTS # any from "hnrt.", default "nrt"
     DABO_RESULTS_OPTS / -r takes a combination of:
      h : internally uses nohup
-     n : run test under "nice -n 10" (default: -n 0)
+     n : run test under "nice -n 10"
      r : script returns false on any failure
      t : timestamp in filenames
      . : ignored (but allows to override defaults)
@@ -126,7 +126,7 @@ test -z "$DABO_RESULTS_DIR" && echo "INFO: DABO_RESULTS_DIR [-d/-o] unset -- wil
 PDIR=${DABO_RESULTS_DIR:="$PDIR"}
 [[ "$PDIR" =~ /$ ]] || PDIR+='/'
 DROH='hrt.' # all
-DRO='rt' # default
+DRO='nrt' # default
 test -z "$DABO_RESULTS_OPTS" && echo "INFO: DABO_RESULTS_OPTS [-r] unset -- will use: \"$DRO\""
 DRO=${DABO_RESULTS_OPTS:="$DRO"}
 [[ "$DRO" =~ ^[hnrt.]+$ ]] || { echo "ERROR: DABO_RESULTS_OPTS=$DABO_RESULTS_OPTS: shall contain chars from [$DROH] ..!"; false; }
