@@ -33,6 +33,7 @@ Option switches (overriding the environment variables):
     -r $DABO_RESULTS_OPTS # any from "hrt."
     DABO_RESULTS_OPTS / -r takes a combination of:
      h : internally uses nohup
+     n : run test under "nice -n 10" (default: -n 0)
      r : script returns false on any failure
      t : timestamp in filenames
      . : ignored (but allows to override defaults)
@@ -124,11 +125,11 @@ PDIR=`pwd`/
 test -z "$DABO_RESULTS_DIR" && echo "INFO: DABO_RESULTS_DIR [-d/-o] unset -- will use working directory: $PDIR"
 PDIR=${DABO_RESULTS_DIR:="$PDIR"}
 [[ "$PDIR" =~ /$ ]] || PDIR+='/'
-DROH='hrt.'
-DRO='rt'
+DROH='hrt.' # all
+DRO='rt' # default
 test -z "$DABO_RESULTS_OPTS" && echo "INFO: DABO_RESULTS_OPTS [-r] unset -- will use: \"$DRO\""
 DRO=${DABO_RESULTS_OPTS:="$DRO"}
-[[ "$DRO" =~ ^[hrt.]+$ ]] || { echo "ERROR: DABO_RESULTS_OPTS=$DABO_RESULTS_OPTS: shall contain chars from [$DROH] ..!"; false; }
+[[ "$DRO" =~ ^[hnrt.]+$ ]] || { echo "ERROR: DABO_RESULTS_OPTS=$DABO_RESULTS_OPTS: shall contain chars from [$DROH] ..!"; false; }
 MPIF='/etc/profile.d/modules.sh' # module path include file
 if test -r "$MPIF" && ! declare -f module > /dev/null ; then echo "INFO: activating module system by including $MPIF"; . $MPIF; fi
 if test -z "$TSTS"; then echo "INFO: No test directory specified at the command line -- exiting. $UI $EI"; exit ; fi
@@ -179,7 +180,8 @@ for TST in ${TSTS} ; do
 	tar c${VTAR}zf ${TTB} --transform s/${TTBN}/${TBN}/g --show-transformed-names ${TTBN}
 	pushd $TD > $DN
 	mkdir -p ${VMD} -- `dirname $LF`
-	( timeout $TO bash --norc -e $TS 2>&1 ; ) 1> $LF \
+	( 	if [[ "$DRO" =~ n ]]; then NICEL="10"; else NICEL='0'; fi # 
+		nice -n ${NICEL} timeout $TO bash --norc -e $TS 2>&1 ; ) 1> $LF \
 		&& {        TR="pass"; echo "PASS TEST: $TST"; PASS+=" $TBN"; } \
 		|| { TC=$?; TR="fail"; echo "FAIL TEST: $TST`test $TC == 124 && echo ' [TIMEOUT]'`""`echo ' '[LOG: $LF]`"; FAIL+=" $TBN"; }
 	#mailx -s test-batch-${TBN}:${TR} -a ${LF} -S from="${EMAIL}" "${EMAIL}"
