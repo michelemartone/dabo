@@ -4,11 +4,14 @@ set -x
 which vim
 which nohup
 which sed
+which grep
+which echo
 which basename
 which true
 which false
 which shar
 which mail
+which nice
 # false # uncomment to make test fail
 [[ "$DABO_SCRIPT" =~ dabo ]] || false
 test -n "$DABO_SCRIPT"
