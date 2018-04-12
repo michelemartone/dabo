@@ -2,7 +2,7 @@
 DABO_HELP='
 Usage:
 
-    dabo.sh <option switches> <test-dirs>
+    dabo.sh <option switches> <test-dirs> # note: option switches first
 
 A test-dir is a directory containing a test.sh file.
 That file will be copied to a temporary directory and executed.

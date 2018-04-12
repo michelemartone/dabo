@@ -4,7 +4,7 @@ DABO
 
 Maintaining good user experience on a system with multiple users
 and administrators requires reproducible procedures, e.g. to:
- - ensure basic environment is consistent
+ - ensure basic environment consistent (kind of service level agreement)
  - spot erroneous behaviours early on
  - manage user side tickets / incidents
 
@@ -23,40 +23,41 @@ of short shell scripts as test cases.
 ## DABO is NOT meant to
  * replace per-software test suites or documentation
  * test exhaustively the whole system
- * replace modulefiles documentation
+ * replace e.g. modulefiles documentation (`module help`)
  * implement heavy automated benchmarks 
  * be particularly portable apart from Linux
 
 ## DABO can
- * produce logs useful as document snippets
  * spot failing use cases
  * report via email
  * save results in a custom directory
+ * produce logs useful as document snippets
 
 ## DABO workflow
- * you create a directory, named e.g. `$MYTEST`
- * you write test script `$MYTEST/test.sh`, which:
-   - shall succeed (e.g. exit 0) on success
-   - shall fail    (e.g. exit 1) on failure
-   - shall make no assumptions on the running directory
-   - runs behalf of the user (so, caution with your tests)
- * you run it: `./dabo.sh $MYTEST`
+ * create a directory e.g. `$MYTEST`
+ * write test script `$MYTEST/test.sh`, which:
+   - shall succeed (e.g. `exit 0`) on success
+   - shall fail    (e.g. `exit 1`) on failure
+   - shall make NO assumptions on the running directory
+   - runs behalf of the user (so: write safe code)
+ * run it dry:    `./dabo.sh -D $MYTEST` # does nothing
+ * run it really: `./dabo.sh    $MYTEST`
    getting PASS / FAIL info for each test
- * path invocation of `$MYTEST` shall be relative
- * you can run many, e.g.: `./dabo.sh $TEST1 $TEST2 ...`
- * such test scripts can be very portable (e.g. run stand-alone)
+ * run with options, e.g.: `./dabo.sh $OPTS $TEST1 $TEST2 ...`
+ * write only small short and stand-alone test scripts
 
 ## DABO caution notes
  * DABO performs no chroot or permissions downgrade
  * DABO uses a timeout: if too short, might leave test files around
+ * DABO runs under `nice` so not to overload machine
  * DABO copies test each supplied directory, script, and input
-   to a temporary directory under /dev/shm, then destroys it.
- * run tests of other people using a shared restricted account !!!
+   to a temporary directory under /dev/shm, then destroys it
+ * run test scripts of other people under a shared restricted account !!!
 
 ## DABO documentation: (from `dabo -h`)
 Usage:
 
-    dabo.sh <option switches> <test-dirs>
+    dabo.sh <option switches> <test-dirs> # note: option switches first
 
 A test-dir is a directory containing a test.sh file.
 That file will be copied to a temporary directory and executed.
@@ -105,7 +106,7 @@ Option switches meant for interactive use:
     # intro:
     git clone git@github.com:michelemartone/dabo.git && cd dabo # get the code
     ./dabo.sh -D true      # dry run: what would be executed ?
-    ./dabo.sh    true      # run trivial passing test, in 'true' directory
+    ./dabo.sh    true      # run trivial passing test, in "true" directory
     ./dabo.sh    false     # run trivial failing test
     ./dabo.sh    self      # run self test -- shall pass
     ./dabo.sh              # run all tests -- some will fail
@@ -115,7 +116,7 @@ Option switches meant for interactive use:
     git clone git@github.com:tests/mm.git dabo_mm && ./dabo.sh dabo_mm/demos/*
     #
     # write your own tests:
-    mkdir -p unfinished_test ; echo 'echo my test' > unfinished_test/test.sh 
+    mkdir -p unfinished_test ; echo "echo my test" > unfinished_test/test.sh 
     DABO_VERBOSITY=2 ./dabo.sh unfinished_test  # inspect your running tests
     mv unfinished_test my_test
     DABO_EMAIL=my@email ./dabo.sh my_test
