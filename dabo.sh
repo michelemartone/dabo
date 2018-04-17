@@ -115,7 +115,7 @@ if echo $MODULEPATH | grep $USER; then echo "ERROR: shall unload personal module
 ECT="'mkdir mytest; echo true  > mytest/test.sh; $0 mytest;'"
 ECF="'mkdir mytest; echo false > mytest/test.sh; $0 mytest;'"
 EI="You can create your own first test case easily, e.g.: $ECT or $ECF."
-UI="Each test directory contains one script file called 'test.sh', and shall be specified with its relative path."
+UI="See $0 -h."
 PASS=''
 FAIL=''
 POFL=''
