@@ -75,10 +75,12 @@ test $# = 0 && on_help
 test -z "$DABO_VERBOSITY" && echo "INFO: DABO_VERBOSITY [-v] unset -- will operate quietly (as with 0)."
 VL=${DABO_VERBOSITY:="0"}
 [[ "$VL" =~ ^[01234]$ ]] || { echo "ERROR: DABO_VERBOSITY=$DABO_VERBOSITY : 0 to 4!"; false; }
-TSTS=''
-TSTS=${TSTS:="$@"}
-echo_V1 "INFO: Will go through tests directories: $TSTS"; 
-for TST in ${TSTS} ; do
+unset TSTS
+declare -a TSTS
+TSTS=($@)
+echo_V1 "INFO: Will go through tests directories: ${TSTS[*]}"; 
+for ((TSTI=0;TSTI<${#TSTS[@]};++TSTI)) ; do
+	TST=${TSTS[$TSTI]}
 	if TBN=`basename $TST` TDN=`dirname  $TST` && test -f "$TST" -a "$TBN" = test.sh -a -n "$TDN" -a "$TDN"; then
 		echo_V1 "INFO: $TDN/$TBN invocation form not supported -- you should specify $TDN instead." 
 		TDN=$TST TBN=test.sh
@@ -139,13 +141,13 @@ DRO=${DABO_RESULTS_OPTS:="$DRO"}
 [[ "$DRO" =~ ^[hnrt.]+$ ]] || { echo "ERROR: DABO_RESULTS_OPTS=$DABO_RESULTS_OPTS: shall contain chars from [$DROH] ..!"; false; }
 MPIF='/etc/profile.d/modules.sh' # module path include file
 if test -r "$MPIF" && ! declare -f module > /dev/null ; then echo_V1 "INFO: activating module system by including $MPIF"; . $MPIF; fi
-if test -z "$TSTS"; then echo_V1 "INFO: No test directory specified at the command line -- exiting. $UI $EI"; exit ; fi
+if test -z "${TSTS[*]}" ; then echo_V1 "INFO: No test directory specified at the command line -- exiting. $UI $EI"; exit ; fi
 if test "$DRY_RUN" = yes ; then echo_V1 "INFO: dry run requested: doing nothing and exiting."; exit; fi
 mkdir -p ${VMD} -- "$PDIR"
 test -d "$PDIR"
 rm -f -- $PDIR/*.shar
 export DABO_SCRIPT="`which $0`" 
-for TST in ${TSTS} ; do
+for TST in ${TSTS[*]}; do
 	TST=${TST/%\//} # elicit trailing slash
 	if   test -d "$TST" -a "${TST:0:1}" = '/'; then # absolute path
 		TS=$TST/test.sh
