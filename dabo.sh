@@ -19,7 +19,7 @@ Environment variables:
 
     DABO_EMAIL       # if set, send report to this email address.
     DABO_SUBJPFX     # if set, email subject prefix
-    DABO_VERBOSITY   # print verbosity: (0) to 3.
+    DABO_VERBOSITY   # print verbosity: (0) to 4.
     DABO_TIMEOUT     # test timeout: <number>[ms], e.g. 4s, 1m, .. 
     DABO_RESULTS_DIR # where to copy results
 
@@ -83,7 +83,7 @@ test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "ERROR: DABO_EMAIL=$DABO
 test -n "$EMAIL" && echo "INFO: DABO_EMAIL=$DABO_EMAIL : will send a report email."
 test -z "$DABO_VERBOSITY" && echo "INFO: DABO_VERBOSITY [-v] unset -- will operate quietly (as with 0)."
 VL=${DABO_VERBOSITY:="0"}
-[[ "$VL" =~ ^[0123]$ ]] || { echo "ERROR: DABO_VERBOSITY=$DABO_VERBOSITY : 0 to 3!"; false; }
+[[ "$VL" =~ ^[01234]$ ]] || { echo "ERROR: DABO_VERBOSITY=$DABO_VERBOSITY : 0 to 4!"; false; }
 TO=4s;
 test -z "$DABO_TIMEOUT" && echo "INFO: DABO_TIMEOUT [-t] unset -- will use default test timeout of $TO."
 test -n "$DABO_TIMEOUT" && echo "INFO: DABO_TIMEOUT=${DABO_TIMEOUT}: each test will be run with this timeout."
@@ -93,7 +93,7 @@ DSP="TEST: "
 test -z "$DABO_SUBJPFX" && echo "INFO: DABO_SUBJPFX [-s] unset -- will use default email subject prefix \"$DSP\"."
 test -n "$DABO_SUBJPFX" && echo "INFO: DABO_SUBJPFX=${DABO_SUBJPFX}: user-set email subject prefix."
 DSP=${DABO_SUBJPFX:="$DSP"} # default subject prefix
-if test "$VL" -ge 1 ; then VMD=-v; VS=''; VCP=-v; VTAR=v; else VMD=''; VS=-q; VCP=''; VTAR=''; fi
+if test "$VL" -ge 2 ; then VMD=-v; VS=''; VCP=-v; VTAR=v; else VMD=''; VS=-q; VCP=''; VTAR=''; fi
 if declare -f module 2>&1 > $DN ; then
 	ML="`module list -t`"
 	for MN in ${ML} ; do 
@@ -109,7 +109,7 @@ if declare -f module 2>&1 > $DN ; then
 		fi
 	done
 fi
-test "$VL" -ge 3 && set -x
+test "$VL" -ge 4 && set -x
 if echo $MODULEPATH | grep $USER; then echo "ERROR: shall unload personal modules first!"; false; fi
 ECT="'mkdir mytest; echo true  > mytest/test.sh; $0 mytest;'"
 ECF="'mkdir mytest; echo false > mytest/test.sh; $0 mytest;'"
@@ -159,7 +159,7 @@ for TST in ${TSTS} ; do
 		PD=$PDIR
 		DP=$TST # relative
 	fi
-	test "$VL" -ge 1 && echo "INFO: Will write logs to $PD$DP"
+	test "$VL" -ge 2 && echo "INFO: Will write logs to $PD$DP"
 	test ! -f $TS && { echo "INFO: $TS is not present -- SKIPPING test \"$TST\""; continue; }
 	test -d "$TST" -a "${TS:0:1}" = '/'
 	TBN=${TST//[.\/]/_}
@@ -187,7 +187,7 @@ for TST in ${TSTS} ; do
 	#mailx -s test-batch-${TBN}:${TR} -a ${LF} -S from="${EMAIL}" "${EMAIL}"
 	SC=dabo.sh # this script basename
 	OFL="`find -maxdepth 1 -name test.sh -o -name '*.c' -o -iname '*.h' -o -iname '*.F90'`"
-	test "$VL" -ge 1 && ls -l -- $OFL 
+	test "$VL" -ge 2 && ls -l -- $OFL 
 	for TF in $OFL ; do
 		HS=${DP}/`basename ${TF}`.html
 		mkdir -p ${VMD} -- `dirname $PD$HS`
@@ -201,13 +201,13 @@ for TST in ${TSTS} ; do
 	done
 	test -f $LF
 	cp $LF $LF.html && sed -i 's/$/<br>/g' $LF.html
-	test "$TR" = "fail" && test "$VL" -ge 2 && nl $LF
+	test "$TR" = "fail" && test "$VL" -ge 3 && nl $LF
 	test "$TR" = "pass" && ATFL="$ATFL ${TTB}"
 	test "$TR" = "pass" && POFL="$POFL ${LP}"
 	test "$TR" = "fail" && FOFL="$FOFL ${LP}"
 	test "$TR" = "pass" -a -n "${IFL}" && mkdir -p ${VMD} -- $PD$DP && for f in ${IFL}; do if test -f $f; then cp -np ${VCP} -- $f $PD$DP; fi ; done
 	test "$TR" = "fail" -a -n "${IFL}" && mkdir -p ${VMD} -- $PD$DP && for f in ${IFL}; do if test -f $f; then cp -np ${VCP} -- $f $PD$DP; fi ; done
-	test "$VL" -ge 1 && ls -l
+	test "$VL" -ge 2 && ls -l
 	if ( test "$TR" = "fail" && [[ "$VIEW_LOG" =~ F ]] ) || ( test "$TR" = "pass" && [[ "$VIEW_LOG" =~ P ]] ) ;  then
 		less ${LF};
 	fi

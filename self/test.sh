@@ -70,7 +70,7 @@ export DABO_RESULTS_OPTS=h.
 WC=`$DABO_SCRIPT -h | wc -c`
 test $WC -ge 1589
 #
-VL='1 2 3'
+VL='1 2 3 4'
 for DABO_VERBOSITY in 0 $VL; do
 	export DABO_VERBOSITY
 	#false

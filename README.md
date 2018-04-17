@@ -74,7 +74,7 @@ Environment variables:
 
     DABO_EMAIL       # if set, send report to this email address.
     DABO_SUBJPFX     # if set, email subject prefix
-    DABO_VERBOSITY   # print verbosity: (0) to 3.
+    DABO_VERBOSITY   # print verbosity: (0) to 4.
     DABO_TIMEOUT     # test timeout: <number>[ms], e.g. 4s, 1m, .. 
     DABO_RESULTS_DIR # where to copy results
 
@@ -117,7 +117,7 @@ Option switches meant for interactive use:
     #
     # write your own tests:
     mkdir -p unfinished_test ; echo "echo my test" > unfinished_test/test.sh 
-    DABO_VERBOSITY=2 ./dabo.sh unfinished_test  # inspect your running tests
+    DABO_VERBOSITY=3 ./dabo.sh unfinished_test  # inspect your running tests
     mv unfinished_test my_test
     DABO_EMAIL=my@email ./dabo.sh my_test
     # 
