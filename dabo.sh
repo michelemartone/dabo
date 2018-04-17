@@ -183,7 +183,7 @@ for TST in ${TSTS} ; do
 	( 	if [[ "$DRO" =~ n ]]; then NICEL="10"; else NICEL='0'; fi # 
 		nice -n ${NICEL} timeout $TO bash --norc -e $TS 2>&1 ; ) 1> $LF \
 		&& {        TR="pass"; echo "PASS TEST: $TST"; PASS+=" $TBN"; } \
-		|| { TC=$?; TR="fail"; echo "FAIL TEST: $TST`test $TC == 124 && echo ' [TIMEOUT]'`""`echo ' '[LOG: $LF]`"; FAIL+=" $TBN"; }
+		|| { TC=$?; TR="fail"; echo "FAIL TEST: $TST`test $TC == 124 && echo ' [TIMEOUT:'${TO}']'`""`echo ' '[LOG: $LF]`"; FAIL+=" $TBN"; }
 	#mailx -s test-batch-${TBN}:${TR} -a ${LF} -S from="${EMAIL}" "${EMAIL}"
 	SC=dabo.sh # this script basename
 	OFL="`find -maxdepth 1 -name test.sh -o -name '*.c' -o -iname '*.h' -o -iname '*.F90'`"
