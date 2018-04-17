@@ -5,7 +5,7 @@ Usage:
     dabo.sh <option switches> <test-case> # note: option switches first
 
 A test-case is either a directory containing a test.sh file or a 
-pathname like <test-dir>/test.sh.
+prefixed script path like <test-dir>/test.sh.
 That test script will be copied to a temporary directory and executed.
 If it returns zero the test passes, otherwise it fails.
 
