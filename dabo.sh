@@ -276,4 +276,5 @@ if test -n "$EMAIL" ; then test -n "$ONLYTEST" && \
 	echo_V1 "INFO: Mailed to \"${AUTHOR} <$EMAIL>\" with subject \"$SL\"" && \
 	echo -e "$BODY" | mailx -s "$DSP$SL" -S from="${AUTHOR//@/-at-} <${EMAIL}>" ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} ${LS:+-a }${LS} ${ATFL:+-a }${ATFL} "${EMAIL}";
 fi
+if test $TC -eq 0; then echo "WARNING: no test executed. $UI"; fi;
 if [[ "$DRO" =~ r ]] && test $FC -gt 0 ; then false; fi
