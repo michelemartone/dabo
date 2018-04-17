@@ -2,11 +2,12 @@
 DABO_HELP='
 Usage:
 
-    dabo.sh <option switches> <test-dirs> # note: option switches first
+    dabo.sh <option switches> <test-case> # note: option switches first
 
-A test-dir is a directory containing a test.sh file.
-That file will be copied to a temporary directory and executed.
-If it returns zero the test passes, otherwise fails.
+A test-case is either a directory containing a test.sh file or a 
+pathname like <test-dir>/test.sh.
+That test script will be copied to a temporary directory and executed.
+If it returns zero the test passes, otherwise it fails.
 
 Check it out:
 
@@ -82,8 +83,8 @@ echo_V1 "INFO: Will go through tests directories: ${TSTS[*]}";
 for ((TSTI=0;TSTI<${#TSTS[@]};++TSTI)) ; do
 	TST=${TSTS[$TSTI]}
 	if TBN=`basename $TST` TDN=`dirname  $TST` && test -f "$TST" -a "$TBN" = test.sh -a -n "$TDN" -a "$TDN"; then
-		echo_V1 "INFO: $TDN/$TBN invocation form not supported -- you should specify $TDN instead." 
-		TDN=$TST TBN=test.sh
+		#echo_V1 "INFO: $TDN/$TBN invocation form not supported -- you should specify $TDN instead."; TDN=$TST TBN=test.sh
+		TSTS[$TSTI]=$TDN # tolerate this form as well test.sh
 	else
 		TDN=$TST TBN=test.sh
 	fi

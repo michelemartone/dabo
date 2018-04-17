@@ -57,11 +57,12 @@ of short shell scripts as test cases.
 ## DABO documentation: (from `dabo -h`)
 Usage:
 
-    dabo.sh <option switches> <test-dirs> # note: option switches first
+    dabo.sh <option switches> <test-case> # note: option switches first
 
-A test-dir is a directory containing a test.sh file.
-That file will be copied to a temporary directory and executed.
-If it returns zero the test passes, otherwise fails.
+A test-case is either a directory containing a test.sh file or a 
+pathname like <test-dir>/test.sh.
+That test script will be copied to a temporary directory and executed.
+If it returns zero the test passes, otherwise it fails.
 
 Check it out:
 
