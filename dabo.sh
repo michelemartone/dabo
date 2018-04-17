@@ -71,6 +71,9 @@ while getopts $OPTSTRING NAME; do
 done
 shift $((OPTIND-1))
 test $# = 0 && on_help
+test -z "$DABO_VERBOSITY" && echo "INFO: DABO_VERBOSITY [-v] unset -- will operate quietly (as with 0)."
+VL=${DABO_VERBOSITY:="0"}
+[[ "$VL" =~ ^[01234]$ ]] || { echo "ERROR: DABO_VERBOSITY=$DABO_VERBOSITY : 0 to 4!"; false; }
 TSTS=''
 TSTS=${TSTS:="$@"}
 echo "INFO: Will go through tests directories: $TSTS"; 
@@ -81,9 +84,6 @@ EMAIL=${DABO_EMAIL:=""}
 test -z "$EMAIL" && echo "INFO: DABO_EMAIL [-e] unset -- no report email will be sent."
 test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "ERROR: DABO_EMAIL=$DABO_EMAIL : invalid email address!"; false; }
 test -n "$EMAIL" && echo "INFO: DABO_EMAIL=$DABO_EMAIL : will send a report email."
-test -z "$DABO_VERBOSITY" && echo "INFO: DABO_VERBOSITY [-v] unset -- will operate quietly (as with 0)."
-VL=${DABO_VERBOSITY:="0"}
-[[ "$VL" =~ ^[01234]$ ]] || { echo "ERROR: DABO_VERBOSITY=$DABO_VERBOSITY : 0 to 4!"; false; }
 TO=4s;
 test -z "$DABO_TIMEOUT" && echo "INFO: DABO_TIMEOUT [-t] unset -- will use default test timeout of $TO."
 test -n "$DABO_TIMEOUT" && echo "INFO: DABO_TIMEOUT=${DABO_TIMEOUT}: each test will be run with this timeout."
