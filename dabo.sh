@@ -266,7 +266,8 @@ LS='' # devel-side sources archive
 #fi
 test -n "$FAIL" && FF=$FS
 test -n "$PASS" && PF=$PS
-echo_V1 "INFO: Give a look at: ${FL} ${PL} ${FF} ${PF} ${LS} ${ATFL}"
+ATTL="${FL} ${PL} ${FF} ${PF} ${LS} ${ATFL}"
+if test -n "${ATTL// /}"; then echo_V1 "INFO: Give a look at: ${ATTL}"; fi
 test -z "$FAIL" && FF=''
 test -z "$PASS" && PF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL $ATS test passed"
