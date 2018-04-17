@@ -79,7 +79,13 @@ TSTS=''
 TSTS=${TSTS:="$@"}
 echo_V1 "INFO: Will go through tests directories: $TSTS"; 
 for TST in ${TSTS} ; do
-	if test ! -f "$TST/test.sh" ; then echo_V1 "INFO: $TST is not a valid test directory -- (will be skipped)."; continue; fi
+	if TBN=`basename $TST` TDN=`dirname  $TST` && test -f "$TST" -a "$TBN" = test.sh -a -n "$TDN" -a "$TDN"; then
+		echo_V1 "INFO: $TDN/$TBN invocation form not supported -- you should specify $TDN instead." 
+		TDN=$TST TBN=test.sh
+	else
+		TDN=$TST TBN=test.sh
+	fi
+	if test ! -f "$TDN/test.sh" ; then echo_V1 "INFO: $TST is not a valid test directory -- (will be skipped)."; continue; fi
 done
 EMAIL=${DABO_EMAIL:=""}
 test -z "$EMAIL" && echo_V1 "INFO: DABO_EMAIL [-e] unset -- no report email will be sent."
