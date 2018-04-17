@@ -82,7 +82,7 @@ TSTS=($@)
 echo_V1 "INFO: Will go through tests directories: ${TSTS[*]}"; 
 for ((TSTI=0;TSTI<${#TSTS[@]};++TSTI)) ; do
 	TST=${TSTS[$TSTI]}
-	if TBN=`basename $TST` TDN=`dirname  $TST` && test -f "$TST" -a "$TBN" = test.sh -a -n "$TDN" -a "$TDN"; then
+	if TBN=`basename $TST` TDN=`dirname  $TST` && test -f "$TST" -a "$TBN" = test.sh -a -n "$TDN" -a -d "$TDN" ; then
 		#echo_V1 "INFO: $TDN/$TBN invocation form not supported -- you should specify $TDN instead."; TDN=$TST TBN=test.sh
 		TSTS[$TSTI]=$TDN # tolerate this form as well test.sh
 	else
