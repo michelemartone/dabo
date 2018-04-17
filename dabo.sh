@@ -52,6 +52,7 @@ DRY_RUN=''
 set -e
 test "`uname`" = Linux # not tested elsewhere
 function on_help() { echo "${DABO_HELP}";exit; }
+function echo_V1() { if test "${VL}" -ge 1 ; then echo "${@}"; fi; }
 OPTSTRING="e:s:v:t:d:o:r:DFLPh"
 while getopts $OPTSTRING NAME; do
 	case $NAME in
@@ -76,35 +77,35 @@ VL=${DABO_VERBOSITY:="0"}
 [[ "$VL" =~ ^[01234]$ ]] || { echo "ERROR: DABO_VERBOSITY=$DABO_VERBOSITY : 0 to 4!"; false; }
 TSTS=''
 TSTS=${TSTS:="$@"}
-echo "INFO: Will go through tests directories: $TSTS"; 
+echo_V1 "INFO: Will go through tests directories: $TSTS"; 
 for TST in ${TSTS} ; do
-	if test ! -f "$TST/test.sh" ; then echo "INFO: $TST is not a valid test directory -- (will be skipped)."; continue; fi
+	if test ! -f "$TST/test.sh" ; then echo_V1 "INFO: $TST is not a valid test directory -- (will be skipped)."; continue; fi
 done
 EMAIL=${DABO_EMAIL:=""}
-test -z "$EMAIL" && echo "INFO: DABO_EMAIL [-e] unset -- no report email will be sent."
+test -z "$EMAIL" && echo_V1 "INFO: DABO_EMAIL [-e] unset -- no report email will be sent."
 test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "ERROR: DABO_EMAIL=$DABO_EMAIL : invalid email address!"; false; }
-test -n "$EMAIL" && echo "INFO: DABO_EMAIL=$DABO_EMAIL : will send a report email."
+test -n "$EMAIL" && echo_V1 "INFO: DABO_EMAIL=$DABO_EMAIL : will send a report email."
 TO=4s;
-test -z "$DABO_TIMEOUT" && echo "INFO: DABO_TIMEOUT [-t] unset -- will use default test timeout of $TO."
-test -n "$DABO_TIMEOUT" && echo "INFO: DABO_TIMEOUT=${DABO_TIMEOUT}: each test will be run with this timeout."
+test -z "$DABO_TIMEOUT" && echo_V1 "INFO: DABO_TIMEOUT [-t] unset -- will use default test timeout of $TO."
+test -n "$DABO_TIMEOUT" && echo_V1 "INFO: DABO_TIMEOUT=${DABO_TIMEOUT}: each test will be run with this timeout."
 TO=${DABO_TIMEOUT:="$TO"}
 [[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "ERROR: DABO_TIMEOUT=$DABO_TIMEOUT: <number>[ms], e.g. $TO, 1m, ..!"; false; }
 DSP="TEST: "
-test -z "$DABO_SUBJPFX" && echo "INFO: DABO_SUBJPFX [-s] unset -- will use default email subject prefix \"$DSP\"."
-test -n "$DABO_SUBJPFX" && echo "INFO: DABO_SUBJPFX=${DABO_SUBJPFX}: user-set email subject prefix."
+test -z "$DABO_SUBJPFX" && echo_V1 "INFO: DABO_SUBJPFX [-s] unset -- will use default email subject prefix \"$DSP\"."
+test -n "$DABO_SUBJPFX" && echo_V1 "INFO: DABO_SUBJPFX=${DABO_SUBJPFX}: user-set email subject prefix."
 DSP=${DABO_SUBJPFX:="$DSP"} # default subject prefix
 if test "$VL" -ge 2 ; then VMD=-v; VS=''; VCP=-v; VTAR=v; else VMD=''; VS=-q; VCP=''; VTAR=''; fi
 if declare -f module 2>&1 > $DN ; then
 	ML="`module list -t`"
 	for MN in ${ML} ; do 
 		if [[ "$MN" =~ $USER ]] ; then 
-			echo "INFO: unload module $MN" ;
+			echo_V1 "INFO: unload module $MN" ;
 			module unload $MN;
 		fi
 	done
 	for MP in ${MODULEPATH//:/ } ; do 
 		if [[ "$MP" =~ $USER ]] ; then 
-			echo "INFO: unuse path $MP" ;
+			echo_V1 "INFO: unuse path $MP" ;
 			module unuse $MP; module unuse $MP; # yes, twice
 		fi
 	done
@@ -122,18 +123,18 @@ ATFL=''
 FOFL=''
 CHEAPTOHTMLRE='s/$/<br>/g'
 PDIR=`pwd`/
-test -z "$DABO_RESULTS_DIR" && echo "INFO: DABO_RESULTS_DIR [-d/-o] unset -- will use working directory: $PDIR"
+test -z "$DABO_RESULTS_DIR" && echo_V1 "INFO: DABO_RESULTS_DIR [-d/-o] unset -- will use working directory: $PDIR"
 PDIR=${DABO_RESULTS_DIR:="$PDIR"}
 [[ "$PDIR" =~ /$ ]] || PDIR+='/'
 DROH='hrt.' # all
 DRO='nrt' # default
-test -z "$DABO_RESULTS_OPTS" && echo "INFO: DABO_RESULTS_OPTS [-r] unset -- will use: \"$DRO\""
+test -z "$DABO_RESULTS_OPTS" && echo_V1 "INFO: DABO_RESULTS_OPTS [-r] unset -- will use: \"$DRO\""
 DRO=${DABO_RESULTS_OPTS:="$DRO"}
 [[ "$DRO" =~ ^[hnrt.]+$ ]] || { echo "ERROR: DABO_RESULTS_OPTS=$DABO_RESULTS_OPTS: shall contain chars from [$DROH] ..!"; false; }
 MPIF='/etc/profile.d/modules.sh' # module path include file
-if test -r "$MPIF" && ! declare -f module > /dev/null ; then echo "INFO: activating module system by including $MPIF"; . $MPIF; fi
-if test -z "$TSTS"; then echo "INFO: No test directory specified at the command line -- exiting. $UI $EI"; exit ; fi
-if test "$DRY_RUN" = yes ; then echo "INFO: dry run requested: doing nothing and exiting."; exit; fi
+if test -r "$MPIF" && ! declare -f module > /dev/null ; then echo_V1 "INFO: activating module system by including $MPIF"; . $MPIF; fi
+if test -z "$TSTS"; then echo_V1 "INFO: No test directory specified at the command line -- exiting. $UI $EI"; exit ; fi
+if test "$DRY_RUN" = yes ; then echo_V1 "INFO: dry run requested: doing nothing and exiting."; exit; fi
 mkdir -p ${VMD} -- "$PDIR"
 test -d "$PDIR"
 rm -f -- $PDIR/*.shar
@@ -152,15 +153,15 @@ for TST in ${TSTS} ; do
 #		echo "ERROR: $TST is not a directory! $UI";
 #		false
 	elif test ! -d "$TST" ; then
-		echo "INFO: $TST is not a test directory -- SKIPPING! $UI";
+		echo_V1 "INFO: $TST is not a test directory -- SKIPPING! $UI";
 		continue;
 	else
 		TS=`pwd`/$TST/test.sh
 		PD=$PDIR
 		DP=$TST # relative
 	fi
-	test "$VL" -ge 2 && echo "INFO: Will write logs to $PD$DP"
-	test ! -f $TS && { echo "INFO: $TS is not present -- SKIPPING test \"$TST\""; continue; }
+	test "$VL" -ge 2 && echo_V1 "INFO: Will write logs to $PD$DP"
+	test ! -f $TS && { echo_V1 "INFO: $TS is not present -- SKIPPING test \"$TST\""; continue; }
 	test -d "$TST" -a "${TS:0:1}" = '/'
 	TBN=${TST//[.\/]/_}
 	while test "$TBN" != "${TBN/#_/}"; do TBN=${TBN/#_/}; done
@@ -265,13 +266,13 @@ LS='' # devel-side sources archive
 #fi
 test -n "$FAIL" && FF=$FS
 test -n "$PASS" && PF=$PS
-echo "INFO: Give a look at: ${FL} ${PL} ${FF} ${PF} ${LS} ${ATFL}"
+echo_V1 "INFO: Give a look at: ${FL} ${PL} ${FF} ${PF} ${LS} ${ATFL}"
 test -z "$FAIL" && FF=''
 test -z "$PASS" && PF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL $ATS test passed"
 if test $TC -le 1; then SL+=" [$ONLYTEST]"; fi
 if test -n "$EMAIL" ; then test -n "$ONLYTEST" && \
-	echo "INFO: Mailed to \"${AUTHOR} <$EMAIL>\" with subject \"$SL\"" && \
+	echo_V1 "INFO: Mailed to \"${AUTHOR} <$EMAIL>\" with subject \"$SL\"" && \
 	echo -e "$BODY" | mailx -s "$DSP$SL" -S from="${AUTHOR//@/-at-} <${EMAIL}>" ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} ${LS:+-a }${LS} ${ATFL:+-a }${ATFL} "${EMAIL}";
 fi
 if [[ "$DRO" =~ r ]] && test $FC -gt 0 ; then false; fi
