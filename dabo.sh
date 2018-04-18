@@ -260,10 +260,11 @@ test -n "$LOFL" && FL=$PDIR/failed${TSL}.log && tail -n 10000 $LOFL > $FL
 test -n "$LOPL" && PL=$PDIR/passed${TSL}.log && tail -n 10000 $LOPL > $PL
 #IF="test.sh README.md"
 IF=''
-if test -n "$POFL"; then
+SHAR='shar' # can turn it off
+if test -n "$POFL" -a -n "$SHAR"; then
 	PS=$PDIR/passed${TSL}.shar; shar ${VS} -T $POFL $IF > $PS ; test -f "$PS"; 
 fi
-if test -n "$FOFL"; then
+if test -n "$FOFL" -a -n "$SHAR"; then
 	FS=$PDIR/failed${TSL}.shar; shar ${VS} -T $FOFL $IF > $FS ; test -f "$FS";
 fi
 cd - > $DN
