@@ -141,7 +141,7 @@ trap "rm -fR ${TPDIR}" EXIT
 test -z "$DABO_RESULTS_DIR" && echo_V1 "INFO: DABO_RESULTS_DIR [-d/-o] unset -- will use: $PDIR" `test "$PDIR" == "$TPDIR" && echo "(temporary)"`
 PDIR=${DABO_RESULTS_DIR:="$PDIR"}
 [[ "$PDIR" =~ /$ ]] || PDIR+='/'
-DROH='hrst.' # all
+DROH='hnrst.' # all
 DRO='nrt' # default
 test -z "$DABO_RESULTS_OPTS" && echo_V1 "INFO: DABO_RESULTS_OPTS [-r] unset -- will use: \"$DRO\""
 
