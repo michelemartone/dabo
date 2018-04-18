@@ -20,7 +20,7 @@ e:
 
 .PHONY: clean
 clean:
-	rm -f */*.html */*.log *.shar *.log *.tar.gz
+	rm -f */*.html */*.log *.shar *.log *.tar.gz */failed.shar */passed.shar */*.tar.gz
 
 .PHONY: true
 true:
