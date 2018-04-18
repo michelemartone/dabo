@@ -31,11 +31,12 @@ Option switches (overriding the environment variables):
     -v $DABO_VERBOSITY
     -t $DABO_TIMEOUT
     -d $DABO_RESULTS_DIR  # -o too
-    -r $DABO_RESULTS_OPTS # any from "hnrt.", default "nrt"
+    -r $DABO_RESULTS_OPTS # any from "hnrst.", default "nrt"
     DABO_RESULTS_OPTS / -r takes a combination of:
      h : internally uses nohup
      n : run test under "nice -n 10"
      r : script returns false on any failure
+     s : archive results in shar format
      t : timestamp in filenames
      . : ignored (but allows to override defaults)
 
@@ -140,12 +141,12 @@ trap "rm -fR ${TPDIR}" EXIT
 test -z "$DABO_RESULTS_DIR" && echo_V1 "INFO: DABO_RESULTS_DIR [-d/-o] unset -- will use: $PDIR" `test "$PDIR" == "$TPDIR" && echo "(temporary)"`
 PDIR=${DABO_RESULTS_DIR:="$PDIR"}
 [[ "$PDIR" =~ /$ ]] || PDIR+='/'
-DROH='hrt.' # all
-DRO='nrt' # default
+DROH='hrst.' # all
+DRO='nrst' # default
 test -z "$DABO_RESULTS_OPTS" && echo_V1 "INFO: DABO_RESULTS_OPTS [-r] unset -- will use: \"$DRO\""
 
 DRO=${DABO_RESULTS_OPTS:="$DRO"}
-[[ "$DRO" =~ ^[hnrt.]+$ ]] || { echo "ERROR: DABO_RESULTS_OPTS=$DABO_RESULTS_OPTS: shall contain chars from [$DROH] ..!"; false; }
+[[ "$DRO" =~ ^[hnrst.]+$ ]] || { echo "ERROR: DABO_RESULTS_OPTS=$DABO_RESULTS_OPTS: shall contain chars from [$DROH] ..!"; false; }
 MPIF='/etc/profile.d/modules.sh' # module path include file
 if test -r "$MPIF" && ! declare -f module > /dev/null ; then echo_V1 "INFO: activating module system by including $MPIF"; . $MPIF; fi
 if test -z "${TSTS[*]}" ; then echo_V1 "INFO: No test directory specified at the command line -- exiting. $UI $EI"; exit ; fi
@@ -260,7 +261,7 @@ test -n "$LOFL" && FL=$PDIR/failed${TSL}.log && tail -n 10000 $LOFL > $FL
 test -n "$LOPL" && PL=$PDIR/passed${TSL}.log && tail -n 10000 $LOPL > $PL
 #IF="test.sh README.md"
 IF=''
-SHAR='shar' # can turn it off
+if [[ "$DRO" =~ s ]]; then SHAR="shar"; else SHAR=''; fi # can turn it off
 if test -n "$POFL" -a -n "$SHAR"; then
 	PS=$PDIR/passed${TSL}.shar; shar ${VS} -T $POFL $IF > $PS ; test -f "$PS"; 
 fi
