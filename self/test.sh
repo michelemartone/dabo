@@ -64,7 +64,7 @@ function basic_tests()
 unset DABO_EMAIL
 unset DABO_VERBOSITY
 unset DABO_TIMEOUT
-unset DABO_RESULTS_DIR
+export DABO_RESULTS_DIR=`pwd`/
 export DABO_RESULTS_OPTS=h.
 #
 WC=`$DABO_SCRIPT -h | wc -c`

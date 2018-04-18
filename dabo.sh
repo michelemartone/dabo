@@ -131,13 +131,19 @@ POFL=''
 ATFL=''
 FOFL=''
 CHEAPTOHTMLRE='s/$/<br>/g'
-PDIR=`pwd`/
-test -z "$DABO_RESULTS_DIR" && echo_V1 "INFO: DABO_RESULTS_DIR [-d/-o] unset -- will use working directory: $PDIR"
+TPDIR=`mktemp -d /dev/shm/dabo-results-XXXX`
+test -n "${TPDIR}" || exit
+test -d "${TPDIR}"
+TPDIR="$TPDIR/"
+PDIR="$TPDIR" # previously was `pwd`/
+trap "rm -fR ${TPDIR}" EXIT
+test -z "$DABO_RESULTS_DIR" && echo_V1 "INFO: DABO_RESULTS_DIR [-d/-o] unset -- will use: $PDIR" `test "$PDIR" == "$TPDIR" && echo "(temporary)"`
 PDIR=${DABO_RESULTS_DIR:="$PDIR"}
 [[ "$PDIR" =~ /$ ]] || PDIR+='/'
 DROH='hrt.' # all
 DRO='nrt' # default
 test -z "$DABO_RESULTS_OPTS" && echo_V1 "INFO: DABO_RESULTS_OPTS [-r] unset -- will use: \"$DRO\""
+
 DRO=${DABO_RESULTS_OPTS:="$DRO"}
 [[ "$DRO" =~ ^[hnrt.]+$ ]] || { echo "ERROR: DABO_RESULTS_OPTS=$DABO_RESULTS_OPTS: shall contain chars from [$DROH] ..!"; false; }
 MPIF='/etc/profile.d/modules.sh' # module path include file
@@ -276,7 +282,7 @@ LS='' # devel-side sources archive
 test -n "$FAIL" && FF=$FS
 test -n "$PASS" && PF=$PS
 ATTL="${FL} ${PL} ${FF} ${PF} ${LS} ${ATFL}"
-if test -n "${ATTL// /}"; then echo_V1 "INFO: Give a look at: ${ATTL}"; fi
+if test -n "${ATTL// /}" -a "$PDIR" != "$TPDIR"; then echo_V1 "INFO: Give a look at: ${ATTL}"; fi
 test -z "$FAIL" && FF=''
 test -z "$PASS" && PF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL $ATS test passed"
