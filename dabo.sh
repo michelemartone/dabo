@@ -210,7 +210,7 @@ for TST in ${TSTS[*]}; do
 		if [[ "$DRO" =~ h ]]; then NOHUP=nohup ; else NOHUP=''; fi
 		! HOME=. ${NOHUP} vim -E $TF -c 'syntax on' -c 'TOhtml' -c "w! ${PD}$HS" -c 'qall!' 2>&1 > $DN
 		test -f ${PD}${HS}
-		if cmp $TF ${PD}${HS} > $DN ; then echo "WARNING: $TF -> ${PD}${HS} conversion failed"; sed -i "$CHEAPTOHTMLRE" ${PD}${HS}; true; fi # e.g. nohup vim
+		if cmp $TF ${PD}${HS} > $DN ; then echo_V1 "WARNING: $TF -> ${PD}${HS} conversion failed"; sed -i "$CHEAPTOHTMLRE" ${PD}${HS}; true; fi # e.g. nohup vim
 		#elinks ${PD}${HS}
 		test "$TR" = "pass" && POFL="$POFL ${HS}"
 		test "$TR" = "fail" && FOFL="$FOFL ${HS}"
