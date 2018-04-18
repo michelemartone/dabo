@@ -21,7 +21,7 @@ Environment variables:
     DABO_EMAIL       # if set, send report to this email address.
     DABO_SUBJPFX     # if set, email subject prefix
     DABO_VERBOSITY   # print verbosity: (0) to 4.
-    DABO_TIMEOUT     # test timeout: <number>[ms], e.g. 4s, 1m, .. 
+    DABO_TIMEOUT     # test timeout: <number>[ms], e.g. 5s, 1m, .. 
     DABO_RESULTS_DIR # where to copy results
 
 Option switches (overriding the environment variables):
@@ -94,7 +94,7 @@ EMAIL=${DABO_EMAIL:=""}
 test -z "$EMAIL" && echo_V1 "INFO: DABO_EMAIL [-e] unset -- no report email will be sent."
 test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "ERROR: DABO_EMAIL=$DABO_EMAIL : invalid email address!"; false; }
 test -n "$EMAIL" && echo_V1 "INFO: DABO_EMAIL=$DABO_EMAIL : will send a report email."
-TO=4s;
+TO=5s;
 test -z "$DABO_TIMEOUT" && echo_V1 "INFO: DABO_TIMEOUT [-t] unset -- will use default test timeout of $TO."
 test -n "$DABO_TIMEOUT" && echo_V1 "INFO: DABO_TIMEOUT=${DABO_TIMEOUT}: each test will be run with this timeout."
 TO=${DABO_TIMEOUT:="$TO"}
