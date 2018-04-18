@@ -142,7 +142,7 @@ test -z "$DABO_RESULTS_DIR" && echo_V1 "INFO: DABO_RESULTS_DIR [-d/-o] unset -- 
 PDIR=${DABO_RESULTS_DIR:="$PDIR"}
 [[ "$PDIR" =~ /$ ]] || PDIR+='/'
 DROH='hrst.' # all
-DRO='nrst' # default
+DRO='nrt' # default
 test -z "$DABO_RESULTS_OPTS" && echo_V1 "INFO: DABO_RESULTS_OPTS [-r] unset -- will use: \"$DRO\""
 
 DRO=${DABO_RESULTS_OPTS:="$DRO"}
