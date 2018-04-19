@@ -300,7 +300,7 @@ test -z "$FAIL" && test -z "$PASS" && SL="$SL $ATS test passed"
 if test $TC -le 1; then SL+=" [$ONLYTEST]"; fi
 if test -n "$EMAIL" ; then test -n "$ONLYTEST" && \
 	TO=${EMAIL}
-	FROM=${DABO_EMAIL_FROM:=$EMAIL}
+	FROM=${DABO_EMAIL_FROM:=$AUTHOR}
 	BCC=${DABO_EMAIL_BCC}
 	CC=${DABO_EMAIL_CC}
 	echo_V1 "INFO: Mailed to \"${AUTHOR} <$TO>\" with subject \"$SL\"" && \
