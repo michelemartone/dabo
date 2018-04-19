@@ -20,6 +20,7 @@ Environment variables:
 
     DABO_EMAIL       # if set, send report to this email address.
     DABO_EMAIL_FROM  # if set, send report from this email address.
+    DABO_EMAIL_BCC   # if set, send in Bcc: to this email address.
     DABO_SUBJPFX     # if set, email subject prefix
     DABO_VERBOSITY   # print verbosity: (0) to 4.
     DABO_TIMEOUT     # test timeout: <number>[ms], e.g. 5s, 1m, .. 
@@ -296,7 +297,7 @@ if test -n "$EMAIL" ; then test -n "$ONLYTEST" && \
 	CC=''
 	TO=${EMAIL}
 	FROM=${DABO_EMAIL_FROM:=$EMAIL}
-	BCC=''
+	BCC=${DABO_EMAIL_BCC}
 	echo_V1 "INFO: Mailed to \"${AUTHOR} <$TO>\" with subject \"$SL\"" && \
 	echo -e "$BODY" | mailx -s "$DSP$SL" -r "${AUTHOR//@/-at-} <${FROM}>" ${CC:+-c }${CC} ${BCC:+-b }${BCC} ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} ${LS:+-a }${LS} ${ATFL:+-a }${ATFL} "$TO";
 fi
