@@ -290,10 +290,12 @@ test -z "$PASS" && PF=''
 test -z "$FAIL" && test -z "$PASS" && SL="$SL $ATS test passed"
 if test $TC -le 1; then SL+=" [$ONLYTEST]"; fi
 if test -n "$EMAIL" ; then test -n "$ONLYTEST" && \
-	echo_V1 "INFO: Mailed to \"${AUTHOR} <$EMAIL>\" with subject \"$SL\"" && \
 	CC=''
+	TO=${EMAIL}
+	FROM=${EMAIL}
 	BCC=''
-	echo -e "$BODY" | mailx -s "$DSP$SL" -r "${AUTHOR//@/-at-} <${EMAIL}>" ${CC:+-c }${CC} ${BCC:+-b }${BCC} ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} ${LS:+-a }${LS} ${ATFL:+-a }${ATFL} "${EMAIL}";
+	echo_V1 "INFO: Mailed to \"${AUTHOR} <$TO>\" with subject \"$SL\"" && \
+	echo -e "$BODY" | mailx -s "$DSP$SL" -r "${AUTHOR//@/-at-} <${FROM}>" ${CC:+-c }${CC} ${BCC:+-b }${BCC} ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} ${LS:+-a }${LS} ${ATFL:+-a }${ATFL} "$TO";
 fi
 if test $TC -eq 0; then echo "WARNING: no test executed. $UI"; fi;
 if [[ "$DRO" =~ r ]] && test $FC -gt 0 ; then echo_V1 "INFO: propagating a failure code (some test failed)"; false; fi
