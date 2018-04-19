@@ -85,6 +85,7 @@ Environment variables:
 Option switches (overriding the environment variables):
 
     -b $DABO_EMAIL_BCC
+    -c $DABO_EMAIL_CC
     -e $DABO_EMAIL
     -f $DABO_EMAIL_FROM
     -s $DABO_SUBJPFX
