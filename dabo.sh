@@ -28,6 +28,7 @@ Environment variables:
 Option switches (overriding the environment variables):
 
     -e $DABO_EMAIL
+    -f $DABO_EMAIL_FROM
     -s $DABO_SUBJPFX
     -v $DABO_VERBOSITY
     -t $DABO_TIMEOUT
@@ -56,10 +57,11 @@ set -e
 test "`uname`" = Linux # not tested elsewhere
 function on_help() { echo "${DABO_HELP}";exit; }
 function echo_V1() { if test "${VL}" -ge 1 ; then echo "${@}"; fi; }
-OPTSTRING="e:s:v:t:d:o:r:DFLPh"
+OPTSTRING="e:f:s:v:t:d:o:r:DFLPh"
 while getopts $OPTSTRING NAME; do
 	case $NAME in
 		e) DABO_EMAIL=$OPTARG;;
+		f) DABO_EMAIL_FROM=$OPTARG;;
 		s) DABO_SUBJPFX=$OPTARG;;
 		v) DABO_VERBOSITY=$OPTARG;;
 		t) DABO_TIMEOUT=$OPTARG;;

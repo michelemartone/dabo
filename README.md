@@ -83,6 +83,7 @@ Environment variables:
 Option switches (overriding the environment variables):
 
     -e $DABO_EMAIL
+    -f $DABO_EMAIL_FROM
     -s $DABO_SUBJPFX
     -v $DABO_VERBOSITY
     -t $DABO_TIMEOUT
