@@ -95,11 +95,11 @@ EMAIL=${DABO_EMAIL:=""}
 test -z "$EMAIL" && echo_V1 "INFO: DABO_EMAIL [-e] unset -- no report email will be sent."
 test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "ERROR: DABO_EMAIL=$DABO_EMAIL : invalid email address!"; false; }
 test -n "$EMAIL" && echo_V1 "INFO: DABO_EMAIL=$DABO_EMAIL : will send a report email."
-TO=5s;
-test -z "$DABO_TIMEOUT" && echo_V1 "INFO: DABO_TIMEOUT [-t] unset -- will use default test timeout of $TO."
+TMT=5s;
+test -z "$DABO_TIMEOUT" && echo_V1 "INFO: DABO_TIMEOUT [-t] unset -- will use default test timeout of $TMT."
 test -n "$DABO_TIMEOUT" && echo_V1 "INFO: DABO_TIMEOUT=${DABO_TIMEOUT}: each test will be run with this timeout."
-TO=${DABO_TIMEOUT:="$TO"}
-[[ "$TO" =~ ^[0-9]+[ms]$ ]] || { echo "ERROR: DABO_TIMEOUT=$DABO_TIMEOUT: <number>[ms], e.g. $TO, 1m, ..!"; false; }
+TMT=${DABO_TIMEOUT:="$TMT"}
+[[ "$TMT" =~ ^[0-9]+[ms]$ ]] || { echo "ERROR: DABO_TIMEOUT=$DABO_TIMEOUT: <number>[ms], e.g. $TMT, 1m, ..!"; false; }
 DSP="TEST: "
 test -z "$DABO_SUBJPFX" && echo_V1 "INFO: DABO_SUBJPFX [-s] unset -- will use default email subject prefix \"$DSP\"."
 test -n "$DABO_SUBJPFX" && echo_V1 "INFO: DABO_SUBJPFX=${DABO_SUBJPFX}: user-set email subject prefix."
@@ -131,7 +131,7 @@ FAIL=''
 POFL=''
 ATFL=''
 FOFL=''
-CHEAPTOHTMLRE='s/$/<br>/g'
+CHEAPTMTHTMLRE='s/$/<br>/g'
 TPDIR=`mktemp -d /dev/shm/dabo-results-XXXX`
 test -n "${TPDIR}" || exit
 test -d "${TPDIR}"
@@ -198,9 +198,9 @@ for TST in ${TSTS[*]}; do
 	pushd $TD > $DN
 	mkdir -p ${VMD} -- `dirname $LF`
 	( 	if [[ "$DRO" =~ n ]]; then NICEL="10"; else NICEL='0'; fi # 
-		nice -n ${NICEL} timeout $TO bash --norc -e $TS 2>&1 ; ) 1> $LF \
+		nice -n ${NICEL} timeout $TMT bash --norc -e $TS 2>&1 ; ) 1> $LF \
 		&& {        TR="pass"; echo "PASS TEST: $TST"; PASS+=" $TBN"; } \
-		|| { TC=$?; TR="fail"; echo "FAIL TEST: $TST`test $TC == 124 && echo ' [TIMEOUT:'${TO}']'`""`echo ' '[LOG: $LF]`"; FAIL+=" $TBN"; }
+		|| { TC=$?; TR="fail"; echo "FAIL TEST: $TST`test $TC == 124 && echo ' [TIMEOUT:'${TMT}']'`""`echo ' '[LOG: $LF]`"; FAIL+=" $TBN"; }
 	#mailx -s test-batch-${TBN}:${TR} -a ${LF} -S from="${EMAIL}" "${EMAIL}"
 	SC=dabo.sh # this script basename
 	OFL="`find -maxdepth 1 -name test.sh -o -name '*.c' -o -iname '*.h' -o -iname '*.F90'`"
@@ -209,9 +209,9 @@ for TST in ${TSTS[*]}; do
 		HS=${DP}/`basename ${TF}`.html
 		mkdir -p ${VMD} -- `dirname $PD$HS`
 		if [[ "$DRO" =~ h ]]; then NOHUP=nohup ; else NOHUP=''; fi
-		! HOME=. ${NOHUP} vim -E $TF -c 'syntax on' -c 'TOhtml' -c "w! ${PD}$HS" -c 'qall!' 2>&1 > $DN
+		! HOME=. ${NOHUP} vim -E $TF -c 'syntax on' -c 'TMThtml' -c "w! ${PD}$HS" -c 'qall!' 2>&1 > $DN
 		test -f ${PD}${HS}
-		if cmp $TF ${PD}${HS} > $DN ; then echo_V1 "WARNING: $TF -> ${PD}${HS} conversion failed"; sed -i "$CHEAPTOHTMLRE" ${PD}${HS}; true; fi # e.g. nohup vim
+		if cmp $TF ${PD}${HS} > $DN ; then echo_V1 "WARNING: $TF -> ${PD}${HS} conversion failed"; sed -i "$CHEAPTMTHTMLRE" ${PD}${HS}; true; fi # e.g. nohup vim
 		#elinks ${PD}${HS}
 		test "$TR" = "pass" && POFL="$POFL ${HS}"
 		test "$TR" = "fail" && FOFL="$FOFL ${HS}"
