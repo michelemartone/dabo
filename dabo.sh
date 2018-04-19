@@ -228,7 +228,7 @@ for TST in ${TSTS[*]}; do
 	test -f $LF
 	cp $LF $LF.html && sed -i 's/$/<br>/g' $LF.html
 	test "$TR" = "fail" && test "$VL" -ge 3 && nl $LF
-	test "$TR" = "pass" && ATFL="$ATFL ${TTB}"
+	test "$TR" = "pass" && if test -n "${TTB}" ; then ATFL="$ATFL ${TTB}"; fi
 	test "$TR" = "pass" && POFL="$POFL ${LP}"
 	test "$TR" = "fail" && FOFL="$FOFL ${LP}"
 	test "$TR" = "pass" -a -n "${IFL}" && mkdir -p ${VMD} -- $PD$DP && for f in ${IFL}; do if test -f $f; then cp -np ${VCP} -- $f $PD$DP; fi ; done
