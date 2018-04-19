@@ -304,7 +304,7 @@ if test -n "$EMAIL" ; then test -n "$ONLYTEST" && \
 	BCC=${DABO_EMAIL_BCC}
 	CC=${DABO_EMAIL_CC}
 	echo_V1 "INFO: Mailed to \"${AUTHOR} <$TO>\" with subject \"$SL\"" && \
-	echo -e "$BODY" | mailx -s "$DSP$SL" -r "${AUTHOR//@/-at-} <${FROM}>" ${CC:+-c }${CC} ${BCC:+-b }${BCC} ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} ${LS:+-a }${LS} ${ATFL:+-a }${ATFL} "$TO";
+	echo -e "$BODY" | mailx -s "$DSP$SL" -r "${AUTHOR//@/-at-} <${FROM}>" ${CC:+-c }${CC} ${BCC:+-b }${BCC} ${FL:+-a }${FL} ${PL:+-a }${PL} ${FF:+-a }${FF} ${PF:+-a }${PF} ${LS:+-a }${LS} `for ATT in $ATFL; do echo ${ATT:+-a }${ATT}; done` "$TO";
 fi
 if test $TC -eq 0; then echo "WARNING: no test executed. $UI"; fi;
 if [[ "$DRO" =~ r ]] && test $FC -gt 0 ; then echo_V1 "INFO: propagating a failure code (some test failed)"; false; fi
