@@ -11,6 +11,8 @@ which true
 which false
 which shar
 which mailx
+which dnsdomainname
+which hostname
 which nice
 # false # uncomment to make test fail
 [[ "$DABO_SCRIPT" =~ dabo ]] || false
