@@ -76,6 +76,7 @@ Environment variables:
     DABO_EMAIL       # if set, send report to this email address.
     DABO_EMAIL_FROM  # if set, send report from this email address.
     DABO_EMAIL_BCC   # if set, send in Bcc: to this email address.
+    DABO_EMAIL_CC    # if set, send in Cc: to this email address.
     DABO_SUBJPFX     # if set, email subject prefix
     DABO_VERBOSITY   # print verbosity: (0) to 4.
     DABO_TIMEOUT     # test timeout: <number>[ms], e.g. 5s, 1m, .. 
