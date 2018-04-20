@@ -92,7 +92,7 @@ Option switches (overriding the environment variables):
     -v $DABO_VERBOSITY
     -t $DABO_TIMEOUT
     -d $DABO_RESULTS_DIR  # -o too
-    -r $DABO_RESULTS_OPTS # any from "ahnrst.", default "anrt"
+    -r $DABO_RESULTS_OPTS # any from "ahnrst.", default "nrt"
     DABO_RESULTS_OPTS / -r takes a combination of:
      a : attach tar archives of test cases
      h : internally uses nohup
