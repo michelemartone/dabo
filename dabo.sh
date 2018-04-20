@@ -37,8 +37,9 @@ Option switches (overriding the environment variables):
     -v $DABO_VERBOSITY
     -t $DABO_TIMEOUT
     -d $DABO_RESULTS_DIR  # -o too
-    -r $DABO_RESULTS_OPTS # any from "hnrst.", default "nrt"
+    -r $DABO_RESULTS_OPTS # any from "ahnrst.", default "anrt"
     DABO_RESULTS_OPTS / -r takes a combination of:
+     a : attach tar archives of test cases
      h : internally uses nohup
      n : run test under "nice -n 10"
      r : script returns false on any failure
@@ -150,12 +151,12 @@ trap "rm -fR ${TPDIR}" EXIT
 test -z "$DABO_RESULTS_DIR" && echo_V1 "INFO: DABO_RESULTS_DIR [-d/-o] unset -- will use: $PDIR" `test "$PDIR" == "$TPDIR" && echo "(temporary)"`
 PDIR=${DABO_RESULTS_DIR:="$PDIR"}
 [[ "$PDIR" =~ /$ ]] || PDIR+='/'
-DROH='hnrst.' # all
-DRO='nrt' # default
+DROH='ahnrst.' # all
+DRO='anrt' # default
 test -z "$DABO_RESULTS_OPTS" && echo_V1 "INFO: DABO_RESULTS_OPTS [-r] unset -- will use: \"$DRO\""
 
 DRO=${DABO_RESULTS_OPTS:="$DRO"}
-[[ "$DRO" =~ ^[hnrst.]+$ ]] || { echo "ERROR: DABO_RESULTS_OPTS=$DABO_RESULTS_OPTS: shall contain chars from [$DROH] ..!"; false; }
+[[ "$DRO" =~ ^[ahnrst.]+$ ]] || { echo "ERROR: DABO_RESULTS_OPTS=$DABO_RESULTS_OPTS: shall contain chars from [$DROH] ..!"; false; }
 MPIF='/etc/profile.d/modules.sh' # module path include file
 if test -r "$MPIF" && ! declare -f module > /dev/null ; then echo_V1 "INFO: activating module system by including $MPIF"; . $MPIF; fi
 if test -z "${TSTS[*]}" ; then echo_V1 "INFO: No test directory specified at the command line -- exiting. $UI $EI"; exit ; fi
@@ -201,9 +202,12 @@ for TST in ${TSTS[*]}; do
 	{ for f in $TST/*.shar $TST/test.sh ; do test -f $f && cp ${VCP} -- $f $TD && IFL="$IFL `basename $f`" ; done || true ; } > $DN
 	cp ${VCP} -- $TS $TD
 	pushd $TD/.. > $DN
-	TTBN=`basename $TD` # test tarball name
-	TTB=${DABO_RESULTS_DIR}/${TBN}.tar.gz
-	tar c${VTAR}zf ${TTB} --transform s/${TTBN}/${TBN}/g --show-transformed-names ${TTBN}
+	TTB='' # test tarball
+	if [[ "$DRO" =~ a ]]; then
+		TTBN=`basename $TD` # test tarball name
+		TTB=${DABO_RESULTS_DIR}/${TBN}.tar.gz
+		tar c${VTAR}zf ${TTB} --transform s/${TTBN}/${TBN}/g --show-transformed-names ${TTBN}
+	fi
 	pushd $TD > $DN
 	mkdir -p ${VMD} -- `dirname $LF`
 	( 	if [[ "$DRO" =~ n ]]; then NICEL="10"; else NICEL='0'; fi # 
