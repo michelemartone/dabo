@@ -105,11 +105,12 @@ EMAIL=${DABO_EMAIL:=""}
 test -z "$EMAIL" && echo_V1 "INFO: DABO_EMAIL [-e] unset -- no report email will be sent."
 test "$EMAIL" = "${EMAIL/%@*/@}${EMAIL/#*@/}" || { echo "ERROR: DABO_EMAIL=$DABO_EMAIL : invalid email address!"; false; }
 test -n "$EMAIL" && echo_V1 "INFO: DABO_EMAIL=$DABO_EMAIL : will send a report email."
-TMT=5s;
+DTMT=5s; # default timeout
+TMT=${DTMT};
 test -z "$DABO_TIMEOUT" && echo_V1 "INFO: DABO_TIMEOUT [-t] unset -- will use default test timeout of $TMT."
 test -n "$DABO_TIMEOUT" && echo_V1 "INFO: DABO_TIMEOUT=${DABO_TIMEOUT}: each test will be run with this timeout."
 TMT=${DABO_TIMEOUT:="$TMT"}
-[[ "$TMT" =~ ^[0-9]+[ms]$ ]] || { echo "ERROR: DABO_TIMEOUT=$DABO_TIMEOUT: <number>[ms], e.g. $TMT, 1m, ..!"; false; }
+[[ "$TMT" =~ ^[0-9]+[ms]$ ]] || { echo "ERROR: DABO_TIMEOUT=$DABO_TIMEOUT: <number>[ms], e.g. $DTMT, 1m, ..!"; false; }
 DSP="TEST: "
 test -z "$DABO_SUBJPFX" && echo_V1 "INFO: DABO_SUBJPFX [-s] unset -- will use default email subject prefix \"$DSP\"."
 test -n "$DABO_SUBJPFX" && echo_V1 "INFO: DABO_SUBJPFX=${DABO_SUBJPFX}: user-set email subject prefix."
