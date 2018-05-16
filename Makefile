@@ -21,6 +21,7 @@ e:
 .PHONY: clean
 clean:
 	rm -f */*.html */*.log *.shar *.log *.tar.gz */failed.shar */passed.shar */*.tar.gz
+	rm -fR self/custom_results_dir
 
 .PHONY: true
 true:
