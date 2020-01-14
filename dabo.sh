@@ -283,8 +283,8 @@ test -n "$POFL" && for t in $POFL ; do [[ "$t" =~ \.log ]] && LOPL+=" $t" ; done
 cd $PDIR
 FL='' PL=''
 if [[ "$DRO" =~ t ]]; then TSL="-`date +%s`"; else TSL=''; fi # time stamp for the logs
-test -n "$LOFL" && test -s "$LOFL" && FL=$PDIR/failed${TSL}.log && tail -n 10000 $LOFL > $FL
-test -n "$LOPL" && test -s "$LOPL" && PL=$PDIR/passed${TSL}.log && tail -n 10000 $LOPL > $PL
+test -n "$LOFL" && { test -s "$LOFL" || LOFL=${DN}; } && FL=$PDIR/failed${TSL}.log && tail -n 10000 $LOFL > $FL
+test -n "$LOPL" && { test -s "$LOPL" || LOPL=${DN}; } && PL=$PDIR/passed${TSL}.log && tail -n 10000 $LOPL > $PL
 #IF="test.sh README.md"
 IF=''
 if [[ "$DRO" =~ s ]]; then SHAR="shar"; else SHAR=''; fi # can turn it off
