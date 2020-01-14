@@ -1,4 +1,4 @@
-TS=./dabo.sh
+TS=`pwd`/dabo.sh
 TL=true example_pass self timeout
 ATL=false $(TL)
 
