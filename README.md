@@ -4,11 +4,11 @@ DABO
 
 Maintaining good user experience on a system with multiple users
 and administrators requires reproducible procedures, e.g. to:
- - ensure basic environment consistent (kind of service level agreement)
+ - ensure the shell environment is consistent
  - spot erroneous behaviours early on
  - manage user side tickets / incidents
 
-DABO is a script to address this.
+DABO is a humble script to address this.
 
 ## A minimalistic, non-invasive helper to user-side
  * testing
@@ -17,8 +17,8 @@ DABO is a script to address this.
 of short shell scripts as test cases.
 
 ## DABO fits in
- * automated test run
- * test driven development
+ * automated test runs
+ * test-driven development
 
 ## DABO is NOT meant to
  * replace per-software test suites or documentation
@@ -26,9 +26,10 @@ of short shell scripts as test cases.
  * replace e.g. modulefiles documentation (`module help`)
  * implement heavy automated benchmarks 
  * be particularly portable apart from Linux
+ * compete with a complete unit testing framework
 
 ## DABO can
- * spot failing use cases
+ * help spoting failing use cases
  * report via email
  * save results in a custom directory
  * produce logs useful as document snippets
