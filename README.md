@@ -114,7 +114,7 @@ Option switches meant for interactive use:
 ## DABO examples
 
     # intro:
-    git clone git@github.com:michelemartone/dabo.git && cd dabo # get the code
+    git clone https://github.com/michelemartone/dabo.git && cd dabo # get the code
     ./dabo.sh -D true      # dry run: what would be executed ?
     ./dabo.sh    true      # run trivial passing test, in "true" directory
     ./dabo.sh    false     # run trivial failing test
@@ -122,8 +122,6 @@ Option switches meant for interactive use:
     ./dabo.sh              # run all tests -- some will fail
     ./dabo.sh example_pass # run user example test
     nl example_pass/test.sh # give a look -- eventually edit
-    git clone git@github.com:tests/examples.git dabo_examples && ./dabo.sh dabo_examples/* # examples
-    git clone git@github.com:tests/mm.git dabo_mm && ./dabo.sh dabo_mm/demos/*
     #
     # write your own tests:
     mkdir -p unfinished_test ; echo "echo my test" > unfinished_test/test.sh 
@@ -131,7 +129,7 @@ Option switches meant for interactive use:
     mv unfinished_test my_test
     DABO_EMAIL=my@email ./dabo.sh my_test
     # 
-    # use different collections of tests:
+    # use different collections of tests; like:
     DABO_TIMEOUT=9s DABO_RESULTS_DIR=$PWD/../demos_results ./dabo.sh demos/*
     DABO_TIMEOUT=1s DABO_RESULTS_DIR=$PWD/../dabo_results ./dabo.sh envtests/*
     DABO_TIMEOUT=1m DABO_RESULTS_DIR=$PWD/../dabo_results ./dabo.sh thorough/*
