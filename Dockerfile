@@ -3,7 +3,7 @@ ARG IMG="debian:unstable"
 FROM "${IMG}"
 
 # Install required packages
-RUN apt-get update; yes | apt-get install bsd-mailx make vim;
+RUN apt-get update; yes | apt-get install bsd-mailx make vim sharutils;
 
 # Set up dirs
 COPY "." "/mnt"
