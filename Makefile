@@ -5,7 +5,6 @@ ATL=false $(TL)
 .PHONY: almost_all
 almost_all:
 	$(TS) -r nt $(TL)
-	! $(TS) $(TL)
 
 .PHONY: all
 all:
