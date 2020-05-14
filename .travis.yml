@@ -13,6 +13,9 @@ arch:
 #script:
 #  - docker build --build-arg "IMG=debian:unstable" "."
 
+script:
+  - make
+
 addons:
   apt:
     packages:
