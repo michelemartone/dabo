@@ -1,7 +1,20 @@
-sudo: required
+language: shell
 
-services:
- - docker
+os:
+  - linux 
 
-script:
-  - docker build --build-arg "IMG=debian:unstable" "."
+arch:
+  - amd64
+  - arm64
+
+#services:
+# - docker
+#
+#script:
+#  - docker build --build-arg "IMG=debian:unstable" "."
+
+addons:
+  apt:
+    packages:
+      - bsd-mailx make vim sharutils
+
