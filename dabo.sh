@@ -144,7 +144,7 @@ if declare -f module 2>&1 > $DN ; then
 	done
 fi
 test "$VL" -ge 4 && set -x
-if echo $MODULEPATH | grep $USER; then echo "ERROR: shall unload personal modules first!"; false; fi
+if [[ "$USER" =~ .+ && "$MODULEPATH" =~ "$USER" ]] ; then echo "ERROR: shall unload personal modules first!"; false; fi
 ECT="'mkdir mytest; echo true  > mytest/test.sh; $0 mytest;'"
 ECF="'mkdir mytest; echo false > mytest/test.sh; $0 mytest;'"
 EI="You can create your own first test case easily, e.g.: $ECT or $ECF."
