@@ -19,5 +19,5 @@ script:
 addons:
   apt:
     packages:
-      - bsd-mailx make vim sharutils
+      - bsd-mailx make sharutils
 

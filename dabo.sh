@@ -235,7 +235,8 @@ for TST in ${TSTS[*]}; do
 		HS=${DP}/`basename ${TF}`.html
 		mkdir -p ${VMD} -- `dirname $PD$HS`
 		if [[ "$DRO" =~ h ]]; then NOHUP=nohup ; else NOHUP=''; fi
-		! HOME=. ${NOHUP} vim -E $TF -c 'syntax on' -c 'TMThtml' -c "w! ${PD}$HS" -c 'qall!' 2>&1 > $DN
+		#! HOME=. ${NOHUP} vim -E $TF -c 'syntax on' -c 'TMThtml' -c "w! ${PD}$HS" -c 'qall!' 2>&1 > $DN
+		{ echo "<html><body><pre>"; cat $TF  ; echo "</pre></body></html>"; } > ${PD}${HS}
 		test -f ${PD}${HS}
 		if cmp $TF ${PD}${HS} > $DN ; then echo_V1 "WARNING: $TF -> ${PD}${HS} conversion failed"; sed -i "$CHEAPTMTHTMLRE" ${PD}${HS}; true; fi # e.g. nohup vim
 		#elinks ${PD}${HS}
