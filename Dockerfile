@@ -16,4 +16,4 @@ USER "user"
 ENV USER user
 
 # Build and test
-RUN make
+RUN make tests
